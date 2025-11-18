@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Avrupa Haritası - Natural Earth 50m</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #eef7f4; /* Türkiye görseline yakın açık zemin */
+      color: #111827;
+    }
+
+    .page {
+      max-width: 1100px;
+      margin: 32px auto;
+      padding: 0 16px 40px;
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(260px, 1fr);
+      gap: 24px;
+      align-items: flex-start;
+    }
+
+    @media (max-width: 900px) {
+      .page {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .map-wrapper {
+      position: relative;
+      background: transparent;
+    }
+
+    svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .country {
+      fill: #d4d7dd;          /* gri dolgu (Türkiye haritasındaki gibi) */
+      stroke: #ffffff;
+      stroke-width: 0.8;
+      cursor: pointer;
+      transition: fill 0.15s ease;
+    }
+
+    .country:hover {
+      fill: #9ca3af;
+    }
+
+    .country.active {
+      fill: #111827;          /* seçili ülke (Şırnak gibi koyu) */
+    }
+
+    .tooltip {
+      position: absolute;
+      padding: 6px 12px;
+      background: #111827;
+      color: #f9fafb;
+      font-size: 13px;
+      border-radius: 999px;
+      pointer-events: none;
+      opacity: 0;
+      transform: translate(-50%, -130%);
+      white-space: nowrap;
+      transition: opacity 0.15s ease;
+      z-index: 10;
+    }
+
+    .info-panel {
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 16px 18px 18px;
+      box-shadow: 0 10px 30px rgba(15,23,42,0.06);
+      border: 1px solid #e5e7eb;
+    }
+
+    .info-title {
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: #6b7280;
+      margin-bottom: 8px;
+    }
+
+    .info-main {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .info-sub {
+      font-size: 14px;
+      color: #6b7280;
+      margin-bottom: 12px;
+    }
+
+    .info-small {
+      font-size: 12px;
+      color: #9ca3af;
+      margin-top: 12px;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <!-- Harita alanı -->
+  <div class="map-wrapper">
+    <div class="tooltip" id="tooltip"></div>
+    <svg id="europeMap" viewBox="0 0 900 600"></svg>
+  </div>
+
+  <!-- Sağ bilgi paneli -->
+  <aside class="info-panel">
+    <div class="info-title">Seçilen ülke</div>
+    <div class="info-main" id="infoName">Henüz seçim yok</div>
+    <div class="info-sub" id="infoSub">Harita üzerinde bir ülkenin üzerine gel veya tıkla.</div>
+
+    <div class="info-small">
+      • Veri kaynağı: Natural Earth Admin 0 Countries, 1:50m
+      (<code>world-atlas@2 / countries-50m.json</code>)<br>
+      • Yalnızca Avrupa için filtrelenmiş şekiller.<br>
+      • İstersen tıklamada link yönlendirme ekleyebilirsin.
+    </div>
+  </aside>
+</div>
+
+<!-- D3 + TopoJSON -->
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://unpkg.com/topojson-client@3/dist/topojson-client.min.js"></script>
+
+<script>
+  const svg   = d3.select("#europeMap");
+  const width = 900;
+  const height = 600;
+
+  const tooltip = document.getElementById("tooltip");
+  const infoName = document.getElementById("infoName");
+  const infoSub  = document.getElementById("infoSub");
+
+  const g = svg.append("g");
+
+  // Avrupa için Mercator projeksiyonu
+  const projection = d3.geoMercator()
+    .center([15, 55])      // Avrupa ortası yaklaşık
+    .scale(500)            // zoom
+    .translate([width / 2, height / 2]);
+
+  const path = d3.geoPath().projection(projection);
+
+  // Natural Earth 1:50m ülkeler (TopoJSON)
+  const url = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json";
+
+  fetch(url)
+    .then(r => r.json())
+    .then(topology => {
+      const countries = topojson.feature(topology, topology.objects.countries).features;
+
+      // Avrupa için kabaca bbox ile filtre (lon, lat)
+      const europeFeatures = countries.filter(f => {
+        const c = d3.geoCentroid(f);
+        const lon = c[0], lat = c[1];
+        return lon > -25 && lon < 45 && lat > 34 && lat < 72;
+      });
+
+      // Ülke path'lerini çiz
+      g.selectAll("path.country")
+        .data(europeFeatures)
+        .enter()
+        .append("path")
+        .attr("class", "country")
+        .attr("d", path)
+        .attr("data-name", d => d.properties.name || "")
+        .on("mousemove", (event, d) => {
+          const name = d.properties.name || "Bilinmeyen ülke";
+
+          // tooltip
+          const rect = svg.node().getBoundingClientRect();
+          tooltip.style.left = (event.clientX - rect.left) + "px";
+          tooltip.style.top  = (event.clientY - rect.top) + "px";
+          tooltip.style.opacity = 1;
+          tooltip.textContent = name;
+        })
+        .on("mouseout", () => {
+          tooltip.style.opacity = 0;
+        })
+        .on("click", function(event, d) {
+          // aktif ülke class'ı
+          svg.selectAll(".country").classed("active", false);
+          d3.select(this).classed("active", true);
+
+          const name = d.properties.name || "Bilinmeyen ülke";
+          infoName.textContent = name;
+          infoSub.textContent  = "Seçilen ülke: " + name;
+
+          // Buraya kendi aksiyonunu ekleyebilirsin:
+          // window.location.href = "/ulke/" + name.toLowerCase().replace(/[^a-z]+/g,"-");
+          console.log("Seçilen ülke:", name);
+        });
+    })
+    .catch(err => {
+      console.error(err);
+      infoSub.textContent = "Harita verisi yüklenirken hata oluştu.";
+    });
+</script>
+</body>
+</html>
