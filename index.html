@@ -65,12 +65,10 @@
                     <div class="arse-news-title">
                         <i class="fa-solid fa-bolt"></i>
                     </div>
-                    <ul class="arse-news">
-                        <li><a href="#" title="Haber 1">WordPress ile Sanal Mağaza Açarken Hızlı ve Kolay Entegrasyon Çözümleri</a></li>
-                        <li><a href="#" title="Haber 2">Resim Optimizasyonu ve Lazy Load Kullanarak WordPress Sitenizin Açılış Hızını Artırma</a></li>
-                        <li><a href="#" title="Haber 3">WordPress Sitenizi Hacklenmeye Karşı Daha Dayanıklı Hale Getirmenin Pratik Yolları</a></li>
-                        <li><a href="#" title="Haber 4">Google PageSpeed Sonuçlarını İyileştirmek İçin WordPress'te Yapılabilecek Optimizasyonlar</a></li>
-                        <li><a href="#" title="Haber 5">Popüler Kültür Trendleri ve İnsanların Sosyal Medyada En Çok Konuştukları Akımlar</a></li>
+                    <ul class="arse-news" id="breakingNewsList">
+                        <li><a href="#" title="Yüklen...
+
+">Haberler yükleniyor...</a></li>
                     </ul>
                 </div>
             </div>
@@ -160,21 +158,14 @@
                         <ul id="menu-header" class="box-nav-menu pars-header-menum">
                             <li class="menu-item"><a href="index.html" class="item-link">Ana Sayfa</a></li>
                             <li class="menu-item position-relative">
-                                <a href="#" class="item-link">Hazır Sayfalar <i class="fa-solid fa-angle-down"></i></a>
+                                <a href="#" class="item-link">Kategoriler <i class="fa-solid fa-angle-down"></i></a>
                                 <div class="sub-menu">
-                                    <ul class="menu-list">
-                                        <li class="sub-menu-item"><a href="#" class="menu-link-text link">Burç Sayfası</a></li>
-                                        <li class="sub-menu-item"><a href="#" class="menu-link-text link">Döviz Kurları</a></li>
-                                        <li class="sub-menu-item"><a href="#" class="menu-link-text link">İletişim</a></li>
-                                        <li class="sub-menu-item"><a href="#" class="menu-link-text link">Künye</a></li>
-                                        <li class="sub-menu-item"><a href="#" class="menu-link-text link">Puan Durumu</a></li>
+                                    <ul class="menu-list" id="categoriesMenu">
+                                        <li class="sub-menu-item"><a href="#" class="menu-link-text link">Yükleniyor...</a></li>
                                     </ul>
                                 </div>
                             </li>
-                            <li class="menu-item"><a href="#" class="item-link">Kategoriler</a></li>
-                            <li class="menu-item"><a href="#" class="item-link">Geziler</a></li>
-                            <li class="menu-item"><a href="#" class="item-link">Hakkımızda</a></li>
-                            <li class="menu-item"><a href="#" class="item-link">İletişim</a></li>
+                            <li class="menu-item"><a href="iletisim.html" class="item-link">İletişim</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -201,6 +192,76 @@
 
     <svg id="europeMap" viewBox="0 0 900 600" style="width:100%; height:auto;"></svg>
 </div>
+            
+            <!-- Dynamic Content Area (Category & Post View) -->
+            <section id="dynamicContentArea" class="py-5" style="display: none;">
+                <div class="container">
+                    <div class="row">
+                        <!-- Left Sidebar - Post List -->
+                        <div class="col-lg-3 col-md-12 mb-4">
+                            <div class="sidebar-section">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h5 class="sidebar-title mb-0" id="categoryTitle">Gönderiler</h5>
+                                    <button class="btn btn-sm btn-outline-secondary" onclick="closeContentArea()">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                                <div id="postsList" class="blog-list">
+                                    <!-- Gönderiler buraya yüklenecek -->
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Center Content - Post Detail -->
+                        <div class="col-lg-6 col-md-12 mb-4">
+                            <div id="postContent" class="post-detail-area">
+                                <!-- Gönderi detayı buraya yüklenecek -->
+                            </div>
+                        </div>
+                        
+                        <!-- Right Sidebar - Widgets -->
+                        <div class="col-lg-3 col-md-12 mb-4">
+                            <!-- Social Media Widget -->
+                            <div class="sidebar-widget mb-4">
+                                <h5 class="widget-title">Bizi Takip Edin</h5>
+                                <div class="social-buttons">
+                                    <a href="#" class="social-btn facebook">
+                                        <i class="fa-brands fa-facebook-f"></i> Facebook
+                                    </a>
+                                    <a href="#" class="social-btn twitter">
+                                        <i class="fa-brands fa-x-twitter"></i> Twitter
+                                    </a>
+                                    <a href="#" class="social-btn instagram">
+                                        <i class="fa-brands fa-instagram"></i> Instagram
+                                    </a>
+                                    <a href="#" class="social-btn youtube">
+                                        <i class="fa-brands fa-youtube"></i> YouTube
+                                    </a>
+                                    <a href="#" class="social-btn pinterest">
+                                        <i class="fa-brands fa-pinterest"></i> Pinterest
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <!-- Categories Widget -->
+                            <div class="sidebar-widget mb-4">
+                                <h5 class="widget-title">Kategoriler</h5>
+                                <div class="category-list" id="categoriesWidget">
+                                    <!-- Kategoriler buraya yüklenecek -->
+                                </div>
+                            </div>
+                            
+                            <!-- Recent Posts Widget -->
+                            <div class="sidebar-widget">
+                                <h5 class="widget-title">Populer Gönderiler</h5>
+                                <div id="recentPostsWidget" class="blog-list">
+                                    <!-- Son gönderiler buraya yüklenecek -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
             
             <!-- Stories Section -->
             <section class="stories-section">
@@ -872,6 +933,19 @@
 const svg = d3.select("#europeMap");
 const tooltip = document.getElementById("euTooltip");
 
+// KATEGORİLERİ SAKLA (Global)
+let categories = [];
+
+// KATEGORİLERİ API'DEN ÇEK
+fetch('api/crud.php?action=list&table=categories')
+    .then(r => r.json())
+    .then(data => {
+        if (data.success && data.data) {
+            categories = data.data;
+        }
+    })
+    .catch(err => console.error('Kategori yükleme hatası:', err));
+
 // PROJEKSİYON
 const projection = d3.geoMercator()
     .center([15,55])
@@ -929,9 +1003,606 @@ fetch("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json")
                 svg.selectAll("path").attr("fill","#d4d7dd");
                 this.setAttribute("fill","#111827");
 
-                console.log("Seçilen ülke:", d.properties.name);
+                const countryName = d.properties.name;
+                
+                // Ülkeyi kategoriye eşleştir ve sayfa aç
+                findCategoryByCountry(countryName);
             });
     });
+
+// Ülke adına göre kategori bul ve yönlendir
+function findCategoryByCountry(countryName) {
+    // Ülke adlarını normalize et
+    const countryMap = {
+        'Turkey': 'Türkiye', 'Germany': 'Almanya', 'France': 'Fransa',
+        'Italy': 'İtalya', 'Spain': 'İspanya', 'United Kingdom': 'Birleşik Krallık',
+        'Greece': 'Yunanistan', 'Netherlands': 'Hollanda', 'Belgium': 'Belçika',
+        'Austria': 'Avusturya', 'Switzerland': 'İsviçre', 'Portugal': 'Portekiz',
+        'Sweden': 'İsveç', 'Norway': 'Norveç', 'Denmark': 'Danimarka',
+        'Finland': 'Finlandiya', 'Poland': 'Polonya', 'Czech Republic': 'Çek Cumhuriyeti',
+        'Hungary': 'Macaristan', 'Romania': 'Romanya', 'Bulgaria': 'Bulgaristan',
+        'Croatia': 'Hırvatistan', 'Serbia': 'Sırbistan', 'Bosnia and Herzegovina': 'Bosna-Hersek',
+        'Albania': 'Arnavutluk', 'Macedonia': 'Makedonya', 'Slovenia': 'Slovenya',
+        'Slovakia': 'Slovakya', 'Lithuania': 'Litvanya', 'Latvia': 'Letonya',
+        'Estonia': 'Estonya', 'Belarus': 'Belarus', 'Ukraine': 'Ukrayna',
+        'Moldova': 'Moldova', 'Ireland': 'İrlanda', 'Iceland': 'İzlanda'
+    };
+    
+    const turkishName = countryMap[countryName] || countryName;
+    
+    // Kategorilerde ara
+    const category = categories.find(cat => 
+        cat.name.toLowerCase() === turkishName.toLowerCase() ||
+        cat.name.toLowerCase() === countryName.toLowerCase()
+    );
+    
+    if (category) {
+        // Kategori sayfasını dinamik alana yükle
+        loadCategoryContent(category);
+    } else {
+        alert(`${turkishName} için henüz içerik bulunmamaktadır.`);
+    }
+}
+
+// Kategori içeriğini yükle
+function loadCategoryContent(category) {
+    // Dinamik alanı göster
+    document.getElementById('dynamicContentArea').style.display = 'block';
+    document.getElementById('categoryTitle').textContent = category.name;
+    
+    // Alana kaydır
+    document.getElementById('dynamicContentArea').scrollIntoView({ behavior: 'smooth' });
+    
+    // Kategoriye ait gönderileri yükle
+    fetch(`api/crud.php?action=list&table=posts`)
+        .then(r => r.json())
+        .then(data => {
+            if (data.success && data.data) {
+                const posts = data.data.filter(post => 
+                    post.category_id == category.id && post.is_active == 1
+                );
+                
+                if (posts.length > 0) {
+                    displayPostsList(posts);
+                    // İlk gönderiyi otomatik göster
+                    loadPostDetail(posts[0].id);
+                } else {
+                    document.getElementById('postsList').innerHTML = `
+                        <div class="text-center py-4">
+                            <i class="fas fa-inbox fa-2x text-muted mb-2"></i>
+                            <p class="text-muted small">Bu kategoride henüz gönderi yok</p>
+                        </div>
+                    `;
+                    document.getElementById('postContent').innerHTML = `
+                        <div class="text-center py-5">
+                            <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">Bu kategoride henüz gönderi bulunmamaktadır.</p>
+                        </div>
+                    `;
+                }
+            }
+        })
+        .catch(err => console.error('Gönderi yükleme hatası:', err));
+    
+    // Widget'ları yükle
+    loadWidgets();
+}
+
+// Gönderi listesini göster
+function displayPostsList(posts) {
+    let html = '';
+    
+    posts.forEach(post => {
+        const date = new Date(post.created_at);
+        const timeAgo = getTimeAgo(date);
+        const image = post.featured_image || `https://via.placeholder.com/100x75/6366f1/ffffff?text=${encodeURIComponent(post.title.substring(0, 5))}`;
+        
+        html += `
+            <article class="blog-list-item" onclick="loadPostDetail(${post.id})" style="cursor: pointer;">
+                <img src="${image}" alt="${escapeHtml(post.title)}" loading="lazy" 
+                     onerror="this.src='https://via.placeholder.com/100x75/6366f1/ffffff?text=No+Image';">
+                <div class="blog-list-content">
+                    <h6>${escapeHtml(post.title)}</h6>
+                    <div class="blog-list-meta">
+                        <span><i class="fa-regular fa-clock"></i> ${timeAgo}</span>
+                    </div>
+                </div>
+            </article>
+        `;
+    });
+    
+    document.getElementById('postsList').innerHTML = html;
+}
+
+// Gönderi detayını yükle
+function loadPostDetail(postId) {
+    const content = document.getElementById('postContent');
+    content.innerHTML = '<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>';
+    
+    fetch(`api/crud.php?action=get&table=posts&id=${postId}`)
+        .then(r => r.json())
+        .then(data => {
+            if (data.success && data.data) {
+                const post = data.data;
+                const date = new Date(post.created_at).toLocaleDateString('tr-TR', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                const image = post.featured_image || `https://via.placeholder.com/800x400/6366f1/ffffff?text=${encodeURIComponent(post.title)}`;
+                
+                content.innerHTML = `
+                    <article class="post-detail">
+                        <div class="post-header mb-4">
+                            <h1 class="post-title mb-3">${escapeHtml(post.title)}</h1>
+                            <div class="post-meta mb-3">
+                                <span class="me-3"><i class="far fa-calendar me-1"></i>${date}</span>
+                                <span class="me-3"><i class="far fa-user me-1"></i>Admin</span>
+                            </div>
+                        </div>
+                        
+                        <div class="post-featured-image mb-4">
+                            <img src="${image}" alt="${escapeHtml(post.title)}" 
+                                 class="img-fluid rounded" 
+                                 onerror="this.src='https://via.placeholder.com/800x400/6366f1/ffffff?text=No+Image';">
+                        </div>
+                        
+                        <div class="post-content">
+                            ${post.content || '<p class="text-muted">Bu gönderinin içeriği bulunmuyor.</p>'}
+                        </div>
+                        
+                        ${post.excerpt ? `<div class="post-excerpt alert alert-info mt-4"><strong>Özet:</strong> ${escapeHtml(post.excerpt)}</div>` : ''}
+                    </article>
+                `;
+                
+                // İçeriğin başına kaydır
+                content.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        })
+        .catch(err => {
+            console.error('Gönderi detay yükleme hatası:', err);
+            content.innerHTML = '<div class="alert alert-danger">Gönderi yüklenemedi!</div>';
+        });
+}
+
+// Widget'ları yükle
+function loadWidgets() {
+    // Kategoriler widget
+    fetch('api/crud.php?action=list&table=categories')
+        .then(r => r.json())
+        .then(data => {
+            if (data.success && data.data) {
+                let html = '';
+                data.data.filter(cat => cat.is_active == 1).slice(0, 8).forEach(cat => {
+                    html += `
+                        <a href="#" class="category-item" onclick="findCategoryByCountry('${cat.name}'); return false;">
+                            <span>${escapeHtml(cat.name)}</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                    `;
+                });
+                document.getElementById('categoriesWidget').innerHTML = html;
+            }
+        });
+    
+    // Son gönderiler widget
+    fetch('api/crud.php?action=list&table=posts')
+        .then(r => r.json())
+        .then(data => {
+            if (data.success && data.data) {
+                let html = '';
+                const recentPosts = data.data
+                    .filter(p => p.is_active == 1)
+                    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+                    .slice(0, 5);
+                
+                recentPosts.forEach(post => {
+                    const timeAgo = getTimeAgo(new Date(post.created_at));
+                    const image = post.featured_image || `https://via.placeholder.com/100x75/6366f1/ffffff?text=No`;
+                    
+                    html += `
+                        <article class="blog-list-item" onclick="loadPostDetail(${post.id})" style="cursor: pointer;">
+                            <img src="${image}" alt="${escapeHtml(post.title)}" loading="lazy" 
+                                 onerror="this.src='https://via.placeholder.com/100x75/6366f1/ffffff?text=No';">
+                            <div class="blog-list-content">
+                                <h6>${escapeHtml(post.title.substring(0, 50))}${post.title.length > 50 ? '...' : ''}</h6>
+                                <div class="blog-list-meta">
+                                    <span><i class="fa-regular fa-clock"></i> ${timeAgo}</span>
+                                </div>
+                            </div>
+                        </article>
+                    `;
+                });
+                document.getElementById('recentPostsWidget').innerHTML = html;
+            }
+        });
+}
+
+// Alanı kapat
+function closeContentArea() {
+    document.getElementById('dynamicContentArea').style.display = 'none';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Yardımcı fonksiyonlar
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function getTimeAgo(date) {
+    const seconds = Math.floor((new Date() - date) / 1000);
+    const intervals = {
+        'yıl': 31536000,
+        'ay': 2592000,
+        'gün': 86400,
+        'saat': 3600,
+        'dakika': 60
+    };
+    
+    for (let [name, value] of Object.entries(intervals)) {
+        const interval = Math.floor(seconds / value);
+        if (interval >= 1) {
+            return `${interval} ${name} önce`;
+        }
+    }
+    return 'Az önce';
+}
+
+// ======================
+// LOAD DYNAMIC CONTENT
+// ======================
+
+// Load Breaking News
+function loadBreakingNews() {
+    fetch('api/crud.php?action=list&table=breaking_news')
+        .then(r => r.json())
+        .then(data => {
+            if (data.success && data.data && data.data.length > 0) {
+                const news = data.data
+                    .filter(n => n.is_active == 1)
+                    .sort((a, b) => (a.order || 0) - (b.order || 0));
+                
+                let html = '';
+                news.forEach(item => {
+                    const url = item.url || '#';
+                    html += `<li><a href="${url}" title="${escapeHtml(item.title)}">${escapeHtml(item.title)}</a></li>`;
+                });
+                
+                if (html) {
+                    document.getElementById('breakingNewsList').innerHTML = html;
+                }
+            }
+        })
+        .catch(err => console.error('Breaking news load error:', err));
+}
+
+// Load Stories
+function loadStories() {
+    fetch('api/crud.php?action=list&table=stories')
+        .then(r => r.json())
+        .then(data => {
+            if (data.success && data.data && data.data.length > 0) {
+                const stories = data.data
+                    .filter(s => s.is_active == 1)
+                    .sort((a, b) => (a.order || 0) - (b.order || 0));
+                
+                let html = '';
+                stories.forEach(story => {
+                    const url = story.url || '#';
+                    const newBadge = story.is_new == 1 ? '<span class="story-yeni">Yeni</span>' : '';
+                    html += `
+                        <div class="swiper-slide">
+                            <a href="${url}" title="${escapeHtml(story.title)}">
+                                <div class="image">
+                                    <img src="${story.image}" alt="${escapeHtml(story.title)}" loading="lazy">
+                                    ${newBadge}
+                                </div>
+                                <span>${escapeHtml(story.short_title || story.title)}</span>
+                            </a>
+                        </div>
+                    `;
+                });
+                
+                const container = document.querySelector('.swiper-wrapper');
+                if (container && html) {
+                    container.innerHTML = html;
+                    // Re-initialize Swiper if it exists
+                    if (window.storySwiper) {
+                        window.storySwiper.update();
+                    }
+                }
+            }
+        })
+        .catch(err => console.error('Stories load error:', err));
+}
+
+// Load Hashtags
+function loadHashtags() {
+    fetch('api/crud.php?action=list&table=hashtags')
+        .then(r => r.json())
+        .then(data => {
+            if (data.success && data.data && data.data.length > 0) {
+                const hashtags = data.data
+                    .filter(h => h.is_active == 1)
+                    .sort((a, b) => (a.order || 0) - (b.order || 0));
+                
+                let html = '';
+                hashtags.forEach(tag => {
+                    const url = tag.url || '#';
+                    html += `<li><a href="${url}" title="${escapeHtml(tag.name)}">${escapeHtml(tag.name)}</a></li>`;
+                });
+                
+                const container = document.querySelector('.sosyal-medya-hashtag ul');
+                if (container && html) {
+                    container.innerHTML = html;
+                }
+            }
+        })
+        .catch(err => console.error('Hashtags load error:', err));
+}
+
+// Load Categories Menu
+function loadCategoriesMenu() {
+    fetch('api/crud.php?action=list&table=categories')
+        .then(r => r.json())
+        .then(data => {
+            if (data.success && data.data && data.data.length > 0) {
+                const cats = data.data
+                    .filter(c => c.is_active == 1)
+                    .sort((a, b) => (a.order || 0) - (b.order || 0));
+                
+                let html = '';
+                cats.forEach(cat => {
+                    html += `<li class="sub-menu-item"><a href="#" class="menu-link-text link" onclick="loadCategoryContent({id: ${cat.id}, name: '${escapeHtml(cat.name)}'}); return false;">${escapeHtml(cat.name)}</a></li>`;
+                });
+                
+                const menu = document.getElementById('categoriesMenu');
+                if (menu && html) {
+                    menu.innerHTML = html;
+                }
+            }
+        })
+        .catch(err => console.error('Categories menu load error:', err));
+}
+
+// Initialize all dynamic content on page load
+document.addEventListener('DOMContentLoaded', function() {
+    loadBreakingNews();
+    loadStories();
+    loadHashtags();
+    loadCategoriesMenu();
+    loadLeftSidebarRecentPosts();
+    loadFeaturedPost();
+    loadRightSidebarCategories();
+    loadRightSidebarPopularPosts();
+    loadAllPostsTabs();
+    
+    // Existing category loading
+    if (!categories || categories.length === 0) {
+        fetch('api/crud.php?action=list&table=categories')
+            .then(r => r.json())
+            .then(data => {
+                if (data.success && data.data) {
+                    categories = data.data;
+                }
+            });
+    }
+});
+
+// ======================
+// LOAD ALL SECTIONS
+// ======================
+
+// Load Left Sidebar Recent Posts
+function loadLeftSidebarRecentPosts() {
+    fetch('api/crud.php?action=list&table=posts')
+        .then(r => r.json())
+        .then(data => {
+            if (data.success && data.data) {
+                const posts = data.data
+                    .filter(p => p.is_active == 1)
+                    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+                    .slice(0, 4);
+                
+                let html = '';
+                posts.forEach(post => {
+                    const timeAgo = getTimeAgo(new Date(post.created_at));
+                    const image = post.featured_image || 'https://via.placeholder.com/400x300/6366f1/ffffff?text=No+Image';
+                    
+                    html += `
+                        <article class="blog-list-item" onclick="loadPostDetail(${post.id})" style="cursor: pointer;">
+                            <img src="${image}" alt="${escapeHtml(post.title)}" loading="lazy"
+                                 onerror="this.src='https://via.placeholder.com/400x300/6366f1/ffffff?text=No+Image';">
+                            <div class="blog-list-content">
+                                <h6>${escapeHtml(post.title.substring(0, 50))}${post.title.length > 50 ? '...' : ''}</h6>
+                                <div class="blog-list-meta">
+                                    <span><i class="fa-regular fa-eye"></i> ${post.view_count || 0}</span>
+                                    <span><i class="fa-regular fa-clock"></i> ${timeAgo}</span>
+                                </div>
+                            </div>
+                        </article>
+                    `;
+                });
+                
+                const container = document.querySelector('.order-lg-1 .blog-list');
+                if (container) {
+                    container.innerHTML = html;
+                }
+            }
+        });
+}
+
+// Load Featured Post (Center)
+function loadFeaturedPost() {
+    fetch('api/crud.php?action=list&table=posts')
+        .then(r => r.json())
+        .then(data => {
+            if (data.success && data.data) {
+                const featured = data.data.find(p => p.is_featured == 1 && p.is_active == 1) || data.data[0];
+                
+                if (featured) {
+                    const image = featured.featured_image || 'https://via.placeholder.com/800x500/6366f1/ffffff?text=Featured';
+                    const date = new Date(featured.created_at).toLocaleDateString('tr-TR');
+                    const excerpt = featured.excerpt || (featured.content ? stripHtml(featured.content).substring(0, 200) + '...' : '');
+                    
+                    const html = `
+                        <div class="featured-post-image" onclick="loadPostDetail(${featured.id})" style="cursor: pointer;">
+                            <img src="${image}" alt="${escapeHtml(featured.title)}" loading="lazy"
+                                 onerror="this.src='https://via.placeholder.com/800x500/6366f1/ffffff?text=Featured';">
+                            <span class="featured-badge"><i class="fa-solid fa-star"></i> Öne Çıkan</span>
+                        </div>
+                        <div class="featured-post-content" onclick="loadPostDetail(${featured.id})" style="cursor: pointer;">
+                            <h2>${escapeHtml(featured.title)}</h2>
+                            <p>${escapeHtml(excerpt)}</p>
+                            <div class="featured-post-meta">
+                                <span><i class="fa-regular fa-calendar"></i> ${date}</span>
+                                <span><i class="fa-regular fa-eye"></i> ${featured.view_count || 0}</span>
+                            </div>
+                        </div>
+                    `;
+                    
+                    const container = document.querySelector('.featured-main-post');
+                    if (container) {
+                        container.innerHTML = html;
+                    }
+                }
+            }
+        });
+}
+
+// Load Right Sidebar Categories
+function loadRightSidebarCategories() {
+    fetch('api/crud.php?action=list&table=categories')
+        .then(r => r.json())
+        .then(data => {
+            if (data.success && data.data) {
+                const cats = data.data
+                    .filter(c => c.is_active == 1)
+                    .sort((a, b) => (a.order || 0) - (b.order || 0))
+                    .slice(0, 5);
+                
+                let html = '';
+                cats.forEach(cat => {
+                    html += `
+                        <li>
+                            <a href="#" onclick="loadCategoryContent({id: ${cat.id}, name: '${escapeHtml(cat.name)}'}); return false;">
+                                <i class="fa-solid fa-folder"></i> ${escapeHtml(cat.name)}
+                                <span class="cat-count">${cat.post_count || 0}</span>
+                            </a>
+                        </li>
+                    `;
+                });
+                
+                const container = document.querySelector('.categories-list');
+                if (container) {
+                    container.innerHTML = html;
+                }
+            }
+        });
+}
+
+// Load Right Sidebar Popular Posts (En Çok Okunanlar)
+function loadRightSidebarPopularPosts() {
+    fetch('api/crud.php?action=list&table=posts')
+        .then(r => r.json())
+        .then(data => {
+            if (data.success && data.data) {
+                const posts = data.data
+                    .filter(p => p.is_active == 1)
+                    .sort((a, b) => (b.view_count || 0) - (a.view_count || 0))
+                    .slice(0, 3);
+                
+                let html = '';
+                posts.forEach(post => {
+                    const image = post.featured_image || 'https://via.placeholder.com/100x80/6366f1/ffffff?text=No';
+                    
+                    html += `
+                        <article class="popular-post-item" onclick="loadPostDetail(${post.id})" style="cursor: pointer;">
+                            <img src="${image}" alt="${escapeHtml(post.title)}" loading="lazy"
+                                 onerror="this.src='https://via.placeholder.com/100x80/6366f1/ffffff?text=No';">
+                            <div class="popular-post-content">
+                                <h6>${escapeHtml(post.title.substring(0, 40))}${post.title.length > 40 ? '...' : ''}</h6>
+                                <span><i class="fa-regular fa-eye"></i> ${post.view_count || 0}</span>
+                            </div>
+                        </article>
+                    `;
+                });
+                
+                const container = document.querySelector('.popular-posts-list');
+                if (container) {
+                    container.innerHTML = html;
+                }
+            }
+        });
+}
+
+// Load All Posts Tabs (Rastgele, Yeni, Popüler)
+function loadAllPostsTabs() {
+    fetch('api/crud.php?action=list&table=posts')
+        .then(r => r.json())
+        .then(data => {
+            if (data.success && data.data) {
+                const activePosts = data.data.filter(p => p.is_active == 1);
+                
+                // Rastgele Tab
+                const randomPosts = [...activePosts].sort(() => Math.random() - 0.5).slice(0, 6);
+                loadPostsIntoTab('rastgele', randomPosts);
+                
+                // Yeni Tab (En son eklenenler)
+                const newPosts = [...activePosts].sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).slice(0, 6);
+                loadPostsIntoTab('yeni', newPosts);
+                
+                // Popüler Tab (En çok görüntülenenler)
+                const popularPosts = [...activePosts].sort((a, b) => (b.view_count || 0) - (a.view_count || 0)).slice(0, 6);
+                loadPostsIntoTab('populer', popularPosts);
+            }
+        });
+}
+
+function loadPostsIntoTab(tabId, posts) {
+    let html = '<div class="row g-4">';
+    
+    posts.forEach(post => {
+        const image = post.featured_image || 'https://via.placeholder.com/400x300/6366f1/ffffff?text=No+Image';
+        const date = new Date(post.created_at).toLocaleDateString('tr-TR');
+        const excerpt = post.excerpt || (post.content ? stripHtml(post.content).substring(0, 100) + '...' : '');
+        
+        html += `
+            <div class="col-lg-4 col-md-6">
+                <article class="post-card" onclick="loadPostDetail(${post.id})" style="cursor: pointer;">
+                    <div class="post-thumbnail">
+                        <img src="${image}" alt="${escapeHtml(post.title)}" loading="lazy"
+                             onerror="this.src='https://via.placeholder.com/400x300/6366f1/ffffff?text=No';">
+                    </div>
+                    <div class="post-content">
+                        <h3 class="post-title">${escapeHtml(post.title.substring(0, 60))}${post.title.length > 60 ? '...' : ''}</h3>
+                        <p class="post-excerpt">${escapeHtml(excerpt)}</p>
+                        <div class="post-meta">
+                            <span><i class="fa-regular fa-calendar"></i> ${date}</span>
+                            <span><i class="fa-regular fa-eye"></i> ${post.view_count || 0}</span>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        `;
+    });
+    
+    html += '</div>';
+    
+    const container = document.querySelector(`#${tabId} .row.g-4`);
+    if (container) {
+        container.innerHTML = html.replace('<div class="row g-4">', '').replace('</div>', '');
+    }
+}
+
+function stripHtml(html) {
+    const div = document.createElement('div');
+    div.innerHTML = html;
+    return div.textContent || div.innerText || '';
+}
+
 </script>
 </body>
 </html>

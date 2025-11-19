@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title id="pageTitle">Kategori - Pars</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    
+    <style>
+        .hover-shadow {
+            transition: all 0.3s ease;
+        }
+        .hover-shadow:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+        }
+        .category-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1a202c;
+        }
+        .breadcrumb {
+            background: transparent;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="wrapper">
+        <!-- Header buraya eklenecek -->
+        
+        <!-- Main Content -->
+        <main id="main-content" class="py-5">
+            <div class="container">
+                <!-- Breadcrumb -->
+                <nav aria-label="breadcrumb" class="mb-4">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="index.html">Ana Sayfa</a></li>
+                        <li class="breadcrumb-item active" aria-current="page" id="breadcrumbCategory">Kategori</li>
+                    </ol>
+                </nav>
+                
+                <!-- Category Header -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <h1 class="category-title mb-2" id="categoryName">Kategori Yükleniyor...</h1>
+                                <p class="text-muted mb-0" id="categoryDescription"></p>
+                            </div>
+                            <div>
+                                <span class="badge bg-primary fs-6" id="postCount">0 Gönderi</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Filter & Sort -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-search"></i></span>
+                            <input type="text" class="form-control" id="searchInput" placeholder="Gönderilerde ara...">
+                        </div>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <select class="form-select" id="sortSelect" style="max-width: 250px; display: inline-block;">
+                            <option value="newest">En Yeni</option>
+                            <option value="oldest">En Eski</option>
+                            <option value="title-asc">Başlık (A-Z)</option>
+                            <option value="title-desc">Başlık (Z-A)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Posts Grid -->
+                <div class="row g-4" id="postsGrid">
+                    <div class="col-12 text-center">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Yükleniyor...</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pagination -->
+                <div class="row mt-5">
+                    <div class="col-12">
+                        <nav aria-label="Sayfa navigasyonu">
+                            <ul class="pagination justify-content-center" id="pagination"></ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    
+    <script>
+    // Global değişkenler
+    let allPosts = [];
+    let filteredPosts = [];
+    const postsPerPage = 9;
+    let currentPage = 1;
+    
+    // URL parametrelerini al
+    const urlParams = new URLSearchParams(window.location.search);
+    const categoryId = urlParams.get('id');
+    const categoryName = urlParams.get('name');
+    
+    // Sayfa başlığını güncelle
+    if (categoryName) {
+        const decodedName = decodeURIComponent(categoryName);
+        document.getElementById('pageTitle').textContent = `${decodedName} - Pars`;
+        document.getElementById('categoryName').textContent = decodedName;
+        document.getElementById('breadcrumbCategory').textContent = decodedName;
+    }
+    
+    // Kategori detaylarını yükle
+    if (categoryId) {
+        fetch(`api/crud.php?action=get&table=categories&id=${categoryId}`)
+            .then(r => r.json())
+            .then(data => {
+                if (data.success && data.data) {
+                    const category = data.data;
+                    document.getElementById('categoryName').textContent = category.name;
+                    document.getElementById('categoryDescription').textContent = category.description || '';
+                    document.getElementById('breadcrumbCategory').textContent = category.name;
+                    
+                    // Bu kategoriye ait gönderileri yükle
+                    loadCategoryPosts(categoryId);
+                } else {
+                    showError('Kategori bulunamadı!');
+                }
+            })
+            .catch(err => {
+                console.error('Kategori yükleme hatası:', err);
+                showError('Kategori yüklenemedi!');
+            });
+    } else {
+        showError('Kategori ID bulunamadı!');
+    }
+    
+    // Kategoriye ait gönderileri yükle
+    function loadCategoryPosts(catId) {
+        fetch(`api/crud.php?action=list&table=posts`)
+            .then(r => r.json())
+            .then(data => {
+                if (data.success && data.data) {
+                    // Bu kategoriye ait gönderileri filtrele
+                    allPosts = data.data.filter(post => post.category_id == catId && post.is_active == 1);
+                    filteredPosts = [...allPosts];
+                    
+                    document.getElementById('postCount').textContent = `${allPosts.length} Gönderi`;
+                    
+                    if (allPosts.length > 0) {
+                        displayPosts();
+                    } else {
+                        document.getElementById('postsGrid').innerHTML = `
+                            <div class="col-12 text-center py-5">
+                                <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                                <p class="text-muted">Bu kategoride henüz gönderi bulunmamaktadır.</p>
+                                <a href="index.html" class="btn btn-primary">Ana Sayfaya Dön</a>
+                            </div>
+                        `;
+                    }
+                } else {
+                    showError('Gönderiler yüklenemedi!');
+                }
+            })
+            .catch(err => {
+                console.error('Gönderi yükleme hatası:', err);
+                showError('Gönderiler yüklenemedi!');
+            });
+    }
+    
+    // Gönderileri göster
+    function displayPosts() {
+        const startIndex = (currentPage - 1) * postsPerPage;
+        const endIndex = startIndex + postsPerPage;
+        const postsToShow = filteredPosts.slice(startIndex, endIndex);
+        
+        let html = '';
+        
+        postsToShow.forEach(post => {
+            const date = new Date(post.created_at).toLocaleDateString('tr-TR', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            const excerpt = post.excerpt || (post.content ? stripHtml(post.content).substring(0, 150) + '...' : 'Bu gönderinin önizlemesi bulunmuyor.');
+            const image = post.featured_image || `https://via.placeholder.com/400x200/6366f1/ffffff?text=${encodeURIComponent(post.title.substring(0, 20))}`;
+            
+            html += `
+                <div class="col-lg-4 col-md-6">
+                    <div class="card h-100 shadow-sm hover-shadow">
+                        <img src="${image}" class="card-img-top" alt="${escapeHtml(post.title)}" 
+                             style="height: 200px; object-fit: cover;" 
+                             onerror="this.src='https://via.placeholder.com/400x200/6366f1/ffffff?text=Resim+Yok';">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">${escapeHtml(post.title)}</h5>
+                            <p class="card-text text-muted small flex-grow-1">${escapeHtml(excerpt)}</p>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <small class="text-muted">
+                                    <i class="far fa-calendar me-1"></i>${date}
+                                </small>
+                                <a href="post.html?id=${post.id}" class="btn btn-sm btn-primary">
+                                    Devamı <i class="fas fa-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        
+        document.getElementById('postsGrid').innerHTML = html;
+        renderPagination();
+    }
+    
+    // Sayfalama göster
+    function renderPagination() {
+        const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
+        
+        if (totalPages <= 1) {
+            document.getElementById('pagination').innerHTML = '';
+            return;
+        }
+        
+        let html = '';
+        
+        // Önceki buton
+        html += `
+            <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+                <a class="page-link" href="#" onclick="changePage(${currentPage - 1}); return false;">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+            </li>
+        `;
+        
+        // Sayfa numaraları
+        for (let i = 1; i <= totalPages; i++) {
+            if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+                html += `
+                    <li class="page-item ${i === currentPage ? 'active' : ''}">
+                        <a class="page-link" href="#" onclick="changePage(${i}); return false;">${i}</a>
+                    </li>
+                `;
+            } else if (i === currentPage - 2 || i === currentPage + 2) {
+                html += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+            }
+        }
+        
+        // Sonraki buton
+        html += `
+            <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+                <a class="page-link" href="#" onclick="changePage(${currentPage + 1}); return false;">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            </li>
+        `;
+        
+        document.getElementById('pagination').innerHTML = html;
+    }
+    
+    // Sayfa değiştir
+    window.changePage = function(page) {
+        const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
+        if (page < 1 || page > totalPages) return;
+        
+        currentPage = page;
+        displayPosts();
+        
+        // Sayfanın üstüne kaydır
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+    
+    // Arama
+    document.getElementById('searchInput').addEventListener('input', function(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        
+        if (searchTerm === '') {
+            filteredPosts = [...allPosts];
+        } else {
+            filteredPosts = allPosts.filter(post => 
+                post.title.toLowerCase().includes(searchTerm) ||
+                (post.content && post.content.toLowerCase().includes(searchTerm)) ||
+                (post.excerpt && post.excerpt.toLowerCase().includes(searchTerm))
+            );
+        }
+        
+        currentPage = 1;
+        document.getElementById('postCount').textContent = `${filteredPosts.length} Gönderi`;
+        displayPosts();
+    });
+    
+    // Sıralama
+    document.getElementById('sortSelect').addEventListener('change', function(e) {
+        const sortType = e.target.value;
+        
+        filteredPosts.sort((a, b) => {
+            switch(sortType) {
+                case 'newest':
+                    return new Date(b.created_at) - new Date(a.created_at);
+                case 'oldest':
+                    return new Date(a.created_at) - new Date(b.created_at);
+                case 'title-asc':
+                    return a.title.localeCompare(b.title, 'tr');
+                case 'title-desc':
+                    return b.title.localeCompare(a.title, 'tr');
+                default:
+                    return 0;
+            }
+        });
+        
+        currentPage = 1;
+        displayPosts();
+    });
+    
+    // Yardımcı fonksiyonlar
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+    
+    function stripHtml(html) {
+        const div = document.createElement('div');
+        div.innerHTML = html;
+        return div.textContent || div.innerText || '';
+    }
+    
+    // Hata göster
+    function showError(message) {
+        document.getElementById('postsGrid').innerHTML = `
+            <div class="col-12 text-center py-5">
+                <i class="fas fa-exclamation-triangle fa-3x text-danger mb-3"></i>
+                <p class="text-danger">${message}</p>
+                <a href="index.html" class="btn btn-primary">Ana Sayfaya Dön</a>
+            </div>
+        `;
+    }
+    </script>
+</body>
+</html>

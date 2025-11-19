@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Media Upload Test</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Media Upload Test</h1>
+    <form id="testForm">
+        <input type="file" id="testFile" name="media_file"><br><br>
+        <input type="text" name="description" placeholder="Description"><br><br>
+        <button type="submit">Upload</button>
+    </form>
+    
+    <div id="result"></div>
+    
+    <script>
+    $('#testForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        const fileInput = $('#testFile')[0];
+        if (!fileInput.files.length) {
+            alert('Select a file!');
+            return;
+        }
+        
+        const formData = new FormData();
+        formData.append('media_file', fileInput.files[0]);
+        formData.append('description', $('[name="description"]').val() || '');
+        
+        console.log('Uploading:', fileInput.files[0].name);
+        
+        $.ajax({
+            url: 'api/upload.php',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                console.log('Response:', response);
+                $('#result').html('<pre>' + JSON.stringify(response, null, 2) + '</pre>');
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+                $('#result').html('<pre>Error: ' + error + '\n\n' + xhr.responseText + '</pre>');
+            }
+        });
+    });
+    </script>
+</body>
+</html>
