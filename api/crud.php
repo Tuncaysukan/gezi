@@ -5,7 +5,14 @@
  */
 
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
+session_start();
+if (isset($_SERVER['HTTP_ORIGIN'])) {
+    $origin = $_SERVER['HTTP_ORIGIN'];
+    $host = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'];
+    if ($origin === $host) {
+        header('Access-Control-Allow-Origin: ' . $origin);
+    }
+}
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
 header('Access-Control-Allow-Headers: Content-Type');
 
@@ -36,16 +43,19 @@ $modelMap = [
     'category_boxes' => 'CategoryBox',
     'info_cards' => 'InfoCard',
     'notifications' => 'Notification',
-    'settings' => 'Setting'
+    'settings' => 'Setting',
+    'backups' => 'Backup'
 ];
 
 // Model kontrolü
-if (!isset($modelMap[$table])) {
+if (!isset($modelMap[$table]) && $action !== 'update_setting' && $action !== 'get_setting') {
     jsonResponse(false, 'Geçersiz tablo!');
 }
 
-$modelClass = $modelMap[$table];
-$model = new $modelClass();
+if (isset($modelMap[$table])) {
+    $modelClass = $modelMap[$table];
+    $model = new $modelClass();
+}
 
 // CRUD İşlemleri
 try {
@@ -144,6 +154,33 @@ try {
             } else {
                 jsonResponse(false, 'Sıra güncelleme başarısız!');
             }
+            break;
+        
+        // SETTINGS İÇİN ÖZEL İŞLEMLER
+        case 'update_setting':
+            if (!$input || !isset($input['key']) || !isset($input['value'])) {
+                jsonResponse(false, 'Key ve value gerekli!');
+            }
+            
+            $settingModel = new Setting();
+            $result = $settingModel->set($input['key'], $input['value']);
+            
+            if ($result) {
+                jsonResponse(true, 'Ayar kaydedildi!');
+            } else {
+                jsonResponse(false, 'Ayar kaydetme başarısız!');
+            }
+            break;
+        
+        case 'get_setting':
+            $key = $_GET['key'] ?? $input['key'] ?? null;
+            if (!$key) {
+                jsonResponse(false, 'Key gerekli!');
+            }
+            
+            $settingModel = new Setting();
+            $value = $settingModel->get($key);
+            jsonResponse(true, 'Başarılı', ['value' => $value]);
             break;
         
         default:

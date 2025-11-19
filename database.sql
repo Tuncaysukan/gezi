@@ -80,6 +80,7 @@ CREATE TABLE IF NOT EXISTS category_boxes (
     description VARCHAR(255),
     icon VARCHAR(50),
     color VARCHAR(20),
+    url VARCHAR(255),
     `order` INT DEFAULT 0,
     is_active TINYINT(1) DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

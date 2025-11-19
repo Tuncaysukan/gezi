@@ -84,11 +84,16 @@ class Setting extends Model {
     public function set($key, $value) {
         $query = "INSERT INTO {$this->table} (setting_key, setting_value) 
                   VALUES (:key, :value) 
-                  ON DUPLICATE KEY UPDATE setting_value = :value";
+                  ON DUPLICATE KEY UPDATE setting_value = :value2";
         $stmt = $this->db->prepare($query);
         $stmt->bindParam(':key', $key);
         $stmt->bindParam(':value', $value);
+        $stmt->bindParam(':value2', $value);
         return $stmt->execute();
     }
+}
+
+class Backup extends Model {
+    protected $table = 'backups';
 }
 ?>
