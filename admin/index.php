@@ -1,3 +1,4 @@
+<?php require_once 'check_session.php'; ?>
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -10,6 +11,13 @@
     
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css">
+    
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="css/admin.css">
@@ -46,9 +54,69 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a href="#breaking-news" class="nav-link" data-page="breaking-news">
+                            <i class="fas fa-bolt"></i>
+                            <span>Kayan Haberler</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#featured-post" class="nav-link" data-page="featured-post">
+                            <i class="fas fa-star"></i>
+                            <span>Öne Çıkan Gönderi</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="#categories" class="nav-link" data-page="categories">
                             <i class="fas fa-folder"></i>
                             <span>Kategoriler</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#category-boxes" class="nav-link" data-page="category-boxes">
+                            <i class="fas fa-th-large"></i>
+                            <span>Kategori Kutuları</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#info-cards" class="nav-link" data-page="info-cards">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Bilgi Kartları</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#hashtags" class="nav-link" data-page="hashtags">
+                            <i class="fas fa-hashtag"></i>
+                            <span>Etiketler</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#widgets" class="nav-link" data-page="widgets">
+                            <i class="fas fa-puzzle-piece"></i>
+                            <span>Widgetlar</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#header" class="nav-link" data-page="header">
+                            <i class="fas fa-bars"></i>
+                            <span>Header & Menü</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#footer" class="nav-link" data-page="footer">
+                            <i class="fas fa-shoe-prints"></i>
+                            <span>Footer</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#notifications" class="nav-link" data-page="notifications">
+                            <i class="fas fa-bell"></i>
+                            <span>Bildirimler</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#adsense" class="nav-link" data-page="adsense">
+                            <i class="fab fa-google"></i>
+                            <span>Reklam Alanları</span>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -104,13 +172,13 @@
                 <div class="top-bar-right">
                     <div class="dropdown">
                         <button class="btn btn-link dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-user-circle"></i> Admin
+                            <i class="fas fa-user-circle"></i> <?php echo $_SESSION['admin_username']; ?>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="#"><i class="fas fa-user"></i> Profil</a></li>
                             <li><a class="dropdown-item" href="#"><i class="fas fa-cog"></i> Ayarlar</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt"></i> Çıkış Yap</a></li>
+                            <li><a class="dropdown-item" href="../api/logout.php"><i class="fas fa-sign-out-alt"></i> Çıkış Yap</a></li>
                         </ul>
                     </div>
                 </div>
@@ -212,6 +280,28 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    
+    <!-- DataTables -->
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.bootstrap5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+    
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <!-- CRUD Helper -->
+    <script src="js/admin.crud.js"></script>
+    
+    <!-- Admin JS -->
     <script src="js/admin.js"></script>
 </body>
 </html>
