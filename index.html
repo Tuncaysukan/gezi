@@ -994,6 +994,41 @@
             }
         }
 
+        // Kategori kutusundan kategori içeriği yükle
+        function loadCategoryByBox(categoryData) {
+            // Dinamik alanı göster
+            document.getElementById('dynamicContentArea').style.display = 'block';
+            document.getElementById('categoryTitle').textContent = categoryData.boxTitle || categoryData.name;
+
+            // Alana kaydır
+            document.getElementById('dynamicContentArea').scrollIntoView({ behavior: 'smooth' });
+
+            // Kategoriye ait gönderileri yükle
+            fetch(`api/crud.php?action=list&table=posts`)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success && data.data) {
+                        const posts = data.data.filter(post =>
+                            post.category_id == categoryData.id && post.is_active == 1
+                        );
+
+                        if (posts.length > 0) {
+                            displayPostsList(posts, 'posts');
+                            loadPostDetail(posts[0].id, 'posts');
+                        } else {
+                            // Boş durum göster
+                            document.getElementById('postsList').innerHTML =
+                                '<div class="text-center text-muted py-5"><i class="fa-solid fa-inbox fa-3x mb-3"></i><p>Bu kategoride henüz gönderi bulunmamaktadır.</p></div>';
+                            document.getElementById('postContent').innerHTML =
+                                '<div class="text-center text-muted py-5"><i class="fa-solid fa-file-circle-plus fa-3x mb-3"></i><p>İlk gönderiyi oluşturun!</p></div>';
+                        }
+                    }
+                })
+                .catch(err => console.error('Category posts load error:', err));
+
+            loadWidgets();
+        }
+
         // Kategori içeriğini yükle
         function loadCategoryContent(category) {
             // Dinamik alanı göster
@@ -1039,7 +1074,7 @@
         }
 
         // Gönderi listesini göster
-        function displayPostsList(posts) {
+        function displayPostsList(posts, tableType = 'posts') {
             let html = '';
 
             posts.forEach(post => {
@@ -1048,13 +1083,14 @@
                 const image = post.featured_image || `https://via.placeholder.com/100x75/6366f1/ffffff?text=${encodeURIComponent(post.title.substring(0, 5))}`;
 
                 html += `
-            <article class="blog-list-item" onclick="loadPostDetail(${post.id})" style="cursor: pointer;">
+            <article class="blog-list-item" onclick="loadPostDetail(${post.id}, '${tableType}')" style="cursor: pointer;">
                 <img src="${image}" alt="${escapeHtml(post.title)}" loading="lazy" 
                      onerror="this.src='https://via.placeholder.com/100x75/6366f1/ffffff?text=No+Image';">
                 <div class="blog-list-content">
                     <h6>${escapeHtml(post.title)}</h6>
                     <div class="blog-list-meta">
                         <span><i class="fa-regular fa-clock"></i> ${timeAgo}</span>
+                        ${post.view_count ? `<span><i class="fa-regular fa-eye"></i> ${post.view_count}</span>` : ''}
                     </div>
                 </div>
             </article>
@@ -1589,14 +1625,12 @@
                             );
 
                             // Eğer eşleşen kategori varsa, kategoriye yönlendir
-                            // Yoksa URL varsa ona, yoksa # kullan
+                            // Yoksa kategori kutusu gönderilerini yükle
                             let clickAction;
                             if (matchingCategory) {
                                 clickAction = `loadCategoryByBox({id: ${matchingCategory.id}, name: '${escapeHtml(matchingCategory.name)}', boxTitle: '${escapeHtml(box.title)}'}); return false;`;
-                            } else if (box.url) {
-                                clickAction = `window.location.href='${box.url}'`;
                             } else {
-                                clickAction = `alert('Bu kategori için henüz içerik bulunmamaktadır.')`;
+                                clickAction = `loadCategoryBoxPosts(${box.id}); return false;`;
                             }
 
                             html += `
@@ -1651,6 +1685,128 @@
             loadWidgets();
         }
 
+        // Kategori kutusu gönderilerini yükle
+        function loadCategoryBoxPosts(categoryBoxId) {
+            // Dinamik alanı göster
+            document.getElementById('dynamicContentArea').style.display = 'block';
+            document.getElementById('categoryTitle').textContent = 'Kategori Kutusu Gönderileri';
+
+            // Alana kaydır
+            document.getElementById('dynamicContentArea').scrollIntoView({ behavior: 'smooth' });
+
+            // Kategori kutusuna ait gönderileri yükle
+            fetch(`api/crud.php?action=list&table=category_box_posts`)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success && data.data) {
+                        const posts = data.data.filter(post =>
+                            post.category_box_id == categoryBoxId && post.is_active == 1
+                        );
+
+                        if (posts.length > 0) {
+                            displayPostsList(posts, 'category_box_posts');
+                            loadPostDetail(posts[0].id, 'category_box_posts');
+                        } else {
+                            // Boş durum göster
+                            document.getElementById('postsList').innerHTML =
+                                '<div class="text-center text-muted py-5"><i class="fa-solid fa-inbox fa-3x mb-3"></i><p>Bu kategori kutusunda henüz gönderi bulunmamaktadır.</p></div>';
+                            document.getElementById('postContent').innerHTML =
+                                '<div class="text-center text-muted py-5"><i class="fa-solid fa-file-circle-plus fa-3x mb-3"></i><p>İlk gönderiyi oluşturun!</p></div>';
+                        }
+                    }
+                })
+                .catch(err => console.error('Category box posts load error:', err));
+
+            loadWidgets();
+        }
+
+        // Bilgi kartı gönderilerini yükle
+        function loadInfoCardPosts(infoCardId) {
+            // Dinamik alanı göster
+            document.getElementById('dynamicContentArea').style.display = 'block';
+            document.getElementById('categoryTitle').textContent = 'Bilgi Kartı Gönderileri';
+
+            // Alana kaydır
+            document.getElementById('dynamicContentArea').scrollIntoView({ behavior: 'smooth' });
+
+            // Bilgi kartına ait gönderileri yükle
+            fetch(`api/crud.php?action=list&table=info_card_posts`)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success && data.data) {
+                        const posts = data.data.filter(post =>
+                            post.info_card_id == infoCardId && post.is_active == 1
+                        );
+
+                        if (posts.length > 0) {
+                            displayPostsList(posts, 'info_card_posts');
+                            loadPostDetail(posts[0].id, 'info_card_posts');
+                        } else {
+                            // Boş durum göster
+                            document.getElementById('postsList').innerHTML =
+                                '<div class="text-center text-muted py-5"><i class="fa-solid fa-inbox fa-3x mb-3"></i><p>Bu bilgi kartında henüz gönderi bulunmamaktadır.</p></div>';
+                            document.getElementById('postContent').innerHTML =
+                                '<div class="text-center text-muted py-5"><i class="fa-solid fa-file-circle-plus fa-3x mb-3"></i><p>İlk gönderiyi oluşturun!</p></div>';
+                        }
+                    }
+                })
+                .catch(err => console.error('Info card posts load error:', err));
+
+            loadWidgets();
+        }
+
+        // Gönderi detayını yükle (tablo türüne göre)
+        function loadPostDetail(postId, tableType = 'posts') {
+            const content = document.getElementById('postContent');
+            content.innerHTML = '<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>';
+
+            fetch(`api/crud.php?action=get&table=${tableType}&id=${postId}`)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success && data.data) {
+                        const post = data.data;
+                        const date = new Date(post.created_at).toLocaleDateString('tr-TR', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        });
+                        const image = post.featured_image || `https://via.placeholder.com/800x400/6366f1/ffffff?text=${encodeURIComponent(post.title)}`;
+
+                        content.innerHTML = `
+                    <article class="post-detail">
+                        <div class="post-header mb-4">
+                            <h1 class="post-title mb-3">${escapeHtml(post.title)}</h1>
+                            <div class="post-meta mb-3">
+                                <span class="me-3"><i class="far fa-calendar me-1"></i>${date}</span>
+                                <span class="me-3"><i class="far fa-user me-1"></i>Admin</span>
+                                ${post.view_count ? `<span class="me-3"><i class="far fa-eye me-1"></i>${post.view_count} görüntüleme</span>` : ''}
+                            </div>
+                        </div>
+                        
+                        <div class="post-featured-image mb-4">
+                            <img src="${image}" alt="${escapeHtml(post.title)}" 
+                                 class="img-fluid rounded" 
+                                 onerror="this.src='https://via.placeholder.com/800x400/6366f1/ffffff?text=No+Image';">
+                        </div>
+                        
+                        <div class="post-content">
+                            ${post.content || '<p class="text-muted">Bu gönderinin içeriği bulunmuyor.</p>'}
+                        </div>
+                        
+                        ${post.excerpt ? `<div class="post-excerpt alert alert-info mt-4"><strong>Özet:</strong> ${escapeHtml(post.excerpt)}</div>` : ''}
+                    </article>
+                `;
+
+                        // İçeriğin başına kaydır
+                        content.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                })
+                .catch(err => {
+                    console.error('Gönderi detay yükleme hatası:', err);
+                    content.innerHTML = '<div class="alert alert-danger">Gönderi yüklenemedi!</div>';
+                });
+        }
+
         // Load Info Cards (5'li Kartlar)
         function loadInfoCards() {
             fetch('api/crud.php?action=list&table=info_cards')
@@ -1684,11 +1840,12 @@
                             );
 
                             // Eğer eşleşen kategori varsa, kategoriye yönlendir
+                            // Yoksa bilgi kartı gönderilerini yükle
                             let clickAction;
                             if (matchingCategory) {
                                 clickAction = `onclick="loadCategoryByBox({id: ${matchingCategory.id}, name: '${escapeHtml(matchingCategory.name)}', boxTitle: '${escapeHtml(card.title)}'}); return false;"`;
                             } else {
-                                clickAction = `onclick="alert('Bu kategori için henüz içerik bulunmamaktadır.')"`;
+                                clickAction = `onclick="loadInfoCardPosts(${card.id}); return false;"`;
                             }
 
                             html += `
