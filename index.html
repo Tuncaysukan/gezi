@@ -1,44 +1,46 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Pars - SEO Uyumlu Gezi Teması">
     <meta name="keywords" content="gezi, blog, seyahat">
     <meta name="author" content="Pars">
-    
+
     <!-- Preconnect -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    
+
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <!-- Leaflet CSS (Harita için) -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    
+
     <!-- Custom CSS -->
     <link rel="stylesheet" href="assets/css/style.css">
-    
+
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="assets/img/favicon.png">
-    
+
     <title>Pars - Seo Uyumlu Gezi Teması</title>
-    
+
     <!-- Theme Script (Dark/Light Mode) -->
     <script>
-        (function() {
+        (function () {
             window.parsDefaultTheme = 'light';
             function getCookie(name) {
                 var nameEQ = name + "=";
                 var ca = document.cookie.split(';');
-                for(var i = 0; i < ca.length; i++) {
+                for (var i = 0; i < ca.length; i++) {
                     var c = ca[i];
                     while (c.charAt(0) == ' ') c = c.substring(1, c.length);
                     if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
@@ -50,13 +52,14 @@
         })();
     </script>
 </head>
+
 <body>
     <!-- Go to Top Button -->
     <button id="goTop">
         <span class="border-progress"></span>
         <span class="fa-regular fa-angle-up"></span>
     </button>
-    
+
     <div id="wrapper">
         <!-- Breaking News Ticker -->
         <div class="arse-header-news">
@@ -73,7 +76,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Header -->
         <header id="header" class="header-default">
             <div class="header-top">
@@ -81,39 +84,44 @@
                     <div class="row wrapper-header align-items-center">
                         <!-- Mobile Menu Button -->
                         <div class="col-md-4 col-3 d-xl-none">
-                            <a href="#mobileMenu" class="mobile-menu" data-bs-toggle="offcanvas" aria-controls="mobileMenu">
+                            <a href="#mobileMenu" class="mobile-menu" data-bs-toggle="offcanvas"
+                                aria-controls="mobileMenu">
                                 <i class="fa-solid fa-bars"></i>
                             </a>
                         </div>
-                        
+
                         <!-- Social Icons (Desktop) -->
                         <div class="col-xl-5 d-none d-xl-block">
                             <ul class="nav-icon d-flex justify-content-start align-items-center">
                                 <li>
-                                    <a href="#" aria-label="Twitter" title="Takip Et" rel="nofollow" target="_blank" class="nav-icon-item">
+                                    <a href="#" aria-label="Twitter" title="Takip Et" rel="nofollow" target="_blank"
+                                        class="nav-icon-item">
                                         <i class="fa-brands fa-x-twitter"></i>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" aria-label="Facebook" title="Takip Et" rel="nofollow" target="_blank" class="nav-icon-item">
+                                    <a href="#" aria-label="Facebook" title="Takip Et" rel="nofollow" target="_blank"
+                                        class="nav-icon-item">
                                         <i class="fa-brands fa-facebook-f"></i>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" aria-label="Instagram" title="Takip Et" rel="nofollow" target="_blank" class="nav-icon-item">
+                                    <a href="#" aria-label="Instagram" title="Takip Et" rel="nofollow" target="_blank"
+                                        class="nav-icon-item">
                                         <i class="fa-brands fa-instagram"></i>
                                     </a>
                                 </li>
                             </ul>
                         </div>
-                        
+
                         <!-- Logo -->
                         <div class="col-xl-2 col-md-4 col-6 text-center">
                             <a href="index.html" title="Pars" class="logo-header">
-                                <img src="assets/img/logo-dark.svg" alt="Pars Logo" class="logo theme-logo" width="160" height="50" id="themeLogo">
+                                <img src="assets/img/logo-dark.svg" alt="Pars Logo" class="logo theme-logo" width="160"
+                                    height="50" id="themeLogo">
                             </a>
                         </div>
-                        
+
                         <!-- Header Icons -->
                         <div class="col-xl-5 col-md-4 col-3">
                             <ul class="nav-icon d-flex justify-content-end align-items-center">
@@ -123,24 +131,25 @@
                                         <i class="fa-solid fa-layer-group"></i> Bize Ulaşın
                                     </a>
                                 </li>
-                                
+
                                 <!-- Search -->
                                 <li class="nav-search">
                                     <a href="#search" aria-label="Arama" data-bs-toggle="modal" class="nav-icon-item">
                                         <i class="fa-solid fa-magnifying-glass"></i>
                                     </a>
                                 </li>
-                                
+
                                 <!-- Dark Mode Toggle -->
                                 <li class="nav-wishlist">
                                     <a href="#" aria-label="Mod" class="theme-karanlik nav-icon-item" id="themeToggle">
                                         <i class="fa-solid fa-moon theme-icon"></i>
                                     </a>
                                 </li>
-                                
+
                                 <!-- Notifications -->
                                 <li class="nav-cart">
-                                    <a href="#bildirim" aria-label="Bildirim" data-bs-toggle="offcanvas" class="nav-icon-item">
+                                    <a href="#bildirim" aria-label="Bildirim" data-bs-toggle="offcanvas"
+                                        class="nav-icon-item">
                                         <i class="fa-solid fa-bell"></i>
                                         <span class="count-box">2</span>
                                     </a>
@@ -150,7 +159,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Navigation Menu -->
             <div class="header-bottom d-none d-xl-block">
                 <div class="container">
@@ -161,7 +170,8 @@
                                 <a href="#" class="item-link">Kategoriler <i class="fa-solid fa-angle-down"></i></a>
                                 <div class="sub-menu">
                                     <ul class="menu-list" id="categoriesMenu">
-                                        <li class="sub-menu-item"><a href="#" class="menu-link-text link">Yükleniyor...</a></li>
+                                        <li class="sub-menu-item"><a href="#"
+                                                class="menu-link-text link">Yükleniyor...</a></li>
                                     </ul>
                                 </div>
                             </li>
@@ -171,14 +181,15 @@
                 </div>
             </div>
         </header>
-        
+
         <!-- Main Content -->
         <main id="main-content">
             <!-- Top Authors/Editors Section -->
-           <br>
-            
-           <div class="map-wrapper" style="position:relative; width:100%; height:auto; background:#eef7f4; padding:20px; border-radius:12px;">
-    <div id="euTooltip" style="
+            <br>
+
+            <div class="map-wrapper"
+                style="position:relative; width:100%; height:auto; background:#eef7f4; padding:20px; border-radius:12px;">
+                <div id="euTooltip" style="
         position:absolute;
         padding:6px 12px;
         background:#111827;
@@ -188,11 +199,11 @@
         pointer-events:none;
         opacity:0;
         transition:opacity .15s;">
-    </div>
+                </div>
 
-    <svg id="europeMap" viewBox="0 0 900 600" style="width:100%; height:auto;"></svg>
-</div>
-            
+                <svg id="europeMap" viewBox="0 0 900 600" style="width:100%; height:auto;"></svg>
+            </div>
+
             <!-- Dynamic Content Area (Category & Post View) -->
             <section id="dynamicContentArea" class="py-5" style="display: none;">
                 <div class="container">
@@ -211,14 +222,14 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <!-- Center Content - Post Detail -->
                         <div class="col-lg-6 col-md-12 mb-4">
                             <div id="postContent" class="post-detail-area">
                                 <!-- Gönderi detayı buraya yüklenecek -->
                             </div>
                         </div>
-                        
+
                         <!-- Right Sidebar - Widgets -->
                         <div class="col-lg-3 col-md-12 mb-4">
                             <!-- Social Media Widget -->
@@ -242,7 +253,7 @@
                                     </a>
                                 </div>
                             </div>
-                            
+
                             <!-- Categories Widget -->
                             <div class="sidebar-widget mb-4">
                                 <h5 class="widget-title">Kategoriler</h5>
@@ -250,7 +261,7 @@
                                     <!-- Kategoriler buraya yüklenecek -->
                                 </div>
                             </div>
-                            
+
                             <!-- Recent Posts Widget -->
                             <div class="sidebar-widget">
                                 <h5 class="widget-title">Populer Gönderiler</h5>
@@ -262,32 +273,36 @@
                     </div>
                 </div>
             </section>
-            
+
             <!-- Stories Section -->
             <section class="stories-section">
                 <div class="container">
                     <div class="stories-wrapper">
                         <div class="story-item new">
                             <div class="story-avatar">
-                                <img src="https://picsum.photos/200/200?random=11" alt="WordPress Mağaza" loading="lazy">
+                                <img src="https://picsum.photos/200/200?random=11" alt="WordPress Mağaza"
+                                    loading="lazy">
                             </div>
                             <span class="story-title">WordPress...</span>
                         </div>
                         <div class="story-item">
                             <div class="story-avatar">
-                                <img src="https://picsum.photos/200/200?random=12" alt="Google PageSpeed" loading="lazy">
+                                <img src="https://picsum.photos/200/200?random=12" alt="Google PageSpeed"
+                                    loading="lazy">
                             </div>
                             <span class="story-title">Google P...</span>
                         </div>
                         <div class="story-item new">
                             <div class="story-avatar">
-                                <img src="https://picsum.photos/200/200?random=13" alt="Özgüveni Artırmak" loading="lazy">
+                                <img src="https://picsum.photos/200/200?random=13" alt="Özgüveni Artırmak"
+                                    loading="lazy">
                             </div>
                             <span class="story-title">Özgüveni...</span>
                         </div>
                         <div class="story-item">
                             <div class="story-avatar">
-                                <img src="https://picsum.photos/200/200?random=14" alt="WordPress Sitenizi" loading="lazy">
+                                <img src="https://picsum.photos/200/200?random=14" alt="WordPress Sitenizi"
+                                    loading="lazy">
                             </div>
                             <span class="story-title">WordPress...</span>
                         </div>
@@ -299,13 +314,15 @@
                         </div>
                         <div class="story-item active">
                             <div class="story-avatar">
-                                <img src="https://picsum.photos/200/200?random=16" alt="Resim Optimizasyonu" loading="lazy">
+                                <img src="https://picsum.photos/200/200?random=16" alt="Resim Optimizasyonu"
+                                    loading="lazy">
                             </div>
                             <span class="story-title">Resim Op...</span>
                         </div>
                         <div class="story-item new">
                             <div class="story-avatar">
-                                <img src="https://picsum.photos/200/200?random=17" alt="Arkadaşlarla Evde" loading="lazy">
+                                <img src="https://picsum.photos/200/200?random=17" alt="Arkadaşlarla Evde"
+                                    loading="lazy">
                             </div>
                             <span class="story-title">Arkadaşl...</span>
                         </div>
@@ -354,7 +371,7 @@
                     </div>
                 </div>
             </section>
-            
+
             <!-- Featured Posts -->
             <section class="featured-posts py-5">
                 <div class="container">
@@ -407,7 +424,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <!-- Center Content - Featured Post -->
                         <div class="col-lg-6 col-md-12 mb-4 order-lg-2">
                             <div class="featured-main-post">
@@ -417,7 +434,9 @@
                                 </div>
                                 <div class="featured-post-content">
                                     <h2>Kapadokya'nın En Güzelli Yerlerini Keşfedin</h2>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
+                                        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+                                        nostrud exercitation ullamco laboris...</p>
                                     <div class="featured-post-meta">
                                         <span><i class="fa-regular fa-calendar"></i> 17 Kasım 2025</span>
                                         <span><i class="fa-regular fa-eye"></i> 5.2K</span>
@@ -430,12 +449,14 @@
                                     <div class="col-lg-4 col-md-6">
                                         <article class="post-card">
                                             <div class="post-thumbnail">
-                                                <img src="https://picsum.photos/400/300?random=25" alt="Yeni 1" loading="lazy">
+                                                <img src="https://picsum.photos/400/300?random=25" alt="Yeni 1"
+                                                    loading="lazy">
                                                 <span class="post-category">Yeni</span>
                                             </div>
                                             <div class="post-content">
                                                 <h3 class="post-title"><a href="#">Yeni İçerik Başlığı</a></h3>
-                                                <p class="post-excerpt">Yeni eklenen içerikler burada görüntülenir...</p>
+                                                <p class="post-excerpt">Yeni eklenen içerikler burada görüntülenir...
+                                                </p>
                                                 <div class="post-meta">
                                                     <span><i class="fa-regular fa-calendar"></i> Bugün</span>
                                                     <span><i class="fa-regular fa-eye"></i> 125</span>
@@ -446,7 +467,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <!-- Right Sidebar - Widgets -->
                         <div class="col-lg-3 col-md-12 mb-4 order-lg-3">
                             <!-- Social Media Widget -->
@@ -473,7 +494,7 @@
                                     </a>
                                 </div>
                             </div>
-                            
+
                             <!-- Categories Widget -->
                             <div class="sidebar-widget mb-4">
                                 <h5 class="widget-title">Kategoriler</h5>
@@ -510,7 +531,7 @@
                                     </li>
                                 </ul>
                             </div>
-                            
+
                             <!-- Popular Posts Widget -->
                             <div class="sidebar-widget">
                                 <h5 class="widget-title">En Çok Okunanlar</h5>
@@ -540,41 +561,7 @@
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- Category Boxes -->
-                    <div class="category-boxes-section mt-5">
-                        <div class="row g-4">
-                            <div class="col-lg-3 col-md-6">
-                                <div class="category-box bg-gradient-blue">
-                                    <i class="fa-solid fa-book-open"></i>
-                                    <h4>Başarıcağız Kutlu</h4>
-                                    <p>Motivasyon ve başarı hikayeleri</p>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-md-6">
-                                <div class="category-box bg-gradient-pink">
-                                    <i class="fa-solid fa-heart"></i>
-                                    <h4>Günlük Yaşam</h4>
-                                    <p>Hayatınızı kolaylaştıran ipucları</p>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-md-6">
-                                <div class="category-box bg-gradient-yellow">
-                                    <i class="fa-solid fa-lightbulb"></i>
-                                    <h4>Kişisel Gelişim</h4>
-                                    <p>Kendinizi geliştirin</p>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-md-6">
-                                <div class="category-box bg-gradient-green">
-                                    <i class="fa-solid fa-leaf"></i>
-                                    <h4>Sağlık & Spor</h4>
-                                    <p>Sağlıklı yaşam rehberi</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
+
                     <!-- AdSense Area Before Posts -->
                     <div class="adsense-area-top my-5">
                         <div class="adsense-box-horizontal">
@@ -583,21 +570,31 @@
                             <a href="#" class="adsense-link">Reklam</a>
                         </div>
                     </div>
-                    
+
+                    <!-- Category Boxes -->
+                    <div class="category-boxes-section mt-5">
+                        <div class="row g-4" id="categoryBoxesContainer">
+                            <!-- Dinamik yüklenecek -->
+                        </div>
+                    </div>
+
                     <!-- Regular Posts Grid -->
                     <h2 class="section-title mt-5 mb-4">Tüm Gönderiler</h2>
-                    
+
                     <!-- Post Tabs -->
                     <div class="post-tabs mb-4">
                         <ul class="nav nav-tabs" role="tablist">
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#rastgele" type="button" role="tab">RASTGELE</button>
+                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#rastgele" type="button"
+                                    role="tab">RASTGELE</button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#yeni" type="button" role="tab">YENİ</button>
+                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#yeni" type="button"
+                                    role="tab">YENİ</button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#populer" type="button" role="tab">POPÜLER</button>
+                                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#populer"
+                                    type="button" role="tab">POPÜLER</button>
                             </li>
                         </ul>
                         <div class="tab-content mt-4">
@@ -607,7 +604,8 @@
                                     <div class="col-lg-4 col-md-6">
                                         <article class="post-card">
                                             <div class="post-thumbnail">
-                                                <img src="https://picsum.photos/400/300?random=30" alt="Rastgele" loading="lazy">
+                                                <img src="https://picsum.photos/400/300?random=30" alt="Rastgele"
+                                                    loading="lazy">
                                                 <span class="post-category">Rastgele</span>
                                             </div>
                                             <div class="post-content">
@@ -622,19 +620,21 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <!-- Yeni Tab -->
                             <div class="tab-pane fade" id="yeni" role="tabpanel">
                                 <div class="row g-4">
                                     <div class="col-lg-4 col-md-6">
                                         <article class="post-card">
                                             <div class="post-thumbnail">
-                                                <img src="https://picsum.photos/400/300?random=25" alt="Yeni 1" loading="lazy">
+                                                <img src="https://picsum.photos/400/300?random=25" alt="Yeni 1"
+                                                    loading="lazy">
                                                 <span class="post-category">Yeni</span>
                                             </div>
                                             <div class="post-content">
                                                 <h3 class="post-title"><a href="#">Yeni İçerik Başlığı</a></h3>
-                                                <p class="post-excerpt">Yeni eklenen içerikler burada görüntülenir...</p>
+                                                <p class="post-excerpt">Yeni eklenen içerikler burada görüntülenir...
+                                                </p>
                                                 <div class="post-meta">
                                                     <span><i class="fa-regular fa-calendar"></i> Bugün</span>
                                                     <span><i class="fa-regular fa-eye"></i> 125</span>
@@ -644,219 +644,168 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <!-- Popüler Tab -->
                             <div class="tab-pane fade show active" id="populer" role="tabpanel">
                                 <div class="row g-4">
-                        <!-- Post Card 1 -->
-                        <div class="col-lg-4 col-md-6">
-                            <article class="post-card">
-                                <div class="post-thumbnail">
-                                    <img src="https://picsum.photos/400/300?random=101" alt="Gezi 1" loading="lazy">
-                                    <span class="post-category">Doğa</span>
-                                </div>
-                                <div class="post-content">
-                                    <h3 class="post-title"><a href="#">İstanbul'un Gizli Bahçeleri</a></h3>
-                                    <p class="post-excerpt">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
-                                    <div class="post-meta">
-                                        <span><i class="fa-regular fa-calendar"></i> 15 Kasım 2025</span>
-                                        <span><i class="fa-regular fa-eye"></i> 1.2K</span>
+                                    <!-- Post Card 1 -->
+                                    <div class="col-lg-4 col-md-6">
+                                        <article class="post-card">
+                                            <div class="post-thumbnail">
+                                                <img src="https://picsum.photos/400/300?random=101" alt="Gezi 1"
+                                                    loading="lazy">
+                                                <span class="post-category">Doğa</span>
+                                            </div>
+                                            <div class="post-content">
+                                                <h3 class="post-title"><a href="#">İstanbul'un Gizli Bahçeleri</a></h3>
+                                                <p class="post-excerpt">Lorem ipsum dolor sit amet, consectetur
+                                                    adipiscing elit...</p>
+                                                <div class="post-meta">
+                                                    <span><i class="fa-regular fa-calendar"></i> 15 Kasım 2025</span>
+                                                    <span><i class="fa-regular fa-eye"></i> 1.2K</span>
+                                                </div>
+                                            </div>
+                                        </article>
+                                    </div>
+
+                                    <!-- Post Card 2 -->
+                                    <div class="col-lg-4 col-md-6">
+                                        <article class="post-card">
+                                            <div class="post-thumbnail">
+                                                <img src="https://picsum.photos/400/300?random=102" alt="Gezi 2"
+                                                    loading="lazy">
+                                                <span class="post-category">Kültür</span>
+                                            </div>
+                                            <div class="post-content">
+                                                <h3 class="post-title"><a href="#">Kapadokya'da Bir Gün</a></h3>
+                                                <p class="post-excerpt">Sed do eiusmod tempor incididunt ut labore et
+                                                    dolore...</p>
+                                                <div class="post-meta">
+                                                    <span><i class="fa-regular fa-calendar"></i> 14 Kasım 2025</span>
+                                                    <span><i class="fa-regular fa-eye"></i> 856</span>
+                                                </div>
+                                            </div>
+                                        </article>
+                                    </div>
+
+                                    <!-- Post Card 3 -->
+                                    <div class="col-lg-4 col-md-6">
+                                        <article class="post-card">
+                                            <div class="post-thumbnail">
+                                                <img src="https://picsum.photos/400/300?random=103" alt="Gezi 3"
+                                                    loading="lazy">
+                                                <span class="post-category">Macera</span>
+                                            </div>
+                                            <div class="post-content">
+                                                <h3 class="post-title"><a href="#">Antalya Kanyonları</a></h3>
+                                                <p class="post-excerpt">Ut enim ad minim veniam, quis nostrud
+                                                    exercitation...</p>
+                                                <div class="post-meta">
+                                                    <span><i class="fa-regular fa-calendar"></i> 13 Kasım 2025</span>
+                                                    <span><i class="fa-regular fa-eye"></i> 2.1K</span>
+                                                </div>
+                                            </div>
+                                        </article>
                                     </div>
                                 </div>
-                            </article>
-                        </div>
-                        
-                        <!-- Post Card 2 -->
-                        <div class="col-lg-4 col-md-6">
-                            <article class="post-card">
-                                <div class="post-thumbnail">
-                                    <img src="https://picsum.photos/400/300?random=102" alt="Gezi 2" loading="lazy">
-                                    <span class="post-category">Kültür</span>
-                                </div>
-                                <div class="post-content">
-                                    <h3 class="post-title"><a href="#">Kapadokya'da Bir Gün</a></h3>
-                                    <p class="post-excerpt">Sed do eiusmod tempor incididunt ut labore et dolore...</p>
-                                    <div class="post-meta">
-                                        <span><i class="fa-regular fa-calendar"></i> 14 Kasım 2025</span>
-                                        <span><i class="fa-regular fa-eye"></i> 856</span>
-                                    </div>
-                                </div>
-                            </article>
-                        </div>
-                        
-                        <!-- Post Card 3 -->
-                        <div class="col-lg-4 col-md-6">
-                            <article class="post-card">
-                                <div class="post-thumbnail">
-                                    <img src="https://picsum.photos/400/300?random=103" alt="Gezi 3" loading="lazy">
-                                    <span class="post-category">Macera</span>
-                                </div>
-                                <div class="post-content">
-                                    <h3 class="post-title"><a href="#">Antalya Kanyonları</a></h3>
-                                    <p class="post-excerpt">Ut enim ad minim veniam, quis nostrud exercitation...</p>
-                                    <div class="post-meta">
-                                        <span><i class="fa-regular fa-calendar"></i> 13 Kasım 2025</span>
-                                        <span><i class="fa-regular fa-eye"></i> 2.1K</span>
-                                    </div>
-                                </div>
-                            </article>
-                        </div>
-                    </div>
-                                </div>
                             </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Load More Button -->
-                    <div class="text-center mt-5">
-                        <button class="btn-load-more">
-                            <i class="fa-solid fa-rotate"></i> DAHA FAZLA GÖSTER
-                        </button>
-                    </div>
-                    
-                    <!-- Info Cards Section -->
-                    <div class="info-cards-section mt-5 mb-5">
-                        <div class="row g-4">
-                            <div class="col-lg col-md-6">
-                                <div class="info-card info-card-blue">
-                                    <h3>Eğlence &<br>Kültür</h3>
-                                    <p>Desteklere ne için,<br>nasıl başvurulur?</p>
-                                </div>
-                            </div>
-                            <div class="col-lg col-md-6">
-                                <div class="info-card info-card-pink">
-                                    <h3>Günlük<br>Yaşam</h3>
-                                    <p>Başarılardan ne<br>öğrenilir?</p>
-                                </div>
-                            </div>
-                            <div class="col-lg col-md-6">
-                                <div class="info-card info-card-orange">
-                                    <h3>Kişisel<br>Gelişim</h3>
-                                    <p>Sivil Düşün nedir, neyi<br>haber verir?</p>
-                                </div>
-                            </div>
-                            <div class="col-lg col-md-6">
-                                <div class="info-card info-card-teal">
-                                    <h3>Sağlık & Spor</h3>
-                                    <p>Neyin, nasıl parçası<br>olunur?</p>
-                                </div>
-                            </div>
-                            <div class="col-lg col-md-6">
-                                <div class="info-card info-card-purple">
-                                    <h3>Seyahat &<br>Keşif</h3>
-                                    <p>Nasıl bir ağ<br>kuruyoruz?</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Hashtags Section -->
-                    <div class="hashtags-section mt-5">
-                        <div class="hashtags-wrapper">
-                            <a href="#" class="hashtag-item">#Softinays</a>
-                            <a href="#" class="hashtag-item">#Yapay Zeka</a>
-                            <a href="#" class="hashtag-item">#Pars Blog Teması</a>
-                            <a href="#" class="hashtag-item">#Lorem Ipsum</a>
-                            <a href="#" class="hashtag-item">#WordPress</a>
-                            <a href="#" class="hashtag-item">#Evde Spor</a>
-                            <a href="#" class="hashtag-item">#Blog Teması</a>
-                            <a href="#" class="hashtag-item">#Pars</a>
-                            <a href="#" class="hashtag-item">#Mobil Uygulamalar</a>
-                            <a href="#" class="hashtag-item">#Minimal</a>
-                        </div>
-                    </div>
-                    
-                    <!-- Category Slider (Full Width) -->
-                    <div class="category-slider-main mt-5 mb-5">
-                        <div class="category-slider-container">
-                            <button class="slider-nav slider-prev">
-                                <i class="fa-solid fa-chevron-left"></i>
-                            </button>
-                            <div class="category-slider">
-                                <div class="category-slide cat-gradient-coral">
-                                    <i class="fa-solid fa-palette"></i>
-                                    <span>Kategori 1</span>
-                                </div>
-                                <div class="category-slide cat-gradient-purple">
-                                    <i class="fa-solid fa-palette"></i>
-                                    <span>Kategori 2</span>
-                                </div>
-                                <div class="category-slide cat-gradient-green">
-                                    <i class="fa-solid fa-palette"></i>
-                                    <span>Kategori 3</span>
-                                </div>
-                                <div class="category-slide cat-gradient-pink">
-                                    <i class="fa-solid fa-palette"></i>
-                                    <span>Kategori 4</span>
-                                </div>
-                                <div class="category-slide cat-gradient-blue">
-                                    <i class="fa-solid fa-palette"></i>
-                                    <span>Kategori 5</span>
-                                </div>
-                                <div class="category-slide cat-gradient-orange">
-                                    <i class="fa-solid fa-palette"></i>
-                                    <span>Kategori 6</span>
-                                </div>
-                                <div class="category-slide cat-gradient-teal">
-                                    <i class="fa-solid fa-palette"></i>
-                                    <span>Kategori 7</span>
-                                </div>
-                                <div class="category-slide cat-gradient-brown">
-                                    <i class="fa-solid fa-palette"></i>
-                                    <span>Kategori 8</span>
-                                </div>
-                            </div>
-                            <button class="slider-nav slider-next">
-                                <i class="fa-solid fa-chevron-right"></i>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <!-- AdSense Area -->
-                    <div class="adsense-area my-5">
-                        <div class="adsense-box">
-                            <i class="fa-brands fa-google"></i>
-                            <span>Google AdSense</span>
-                            <p>Reklam Alanı</p>
                         </div>
                     </div>
                 </div>
-            </section>
-        </main>
-        
-        <!-- Footer -->
-        <footer class="footer bg-dark text-white py-5">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-4 mb-4">
-                        <h5>Hakkımızda</h5>
-                        <p>Pars Gezi Teması ile dünyayı keşfedin. SEO uyumlu, hızlı ve modern tasarım.</p>
-                    </div>
-                    <div class="col-lg-4 mb-4">
-                        <h5>Hızlı Linkler</h5>
-                        <ul class="list-unstyled">
-                            <li><a href="#" class="text-white-50">Ana Sayfa</a></li>
-                            <li><a href="#" class="text-white-50">Hakkımızda</a></li>
-                            <li><a href="#" class="text-white-50">İletişim</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-lg-4 mb-4">
-                        <h5>Sosyal Medya</h5>
-                        <div class="social-links">
-                            <a href="#" class="text-white me-3"><i class="fa-brands fa-facebook-f"></i></a>
-                            <a href="#" class="text-white me-3"><i class="fa-brands fa-twitter"></i></a>
-                            <a href="#" class="text-white me-3"><i class="fa-brands fa-instagram"></i></a>
-                        </div>
+
+                <!-- Load More Button -->
+                <div class="text-center mt-5">
+                    <button class="btn-load-more">
+                        <i class="fa-solid fa-rotate"></i> DAHA FAZLA GÖSTER
+                    </button>
+                </div>
+
+                <!-- AdSense Area -->
+                <div class="adsense-area-bottom my-5">
+                    <div class="adsense-box-horizontal">
+                        <i class="fa-brands fa-google"></i>
+                        <span>Google AdSense</span>
+                        <a href="#" class="adsense-link">Reklam</a>
                     </div>
                 </div>
-                <hr class="bg-white">
-                <div class="text-center">
-                    <p>&copy; 2025 Pars Gezi Teması. Tüm hakları saklıdır.</p>
+
+                <!-- Hashtags Section -->
+                <div class="hashtags-section mt-5">
+                    <div class="hashtags-wrapper">
+                        <a href="#" class="hashtag-item">#Softinays</a>
+                        <a href="#" class="hashtag-item">#Yapay Zeka</a>
+                        <a href="#" class="hashtag-item">#Pars Blog Teması</a>
+                        <a href="#" class="hashtag-item">#Lorem Ipsum</a>
+                        <a href="#" class="hashtag-item">#WordPress</a>
+                        <a href="#" class="hashtag-item">#Evde Spor</a>
+                        <a href="#" class="hashtag-item">#Blog Teması</a>
+                        <a href="#" class="hashtag-item">#Pars</a>
+                        <a href="#" class="hashtag-item">#Mobil Uygulamalar</a>
+                        <a href="#" class="hashtag-item">#Minimal</a>
+                    </div>
+                </div>
+
+                <!-- AdSense Area -->
+                <div class="adsense-area-bottom my-5">
+                    <div class="adsense-box-horizontal">
+                        <i class="fa-brands fa-google"></i>
+                        <span>Google AdSense</span>
+                        <a href="#" class="adsense-link">Reklam</a>
+                    </div>
+                </div>
+
+                <!-- Info Cards Section -->
+                <div class="info-cards-section mt-5 mb-5">
+                    <div class="row g-4" id="infoCardsContainer">
+                        <!-- Info kartları buradan yüklenecek -->
+                    </div>
+                </div>
+
+                <!-- AdSense Area -->
+                <div class="adsense-area my-5">
+                    <div class="adsense-box">
+                        <i class="fa-brands fa-google"></i>
+                        <span>Google AdSense</span>
+                        <p>Reklam Alanı</p>
+                    </div>
+                </div>
+    </div>
+    </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer bg-dark text-white py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5>Hakkımızda</h5>
+                    <p>Pars Gezi Teması ile dünyayı keşfedin. SEO uyumlu, hızlı ve modern tasarım.</p>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <h5>Hızlı Linkler</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white-50">Ana Sayfa</a></li>
+                        <li><a href="#" class="text-white-50">Hakkımızda</a></li>
+                        <li><a href="#" class="text-white-50">İletişim</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <h5>Sosyal Medya</h5>
+                    <div class="social-links">
+                        <a href="#" class="text-white me-3"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fa-brands fa-instagram"></i></a>
+                    </div>
                 </div>
             </div>
-        </footer>
+            <hr class="bg-white">
+            <div class="text-center">
+                <p>&copy; 2025 Pars Gezi Teması. Tüm hakları saklıdır.</p>
+            </div>
+        </div>
+    </footer>
     </div>
-    
+
     <!-- Search Modal -->
     <div class="modal fade" id="search" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -871,7 +820,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Notification Offcanvas -->
     <div class="offcanvas offcanvas-end" tabindex="-1" id="bildirim">
         <div class="offcanvas-header">
@@ -889,7 +838,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Mobile Menu Offcanvas -->
     <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileMenu">
         <div class="offcanvas-header">
@@ -906,13 +855,14 @@
             </ul>
         </div>
     </div>
-    
+
     <!-- Cookie Consent Banner -->
     <div id="cookieConsent" class="cookie-consent">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-9">
-                    <p class="mb-0">Bu site, deneyiminizi geliştirmek için çerezler kullanır. Kabul ederek devam edebilirsiniz.</p>
+                    <p class="mb-0">Bu site, deneyiminizi geliştirmek için çerezler kullanır. Kabul ederek devam
+                        edebilirsiniz.</p>
                 </div>
                 <div class="col-lg-3 text-end">
                     <button class="btn btn-primary btn-sm" id="acceptCookies">Kabul Et</button>
@@ -920,184 +870,184 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="assets/js/main.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
-<script src="https://unpkg.com/topojson-client@3/dist/topojson-client.min.js"></script>
+    <script src="https://unpkg.com/topojson-client@3/dist/topojson-client.min.js"></script>
 
-<script>
-// ELEMENTLER
-const svg = d3.select("#europeMap");
-const tooltip = document.getElementById("euTooltip");
+    <script>
+        // ELEMENTLER
+        const svg = d3.select("#europeMap");
+        const tooltip = document.getElementById("euTooltip");
 
-// KATEGORİLERİ SAKLA (Global)
-let categories = [];
+        // KATEGORİLERİ SAKLA (Global)
+        let categories = [];
 
-// KATEGORİLERİ API'DEN ÇEK
-fetch('api/crud.php?action=list&table=categories')
-    .then(r => r.json())
-    .then(data => {
-        if (data.success && data.data) {
-            categories = data.data;
-        }
-    })
-    .catch(err => console.error('Kategori yükleme hatası:', err));
-
-// PROJEKSİYON
-const projection = d3.geoMercator()
-    .center([15,55])
-    .scale(500)
-    .translate([450,300]);
-
-const path = d3.geoPath().projection(projection);
-
-// VERİ KAYNAĞI (Natural Earth 50m)
-fetch("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json")
-    .then(r => r.json())
-    .then(worldData => {
-
-        const countries = topojson.feature(worldData, worldData.objects.countries).features;
-
-        // Avrupa ülkelerini coğrafi konuma göre filtrele
-        const europe = countries.filter(f => {
-            const c = d3.geoCentroid(f);
-            return c[0] > -25 && c[0] < 45 && c[1] > 34 && c[1] < 72;
-        });
-
-        svg.selectAll("path")
-            .data(europe)
-            .enter()
-            .append("path")
-            .attr("d", path)
-            .attr("fill", "#d4d7dd")
-            .attr("stroke", "#fff")
-            .attr("stroke-width", 1)
-            .attr("class", "country")
-            .style("cursor","pointer")
-
-            // ÜZERİNE GELİNCE
-            .on("mousemove", function(event, d){
-                const name = d.properties.name || "Bilinmiyor";
-
-                this.setAttribute("fill","#9ca3af");
-
-                // Tooltip pozisyonu
-                const rect = svg.node().getBoundingClientRect();
-                tooltip.style.left = (event.clientX - rect.left + 10) + "px";
-                tooltip.style.top  = (event.clientY - rect.top - 10) + "px";
-                tooltip.style.opacity = 1;
-                tooltip.textContent = name;
+        // KATEGORİLERİ API'DEN ÇEK
+        fetch('api/crud.php?action=list&table=categories')
+            .then(r => r.json())
+            .then(data => {
+                if (data.success && data.data) {
+                    categories = data.data;
+                }
             })
+            .catch(err => console.error('Kategori yükleme hatası:', err));
 
-            // ÇIKINCA
-            .on("mouseout", function(){
-                this.setAttribute("fill","#d4d7dd");
-                tooltip.style.opacity = 0;
-            })
+        // PROJEKSİYON
+        const projection = d3.geoMercator()
+            .center([15, 55])
+            .scale(500)
+            .translate([450, 300]);
 
-            // TIKLAYINCA SEÇİLİ RENGİ
-            .on("click", function(event, d){
-                svg.selectAll("path").attr("fill","#d4d7dd");
-                this.setAttribute("fill","#111827");
+        const path = d3.geoPath().projection(projection);
 
-                const countryName = d.properties.name;
-                
-                // Ülkeyi kategoriye eşleştir ve sayfa aç
-                findCategoryByCountry(countryName);
+        // VERİ KAYNAĞI (Natural Earth 50m)
+        fetch("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json")
+            .then(r => r.json())
+            .then(worldData => {
+
+                const countries = topojson.feature(worldData, worldData.objects.countries).features;
+
+                // Avrupa ülkelerini coğrafi konuma göre filtrele
+                const europe = countries.filter(f => {
+                    const c = d3.geoCentroid(f);
+                    return c[0] > -25 && c[0] < 45 && c[1] > 34 && c[1] < 72;
+                });
+
+                svg.selectAll("path")
+                    .data(europe)
+                    .enter()
+                    .append("path")
+                    .attr("d", path)
+                    .attr("fill", "#d4d7dd")
+                    .attr("stroke", "#fff")
+                    .attr("stroke-width", 1)
+                    .attr("class", "country")
+                    .style("cursor", "pointer")
+
+                    // ÜZERİNE GELİNCE
+                    .on("mousemove", function (event, d) {
+                        const name = d.properties.name || "Bilinmiyor";
+
+                        this.setAttribute("fill", "#9ca3af");
+
+                        // Tooltip pozisyonu
+                        const rect = svg.node().getBoundingClientRect();
+                        tooltip.style.left = (event.clientX - rect.left + 10) + "px";
+                        tooltip.style.top = (event.clientY - rect.top - 10) + "px";
+                        tooltip.style.opacity = 1;
+                        tooltip.textContent = name;
+                    })
+
+                    // ÇIKINCA
+                    .on("mouseout", function () {
+                        this.setAttribute("fill", "#d4d7dd");
+                        tooltip.style.opacity = 0;
+                    })
+
+                    // TIKLAYINCA SEÇİLİ RENGİ
+                    .on("click", function (event, d) {
+                        svg.selectAll("path").attr("fill", "#d4d7dd");
+                        this.setAttribute("fill", "#111827");
+
+                        const countryName = d.properties.name;
+
+                        // Ülkeyi kategoriye eşleştir ve sayfa aç
+                        findCategoryByCountry(countryName);
+                    });
             });
-    });
 
-// Ülke adına göre kategori bul ve yönlendir
-function findCategoryByCountry(countryName) {
-    // Ülke adlarını normalize et
-    const countryMap = {
-        'Turkey': 'Türkiye', 'Germany': 'Almanya', 'France': 'Fransa',
-        'Italy': 'İtalya', 'Spain': 'İspanya', 'United Kingdom': 'Birleşik Krallık',
-        'Greece': 'Yunanistan', 'Netherlands': 'Hollanda', 'Belgium': 'Belçika',
-        'Austria': 'Avusturya', 'Switzerland': 'İsviçre', 'Portugal': 'Portekiz',
-        'Sweden': 'İsveç', 'Norway': 'Norveç', 'Denmark': 'Danimarka',
-        'Finland': 'Finlandiya', 'Poland': 'Polonya', 'Czech Republic': 'Çek Cumhuriyeti',
-        'Hungary': 'Macaristan', 'Romania': 'Romanya', 'Bulgaria': 'Bulgaristan',
-        'Croatia': 'Hırvatistan', 'Serbia': 'Sırbistan', 'Bosnia and Herzegovina': 'Bosna-Hersek',
-        'Albania': 'Arnavutluk', 'Macedonia': 'Makedonya', 'Slovenia': 'Slovenya',
-        'Slovakia': 'Slovakya', 'Lithuania': 'Litvanya', 'Latvia': 'Letonya',
-        'Estonia': 'Estonya', 'Belarus': 'Belarus', 'Ukraine': 'Ukrayna',
-        'Moldova': 'Moldova', 'Ireland': 'İrlanda', 'Iceland': 'İzlanda'
-    };
-    
-    const turkishName = countryMap[countryName] || countryName;
-    
-    // Kategorilerde ara
-    const category = categories.find(cat => 
-        cat.name.toLowerCase() === turkishName.toLowerCase() ||
-        cat.name.toLowerCase() === countryName.toLowerCase()
-    );
-    
-    if (category) {
-        // Kategori sayfasını dinamik alana yükle
-        loadCategoryContent(category);
-    } else {
-        alert(`${turkishName} için henüz içerik bulunmamaktadır.`);
-    }
-}
+        // Ülke adına göre kategori bul ve yönlendir
+        function findCategoryByCountry(countryName) {
+            // Ülke adlarını normalize et
+            const countryMap = {
+                'Turkey': 'Türkiye', 'Germany': 'Almanya', 'France': 'Fransa',
+                'Italy': 'İtalya', 'Spain': 'İspanya', 'United Kingdom': 'Birleşik Krallık',
+                'Greece': 'Yunanistan', 'Netherlands': 'Hollanda', 'Belgium': 'Belçika',
+                'Austria': 'Avusturya', 'Switzerland': 'İsviçre', 'Portugal': 'Portekiz',
+                'Sweden': 'İsveç', 'Norway': 'Norveç', 'Denmark': 'Danimarka',
+                'Finland': 'Finlandiya', 'Poland': 'Polonya', 'Czech Republic': 'Çek Cumhuriyeti',
+                'Hungary': 'Macaristan', 'Romania': 'Romanya', 'Bulgaria': 'Bulgaristan',
+                'Croatia': 'Hırvatistan', 'Serbia': 'Sırbistan', 'Bosnia and Herzegovina': 'Bosna-Hersek',
+                'Albania': 'Arnavutluk', 'Macedonia': 'Makedonya', 'Slovenia': 'Slovenya',
+                'Slovakia': 'Slovakya', 'Lithuania': 'Litvanya', 'Latvia': 'Letonya',
+                'Estonia': 'Estonya', 'Belarus': 'Belarus', 'Ukraine': 'Ukrayna',
+                'Moldova': 'Moldova', 'Ireland': 'İrlanda', 'Iceland': 'İzlanda'
+            };
 
-// Kategori içeriğini yükle
-function loadCategoryContent(category) {
-    // Dinamik alanı göster
-    document.getElementById('dynamicContentArea').style.display = 'block';
-    document.getElementById('categoryTitle').textContent = category.name;
-    
-    // Alana kaydır
-    document.getElementById('dynamicContentArea').scrollIntoView({ behavior: 'smooth' });
-    
-    // Kategoriye ait gönderileri yükle
-    fetch(`api/crud.php?action=list&table=posts`)
-        .then(r => r.json())
-        .then(data => {
-            if (data.success && data.data) {
-                const posts = data.data.filter(post => 
-                    post.category_id == category.id && post.is_active == 1
-                );
-                
-                if (posts.length > 0) {
-                    displayPostsList(posts);
-                    // İlk gönderiyi otomatik göster
-                    loadPostDetail(posts[0].id);
-                } else {
-                    document.getElementById('postsList').innerHTML = `
+            const turkishName = countryMap[countryName] || countryName;
+
+            // Kategorilerde ara
+            const category = categories.find(cat =>
+                cat.name.toLowerCase() === turkishName.toLowerCase() ||
+                cat.name.toLowerCase() === countryName.toLowerCase()
+            );
+
+            if (category) {
+                // Kategori sayfasını dinamik alana yükle
+                loadCategoryContent(category);
+            } else {
+                alert(`${turkishName} için henüz içerik bulunmamaktadır.`);
+            }
+        }
+
+        // Kategori içeriğini yükle
+        function loadCategoryContent(category) {
+            // Dinamik alanı göster
+            document.getElementById('dynamicContentArea').style.display = 'block';
+            document.getElementById('categoryTitle').textContent = category.name;
+
+            // Alana kaydır
+            document.getElementById('dynamicContentArea').scrollIntoView({ behavior: 'smooth' });
+
+            // Kategoriye ait gönderileri yükle
+            fetch(`api/crud.php?action=list&table=posts`)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success && data.data) {
+                        const posts = data.data.filter(post =>
+                            post.category_id == category.id && post.is_active == 1
+                        );
+
+                        if (posts.length > 0) {
+                            displayPostsList(posts);
+                            // İlk gönderiyi otomatik göster
+                            loadPostDetail(posts[0].id);
+                        } else {
+                            document.getElementById('postsList').innerHTML = `
                         <div class="text-center py-4">
                             <i class="fas fa-inbox fa-2x text-muted mb-2"></i>
                             <p class="text-muted small">Bu kategoride henüz gönderi yok</p>
                         </div>
                     `;
-                    document.getElementById('postContent').innerHTML = `
+                            document.getElementById('postContent').innerHTML = `
                         <div class="text-center py-5">
                             <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
                             <p class="text-muted">Bu kategoride henüz gönderi bulunmamaktadır.</p>
                         </div>
                     `;
-                }
-            }
-        })
-        .catch(err => console.error('Gönderi yükleme hatası:', err));
-    
-    // Widget'ları yükle
-    loadWidgets();
-}
+                        }
+                    }
+                })
+                .catch(err => console.error('Gönderi yükleme hatası:', err));
 
-// Gönderi listesini göster
-function displayPostsList(posts) {
-    let html = '';
-    
-    posts.forEach(post => {
-        const date = new Date(post.created_at);
-        const timeAgo = getTimeAgo(date);
-        const image = post.featured_image || `https://via.placeholder.com/100x75/6366f1/ffffff?text=${encodeURIComponent(post.title.substring(0, 5))}`;
-        
-        html += `
+            // Widget'ları yükle
+            loadWidgets();
+        }
+
+        // Gönderi listesini göster
+        function displayPostsList(posts) {
+            let html = '';
+
+            posts.forEach(post => {
+                const date = new Date(post.created_at);
+                const timeAgo = getTimeAgo(date);
+                const image = post.featured_image || `https://via.placeholder.com/100x75/6366f1/ffffff?text=${encodeURIComponent(post.title.substring(0, 5))}`;
+
+                html += `
             <article class="blog-list-item" onclick="loadPostDetail(${post.id})" style="cursor: pointer;">
                 <img src="${image}" alt="${escapeHtml(post.title)}" loading="lazy" 
                      onerror="this.src='https://via.placeholder.com/100x75/6366f1/ffffff?text=No+Image';">
@@ -1109,29 +1059,29 @@ function displayPostsList(posts) {
                 </div>
             </article>
         `;
-    });
-    
-    document.getElementById('postsList').innerHTML = html;
-}
+            });
 
-// Gönderi detayını yükle
-function loadPostDetail(postId) {
-    const content = document.getElementById('postContent');
-    content.innerHTML = '<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>';
-    
-    fetch(`api/crud.php?action=get&table=posts&id=${postId}`)
-        .then(r => r.json())
-        .then(data => {
-            if (data.success && data.data) {
-                const post = data.data;
-                const date = new Date(post.created_at).toLocaleDateString('tr-TR', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                });
-                const image = post.featured_image || `https://via.placeholder.com/800x400/6366f1/ffffff?text=${encodeURIComponent(post.title)}`;
-                
-                content.innerHTML = `
+            document.getElementById('postsList').innerHTML = html;
+        }
+
+        // Gönderi detayını yükle
+        function loadPostDetail(postId) {
+            const content = document.getElementById('postContent');
+            content.innerHTML = '<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>';
+
+            fetch(`api/crud.php?action=get&table=posts&id=${postId}`)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success && data.data) {
+                        const post = data.data;
+                        const date = new Date(post.created_at).toLocaleDateString('tr-TR', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        });
+                        const image = post.featured_image || `https://via.placeholder.com/800x400/6366f1/ffffff?text=${encodeURIComponent(post.title)}`;
+
+                        content.innerHTML = `
                     <article class="post-detail">
                         <div class="post-header mb-4">
                             <h1 class="post-title mb-3">${escapeHtml(post.title)}</h1>
@@ -1154,53 +1104,53 @@ function loadPostDetail(postId) {
                         ${post.excerpt ? `<div class="post-excerpt alert alert-info mt-4"><strong>Özet:</strong> ${escapeHtml(post.excerpt)}</div>` : ''}
                     </article>
                 `;
-                
-                // İçeriğin başına kaydır
-                content.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        })
-        .catch(err => {
-            console.error('Gönderi detay yükleme hatası:', err);
-            content.innerHTML = '<div class="alert alert-danger">Gönderi yüklenemedi!</div>';
-        });
-}
 
-// Widget'ları yükle
-function loadWidgets() {
-    // Kategoriler widget
-    fetch('api/crud.php?action=list&table=categories')
-        .then(r => r.json())
-        .then(data => {
-            if (data.success && data.data) {
-                let html = '';
-                data.data.filter(cat => cat.is_active == 1).slice(0, 8).forEach(cat => {
-                    html += `
+                        // İçeriğin başına kaydır
+                        content.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                })
+                .catch(err => {
+                    console.error('Gönderi detay yükleme hatası:', err);
+                    content.innerHTML = '<div class="alert alert-danger">Gönderi yüklenemedi!</div>';
+                });
+        }
+
+        // Widget'ları yükle
+        function loadWidgets() {
+            // Kategoriler widget
+            fetch('api/crud.php?action=list&table=categories')
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success && data.data) {
+                        let html = '';
+                        data.data.filter(cat => cat.is_active == 1).slice(0, 8).forEach(cat => {
+                            html += `
                         <a href="#" class="category-item" onclick="findCategoryByCountry('${cat.name}'); return false;">
                             <span>${escapeHtml(cat.name)}</span>
                             <i class="fas fa-chevron-right"></i>
                         </a>
                     `;
+                        });
+                        document.getElementById('categoriesWidget').innerHTML = html;
+                    }
                 });
-                document.getElementById('categoriesWidget').innerHTML = html;
-            }
-        });
-    
-    // Son gönderiler widget
-    fetch('api/crud.php?action=list&table=posts')
-        .then(r => r.json())
-        .then(data => {
-            if (data.success && data.data) {
-                let html = '';
-                const recentPosts = data.data
-                    .filter(p => p.is_active == 1)
-                    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-                    .slice(0, 5);
-                
-                recentPosts.forEach(post => {
-                    const timeAgo = getTimeAgo(new Date(post.created_at));
-                    const image = post.featured_image || `https://via.placeholder.com/100x75/6366f1/ffffff?text=No`;
-                    
-                    html += `
+
+            // Son gönderiler widget
+            fetch('api/crud.php?action=list&table=posts')
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success && data.data) {
+                        let html = '';
+                        const recentPosts = data.data
+                            .filter(p => p.is_active == 1)
+                            .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+                            .slice(0, 5);
+
+                        recentPosts.forEach(post => {
+                            const timeAgo = getTimeAgo(new Date(post.created_at));
+                            const image = post.featured_image || `https://via.placeholder.com/100x75/6366f1/ffffff?text=No`;
+
+                            html += `
                         <article class="blog-list-item" onclick="loadPostDetail(${post.id})" style="cursor: pointer;">
                             <img src="${image}" alt="${escapeHtml(post.title)}" loading="lazy" 
                                  onerror="this.src='https://via.placeholder.com/100x75/6366f1/ffffff?text=No';">
@@ -1212,87 +1162,87 @@ function loadWidgets() {
                             </div>
                         </article>
                     `;
+                        });
+                        document.getElementById('recentPostsWidget').innerHTML = html;
+                    }
                 });
-                document.getElementById('recentPostsWidget').innerHTML = html;
-            }
-        });
-}
-
-// Alanı kapat
-function closeContentArea() {
-    document.getElementById('dynamicContentArea').style.display = 'none';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-// Yardımcı fonksiyonlar
-function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-}
-
-function getTimeAgo(date) {
-    const seconds = Math.floor((new Date() - date) / 1000);
-    const intervals = {
-        'yıl': 31536000,
-        'ay': 2592000,
-        'gün': 86400,
-        'saat': 3600,
-        'dakika': 60
-    };
-    
-    for (let [name, value] of Object.entries(intervals)) {
-        const interval = Math.floor(seconds / value);
-        if (interval >= 1) {
-            return `${interval} ${name} önce`;
         }
-    }
-    return 'Az önce';
-}
 
-// ======================
-// LOAD DYNAMIC CONTENT
-// ======================
+        // Alanı kapat
+        function closeContentArea() {
+            document.getElementById('dynamicContentArea').style.display = 'none';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
-// Load Breaking News
-function loadBreakingNews() {
-    fetch('api/crud.php?action=list&table=breaking_news')
-        .then(r => r.json())
-        .then(data => {
-            if (data.success && data.data && data.data.length > 0) {
-                const news = data.data
-                    .filter(n => n.is_active == 1)
-                    .sort((a, b) => (a.order || 0) - (b.order || 0));
-                
-                let html = '';
-                news.forEach(item => {
-                    const url = item.url || '#';
-                    html += `<li><a href="${url}" title="${escapeHtml(item.title)}">${escapeHtml(item.title)}</a></li>`;
-                });
-                
-                if (html) {
-                    document.getElementById('breakingNewsList').innerHTML = html;
+        // Yardımcı fonksiyonlar
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function getTimeAgo(date) {
+            const seconds = Math.floor((new Date() - date) / 1000);
+            const intervals = {
+                'yıl': 31536000,
+                'ay': 2592000,
+                'gün': 86400,
+                'saat': 3600,
+                'dakika': 60
+            };
+
+            for (let [name, value] of Object.entries(intervals)) {
+                const interval = Math.floor(seconds / value);
+                if (interval >= 1) {
+                    return `${interval} ${name} önce`;
                 }
             }
-        })
-        .catch(err => console.error('Breaking news load error:', err));
-}
+            return 'Az önce';
+        }
 
-// Load Stories
-function loadStories() {
-    fetch('api/crud.php?action=list&table=stories')
-        .then(r => r.json())
-        .then(data => {
-            if (data.success && data.data && data.data.length > 0) {
-                const stories = data.data
-                    .filter(s => s.is_active == 1)
-                    .sort((a, b) => (a.order || 0) - (b.order || 0));
-                
-                let html = '';
-                stories.forEach(story => {
-                    const url = story.url || '#';
-                    const newBadge = story.is_new == 1 ? '<span class="story-yeni">Yeni</span>' : '';
-                    html += `
+        // ======================
+        // LOAD DYNAMIC CONTENT
+        // ======================
+
+        // Load Breaking News
+        function loadBreakingNews() {
+            fetch('api/crud.php?action=list&table=breaking_news')
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success && data.data && data.data.length > 0) {
+                        const news = data.data
+                            .filter(n => n.is_active == 1)
+                            .sort((a, b) => (a.order || 0) - (b.order || 0));
+
+                        let html = '';
+                        news.forEach(item => {
+                            const url = item.url || '#';
+                            html += `<li><a href="${url}" title="${escapeHtml(item.title)}">${escapeHtml(item.title)}</a></li>`;
+                        });
+
+                        if (html) {
+                            document.getElementById('breakingNewsList').innerHTML = html;
+                        }
+                    }
+                })
+                .catch(err => console.error('Breaking news load error:', err));
+        }
+
+        // Load Stories
+        function loadStories() {
+            fetch('api/crud.php?action=list&table=stories')
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success && data.data && data.data.length > 0) {
+                        const stories = data.data
+                            .filter(s => s.is_active == 1)
+                            .sort((a, b) => (a.order || 0) - (b.order || 0));
+
+                        let html = '';
+                        stories.forEach(story => {
+                            const url = story.url || '#';
+                            const newBadge = story.is_new == 1 ? '<span class="story-yeni">Yeni</span>' : '';
+                            html += `
                         <div class="swiper-slide">
                             <a href="${url}" title="${escapeHtml(story.title)}">
                                 <div class="image">
@@ -1303,115 +1253,118 @@ function loadStories() {
                             </a>
                         </div>
                     `;
-                });
-                
-                const container = document.querySelector('.swiper-wrapper');
-                if (container && html) {
-                    container.innerHTML = html;
-                    // Re-initialize Swiper if it exists
-                    if (window.storySwiper) {
-                        window.storySwiper.update();
+                        });
+
+                        const container = document.querySelector('.swiper-wrapper');
+                        if (container && html) {
+                            container.innerHTML = html;
+                            // Re-initialize Swiper if it exists
+                            if (window.storySwiper) {
+                                window.storySwiper.update();
+                            }
+                        }
                     }
-                }
+                })
+                .catch(err => console.error('Stories load error:', err));
+        }
+
+        // Load Hashtags
+        function loadHashtags() {
+            fetch('api/crud.php?action=list&table=hashtags')
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success && data.data && data.data.length > 0) {
+                        const hashtags = data.data
+                            .filter(h => h.is_active == 1)
+                            .sort((a, b) => (a.order || 0) - (b.order || 0));
+
+                        let html = '';
+                        hashtags.forEach(tag => {
+                            const url = tag.url || '#';
+                            html += `<li><a href="${url}" title="${escapeHtml(tag.name)}">${escapeHtml(tag.name)}</a></li>`;
+                        });
+
+                        const container = document.querySelector('.sosyal-medya-hashtag ul');
+                        if (container && html) {
+                            container.innerHTML = html;
+                        }
+                    }
+                })
+                .catch(err => console.error('Hashtags load error:', err));
+        }
+
+        // Load Categories Menu
+        function loadCategoriesMenu() {
+            fetch('api/crud.php?action=list&table=categories')
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success && data.data && data.data.length > 0) {
+                        const cats = data.data
+                            .filter(c => c.is_active == 1)
+                            .sort((a, b) => (a.order || 0) - (b.order || 0));
+
+                        let html = '';
+                        cats.forEach(cat => {
+                            // loadCategoryByBox kullan (kutularla aynı fonksiyon)
+                            html += `<li class="sub-menu-item"><a href="#" class="menu-link-text link" onclick="loadCategoryByBox({id: ${cat.id}, name: '${escapeHtml(cat.name)}', boxTitle: '${escapeHtml(cat.name)}'}); return false;">${escapeHtml(cat.name)}</a></li>`;
+                        });
+
+                        const menu = document.getElementById('categoriesMenu');
+                        if (menu && html) {
+                            menu.innerHTML = html;
+                        }
+                    }
+                })
+                .catch(err => console.error('Categories menu load error:', err));
+        }
+
+        // Initialize all dynamic content on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            loadBreakingNews();
+            loadStories();
+            loadHashtags();
+            loadCategoriesMenu();
+            loadCategoryBoxes();
+            loadInfoCards();
+            loadLeftSidebarRecentPosts();
+            loadFeaturedPost();
+            loadRightSidebarCategories();
+            loadRightSidebarPopularPosts();
+            loadAllPostsTabs();
+
+            // Existing category loading
+            if (!categories || categories.length === 0) {
+                fetch('api/crud.php?action=list&table=categories')
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.success && data.data) {
+                            categories = data.data;
+                        }
+                    });
             }
-        })
-        .catch(err => console.error('Stories load error:', err));
-}
+        });
 
-// Load Hashtags
-function loadHashtags() {
-    fetch('api/crud.php?action=list&table=hashtags')
-        .then(r => r.json())
-        .then(data => {
-            if (data.success && data.data && data.data.length > 0) {
-                const hashtags = data.data
-                    .filter(h => h.is_active == 1)
-                    .sort((a, b) => (a.order || 0) - (b.order || 0));
-                
-                let html = '';
-                hashtags.forEach(tag => {
-                    const url = tag.url || '#';
-                    html += `<li><a href="${url}" title="${escapeHtml(tag.name)}">${escapeHtml(tag.name)}</a></li>`;
-                });
-                
-                const container = document.querySelector('.sosyal-medya-hashtag ul');
-                if (container && html) {
-                    container.innerHTML = html;
-                }
-            }
-        })
-        .catch(err => console.error('Hashtags load error:', err));
-}
+        // ======================
+        // LOAD ALL SECTIONS
+        // ======================
 
-// Load Categories Menu
-function loadCategoriesMenu() {
-    fetch('api/crud.php?action=list&table=categories')
-        .then(r => r.json())
-        .then(data => {
-            if (data.success && data.data && data.data.length > 0) {
-                const cats = data.data
-                    .filter(c => c.is_active == 1)
-                    .sort((a, b) => (a.order || 0) - (b.order || 0));
-                
-                let html = '';
-                cats.forEach(cat => {
-                    html += `<li class="sub-menu-item"><a href="#" class="menu-link-text link" onclick="loadCategoryContent({id: ${cat.id}, name: '${escapeHtml(cat.name)}'}); return false;">${escapeHtml(cat.name)}</a></li>`;
-                });
-                
-                const menu = document.getElementById('categoriesMenu');
-                if (menu && html) {
-                    menu.innerHTML = html;
-                }
-            }
-        })
-        .catch(err => console.error('Categories menu load error:', err));
-}
+        // Load Left Sidebar Recent Posts
+        function loadLeftSidebarRecentPosts() {
+            fetch('api/crud.php?action=list&table=posts')
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success && data.data) {
+                        const posts = data.data
+                            .filter(p => p.is_active == 1)
+                            .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+                            .slice(0, 4);
 
-// Initialize all dynamic content on page load
-document.addEventListener('DOMContentLoaded', function() {
-    loadBreakingNews();
-    loadStories();
-    loadHashtags();
-    loadCategoriesMenu();
-    loadLeftSidebarRecentPosts();
-    loadFeaturedPost();
-    loadRightSidebarCategories();
-    loadRightSidebarPopularPosts();
-    loadAllPostsTabs();
-    
-    // Existing category loading
-    if (!categories || categories.length === 0) {
-        fetch('api/crud.php?action=list&table=categories')
-            .then(r => r.json())
-            .then(data => {
-                if (data.success && data.data) {
-                    categories = data.data;
-                }
-            });
-    }
-});
+                        let html = '';
+                        posts.forEach(post => {
+                            const timeAgo = getTimeAgo(new Date(post.created_at));
+                            const image = post.featured_image || 'https://via.placeholder.com/400x300/6366f1/ffffff?text=No+Image';
 
-// ======================
-// LOAD ALL SECTIONS
-// ======================
-
-// Load Left Sidebar Recent Posts
-function loadLeftSidebarRecentPosts() {
-    fetch('api/crud.php?action=list&table=posts')
-        .then(r => r.json())
-        .then(data => {
-            if (data.success && data.data) {
-                const posts = data.data
-                    .filter(p => p.is_active == 1)
-                    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-                    .slice(0, 4);
-                
-                let html = '';
-                posts.forEach(post => {
-                    const timeAgo = getTimeAgo(new Date(post.created_at));
-                    const image = post.featured_image || 'https://via.placeholder.com/400x300/6366f1/ffffff?text=No+Image';
-                    
-                    html += `
+                            html += `
                         <article class="blog-list-item" onclick="loadPostDetail(${post.id})" style="cursor: pointer;">
                             <img src="${image}" alt="${escapeHtml(post.title)}" loading="lazy"
                                  onerror="this.src='https://via.placeholder.com/400x300/6366f1/ffffff?text=No+Image';">
@@ -1424,30 +1377,30 @@ function loadLeftSidebarRecentPosts() {
                             </div>
                         </article>
                     `;
-                });
-                
-                const container = document.querySelector('.order-lg-1 .blog-list');
-                if (container) {
-                    container.innerHTML = html;
-                }
-            }
-        });
-}
+                        });
 
-// Load Featured Post (Center)
-function loadFeaturedPost() {
-    fetch('api/crud.php?action=list&table=posts')
-        .then(r => r.json())
-        .then(data => {
-            if (data.success && data.data) {
-                const featured = data.data.find(p => p.is_featured == 1 && p.is_active == 1) || data.data[0];
-                
-                if (featured) {
-                    const image = featured.featured_image || 'https://via.placeholder.com/800x500/6366f1/ffffff?text=Featured';
-                    const date = new Date(featured.created_at).toLocaleDateString('tr-TR');
-                    const excerpt = featured.excerpt || (featured.content ? stripHtml(featured.content).substring(0, 200) + '...' : '');
-                    
-                    const html = `
+                        const container = document.querySelector('.order-lg-1 .blog-list');
+                        if (container) {
+                            container.innerHTML = html;
+                        }
+                    }
+                });
+        }
+
+        // Load Featured Post (Center)
+        function loadFeaturedPost() {
+            fetch('api/crud.php?action=list&table=posts')
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success && data.data) {
+                        const featured = data.data.find(p => p.is_featured == 1 && p.is_active == 1) || data.data[0];
+
+                        if (featured) {
+                            const image = featured.featured_image || 'https://via.placeholder.com/800x500/6366f1/ffffff?text=Featured';
+                            const date = new Date(featured.created_at).toLocaleDateString('tr-TR');
+                            const excerpt = featured.excerpt || (featured.content ? stripHtml(featured.content).substring(0, 200) + '...' : '');
+
+                            const html = `
                         <div class="featured-post-image" onclick="loadPostDetail(${featured.id})" style="cursor: pointer;">
                             <img src="${image}" alt="${escapeHtml(featured.title)}" loading="lazy"
                                  onerror="this.src='https://via.placeholder.com/800x500/6366f1/ffffff?text=Featured';">
@@ -1462,30 +1415,30 @@ function loadFeaturedPost() {
                             </div>
                         </div>
                     `;
-                    
-                    const container = document.querySelector('.featured-main-post');
-                    if (container) {
-                        container.innerHTML = html;
-                    }
-                }
-            }
-        });
-}
 
-// Load Right Sidebar Categories
-function loadRightSidebarCategories() {
-    fetch('api/crud.php?action=list&table=categories')
-        .then(r => r.json())
-        .then(data => {
-            if (data.success && data.data) {
-                const cats = data.data
-                    .filter(c => c.is_active == 1)
-                    .sort((a, b) => (a.order || 0) - (b.order || 0))
-                    .slice(0, 5);
-                
-                let html = '';
-                cats.forEach(cat => {
-                    html += `
+                            const container = document.querySelector('.featured-main-post');
+                            if (container) {
+                                container.innerHTML = html;
+                            }
+                        }
+                    }
+                });
+        }
+
+        // Load Right Sidebar Categories
+        function loadRightSidebarCategories() {
+            fetch('api/crud.php?action=list&table=categories')
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success && data.data) {
+                        const cats = data.data
+                            .filter(c => c.is_active == 1)
+                            .sort((a, b) => (a.order || 0) - (b.order || 0))
+                            .slice(0, 5);
+
+                        let html = '';
+                        cats.forEach(cat => {
+                            html += `
                         <li>
                             <a href="#" onclick="loadCategoryContent({id: ${cat.id}, name: '${escapeHtml(cat.name)}'}); return false;">
                                 <i class="fa-solid fa-folder"></i> ${escapeHtml(cat.name)}
@@ -1493,32 +1446,32 @@ function loadRightSidebarCategories() {
                             </a>
                         </li>
                     `;
-                });
-                
-                const container = document.querySelector('.categories-list');
-                if (container) {
-                    container.innerHTML = html;
-                }
-            }
-        });
-}
+                        });
 
-// Load Right Sidebar Popular Posts (En Çok Okunanlar)
-function loadRightSidebarPopularPosts() {
-    fetch('api/crud.php?action=list&table=posts')
-        .then(r => r.json())
-        .then(data => {
-            if (data.success && data.data) {
-                const posts = data.data
-                    .filter(p => p.is_active == 1)
-                    .sort((a, b) => (b.view_count || 0) - (a.view_count || 0))
-                    .slice(0, 3);
-                
-                let html = '';
-                posts.forEach(post => {
-                    const image = post.featured_image || 'https://via.placeholder.com/100x80/6366f1/ffffff?text=No';
-                    
-                    html += `
+                        const container = document.querySelector('.categories-list');
+                        if (container) {
+                            container.innerHTML = html;
+                        }
+                    }
+                });
+        }
+
+        // Load Right Sidebar Popular Posts (En Çok Okunanlar)
+        function loadRightSidebarPopularPosts() {
+            fetch('api/crud.php?action=list&table=posts')
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success && data.data) {
+                        const posts = data.data
+                            .filter(p => p.is_active == 1)
+                            .sort((a, b) => (b.view_count || 0) - (a.view_count || 0))
+                            .slice(0, 3);
+
+                        let html = '';
+                        posts.forEach(post => {
+                            const image = post.featured_image || 'https://via.placeholder.com/100x80/6366f1/ffffff?text=No';
+
+                            html += `
                         <article class="popular-post-item" onclick="loadPostDetail(${post.id})" style="cursor: pointer;">
                             <img src="${image}" alt="${escapeHtml(post.title)}" loading="lazy"
                                  onerror="this.src='https://via.placeholder.com/100x80/6366f1/ffffff?text=No';">
@@ -1528,48 +1481,48 @@ function loadRightSidebarPopularPosts() {
                             </div>
                         </article>
                     `;
+                        });
+
+                        const container = document.querySelector('.popular-posts-list');
+                        if (container) {
+                            container.innerHTML = html;
+                        }
+                    }
                 });
-                
-                const container = document.querySelector('.popular-posts-list');
-                if (container) {
-                    container.innerHTML = html;
-                }
-            }
-        });
-}
+        }
 
-// Load All Posts Tabs (Rastgele, Yeni, Popüler)
-function loadAllPostsTabs() {
-    fetch('api/crud.php?action=list&table=posts')
-        .then(r => r.json())
-        .then(data => {
-            if (data.success && data.data) {
-                const activePosts = data.data.filter(p => p.is_active == 1);
-                
-                // Rastgele Tab
-                const randomPosts = [...activePosts].sort(() => Math.random() - 0.5).slice(0, 6);
-                loadPostsIntoTab('rastgele', randomPosts);
-                
-                // Yeni Tab (En son eklenenler)
-                const newPosts = [...activePosts].sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).slice(0, 6);
-                loadPostsIntoTab('yeni', newPosts);
-                
-                // Popüler Tab (En çok görüntülenenler)
-                const popularPosts = [...activePosts].sort((a, b) => (b.view_count || 0) - (a.view_count || 0)).slice(0, 6);
-                loadPostsIntoTab('populer', popularPosts);
-            }
-        });
-}
+        // Load All Posts Tabs (Rastgele, Yeni, Popüler)
+        function loadAllPostsTabs() {
+            fetch('api/crud.php?action=list&table=posts')
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success && data.data) {
+                        const activePosts = data.data.filter(p => p.is_active == 1);
 
-function loadPostsIntoTab(tabId, posts) {
-    let html = '<div class="row g-4">';
-    
-    posts.forEach(post => {
-        const image = post.featured_image || 'https://via.placeholder.com/400x300/6366f1/ffffff?text=No+Image';
-        const date = new Date(post.created_at).toLocaleDateString('tr-TR');
-        const excerpt = post.excerpt || (post.content ? stripHtml(post.content).substring(0, 100) + '...' : '');
-        
-        html += `
+                        // Rastgele Tab
+                        const randomPosts = [...activePosts].sort(() => Math.random() - 0.5).slice(0, 6);
+                        loadPostsIntoTab('rastgele', randomPosts);
+
+                        // Yeni Tab (En son eklenenler)
+                        const newPosts = [...activePosts].sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).slice(0, 6);
+                        loadPostsIntoTab('yeni', newPosts);
+
+                        // Popüler Tab (En çok görüntülenenler)
+                        const popularPosts = [...activePosts].sort((a, b) => (b.view_count || 0) - (a.view_count || 0)).slice(0, 6);
+                        loadPostsIntoTab('populer', popularPosts);
+                    }
+                });
+        }
+
+        function loadPostsIntoTab(tabId, posts) {
+            let html = '<div class="row g-4">';
+
+            posts.forEach(post => {
+                const image = post.featured_image || 'https://via.placeholder.com/400x300/6366f1/ffffff?text=No+Image';
+                const date = new Date(post.created_at).toLocaleDateString('tr-TR');
+                const excerpt = post.excerpt || (post.content ? stripHtml(post.content).substring(0, 100) + '...' : '');
+
+                html += `
             <div class="col-lg-4 col-md-6">
                 <article class="post-card" onclick="loadPostDetail(${post.id})" style="cursor: pointer;">
                     <div class="post-thumbnail">
@@ -1587,22 +1540,174 @@ function loadPostsIntoTab(tabId, posts) {
                 </article>
             </div>
         `;
-    });
-    
-    html += '</div>';
-    
-    const container = document.querySelector(`#${tabId} .row.g-4`);
-    if (container) {
-        container.innerHTML = html.replace('<div class="row g-4">', '').replace('</div>', '');
-    }
-}
+            });
 
-function stripHtml(html) {
-    const div = document.createElement('div');
-    div.innerHTML = html;
-    return div.textContent || div.innerText || '';
-}
+            html += '</div>';
 
-</script>
+            const container = document.querySelector(`#${tabId} .row.g-4`);
+            if (container) {
+                container.innerHTML = html.replace('<div class="row g-4">', '').replace('</div>', '');
+            }
+        }
+
+        function stripHtml(html) {
+            const div = document.createElement('div');
+            div.innerHTML = html;
+            return div.textContent || div.innerText || '';
+        }
+
+        // Load Category Boxes (4'lü Kartlar)
+        function loadCategoryBoxes() {
+            fetch('api/crud.php?action=list&table=category_boxes')
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success && data.data && data.data.length > 0) {
+                        const boxes = data.data
+                            .filter(b => b.is_active == 1)
+                            .sort((a, b) => (a.order || 0) - (b.order || 0));
+
+                        let html = '';
+
+                        const colorMap = {
+                            'blue': 'bg-gradient-blue',
+                            'pink': 'bg-gradient-pink',
+                            'yellow': 'bg-gradient-yellow',
+                            'orange': 'bg-gradient-orange',
+                            'green': 'bg-gradient-green',
+                            'purple': 'bg-gradient-purple',
+                            'teal': 'bg-gradient-teal'
+                        };
+
+                        boxes.forEach(box => {
+                            const colorClass = colorMap[box.color] || 'bg-gradient-blue';
+
+                            // Kutu başlığıyla eşleşen kategoriyi bul
+                            const matchingCategory = categories.find(cat =>
+                                cat.name.toLowerCase() === box.title.toLowerCase() ||
+                                cat.name.toLowerCase().includes(box.title.toLowerCase()) ||
+                                box.title.toLowerCase().includes(cat.name.toLowerCase())
+                            );
+
+                            // Eğer eşleşen kategori varsa, kategoriye yönlendir
+                            // Yoksa URL varsa ona, yoksa # kullan
+                            let clickAction;
+                            if (matchingCategory) {
+                                clickAction = `loadCategoryByBox({id: ${matchingCategory.id}, name: '${escapeHtml(matchingCategory.name)}', boxTitle: '${escapeHtml(box.title)}'}); return false;`;
+                            } else if (box.url) {
+                                clickAction = `window.location.href='${box.url}'`;
+                            } else {
+                                clickAction = `alert('Bu kategori için henüz içerik bulunmamaktadır.')`;
+                            }
+
+                            html += `
+                        <div class="col-lg-3 col-md-6">
+                            <div class="category-box ${colorClass}" onclick="${clickAction}" style="cursor: pointer;">
+                                <i class="${box.icon || 'fa-solid fa-star'}"></i>
+                                <h4>${escapeHtml(box.title)}</h4>
+                                <p>${escapeHtml(box.description || '')}</p>
+                            </div>
+                        </div>
+                    `;
+                        });
+
+                        document.getElementById('categoryBoxesContainer').innerHTML = html;
+                    }
+                })
+                .catch(err => console.error('Category boxes load error:', err));
+        }
+
+        // Kategori kutusundan kategori içeriği yükle
+        function loadCategoryByBox(categoryData) {
+            // Dinamik alanı göster
+            document.getElementById('dynamicContentArea').style.display = 'block';
+            document.getElementById('categoryTitle').textContent = categoryData.boxTitle || categoryData.name;
+
+            // Alana kaydır
+            document.getElementById('dynamicContentArea').scrollIntoView({ behavior: 'smooth' });
+
+            // Kategoriye ait gönderileri yükle
+            fetch(`api/crud.php?action=list&table=posts`)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success && data.data) {
+                        const posts = data.data.filter(post =>
+                            post.category_id == categoryData.id && post.is_active == 1
+                        );
+
+                        if (posts.length > 0) {
+                            displayPostsList(posts);
+                            loadPostDetail(posts[0].id);
+                        } else {
+                            // Boş durum göster
+                            document.getElementById('postsList').innerHTML =
+                                '<div class="text-center text-muted py-5"><i class="fa-solid fa-inbox fa-3x mb-3"></i><p>Bu kategoride henüz gönderi bulunmamaktadır.</p></div>';
+                            document.getElementById('postContent').innerHTML =
+                                '<div class="text-center text-muted py-5"><i class="fa-solid fa-file-circle-plus fa-3x mb-3"></i><p>İlk gönderiyi oluşturun!</p></div>';
+                        }
+                    }
+                })
+                .catch(err => console.error('Category posts load error:', err));
+
+            loadWidgets();
+        }
+
+        // Load Info Cards (5'li Kartlar)
+        function loadInfoCards() {
+            fetch('api/crud.php?action=list&table=info_cards')
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success && data.data && data.data.length > 0) {
+                        const cards = data.data
+                            .filter(c => c.is_active == 1)
+                            .sort((a, b) => (a.order || 0) - (b.order || 0));
+
+                        let html = '';
+
+                        const colorMap = {
+                            'blue': 'info-card-blue',
+                            'pink': 'info-card-pink',
+                            'orange': 'info-card-orange',
+                            'teal': 'info-card-teal',
+                            'purple': 'info-card-purple',
+                            'green': 'info-card-green',
+                            'yellow': 'info-card-yellow'
+                        };
+
+                        cards.forEach(card => {
+                            const colorClass = colorMap[card.color] || 'info-card-blue';
+
+                            // Kart başlığıyla eşleşen kategoriyi bul
+                            const matchingCategory = categories.find(cat =>
+                                cat.name.toLowerCase() === card.title.toLowerCase() ||
+                                cat.name.toLowerCase().includes(card.title.toLowerCase()) ||
+                                card.title.toLowerCase().includes(cat.name.toLowerCase())
+                            );
+
+                            // Eğer eşleşen kategori varsa, kategoriye yönlendir
+                            let clickAction;
+                            if (matchingCategory) {
+                                clickAction = `onclick="loadCategoryByBox({id: ${matchingCategory.id}, name: '${escapeHtml(matchingCategory.name)}', boxTitle: '${escapeHtml(card.title)}'}); return false;"`;
+                            } else {
+                                clickAction = `onclick="alert('Bu kategori için henüz içerik bulunmamaktadır.')"`;
+                            }
+
+                            html += `
+                        <div class="col-lg col-md-6">
+                            <div class="info-card ${colorClass}" ${clickAction} style="cursor: pointer;">
+                                <h3>${escapeHtml(card.title)}</h3>
+                                <p>${escapeHtml(card.description || '')}</p>
+                            </div>
+                        </div>
+                    `;
+                        });
+
+                        document.getElementById('infoCardsContainer').innerHTML = html;
+                    }
+                })
+                .catch(err => console.error('Info cards load error:', err));
+        }
+
+    </script>
 </body>
+
 </html>

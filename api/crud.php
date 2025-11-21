@@ -5,14 +5,7 @@
  */
 
 header('Content-Type: application/json');
-session_start();
-if (isset($_SERVER['HTTP_ORIGIN'])) {
-    $origin = $_SERVER['HTTP_ORIGIN'];
-    $host = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'];
-    if ($origin === $host) {
-        header('Access-Control-Allow-Origin: ' . $origin);
-    }
-}
+header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
 header('Access-Control-Allow-Headers: Content-Type');
 
@@ -42,6 +35,8 @@ $modelMap = [
     'hashtags' => 'Hashtag',
     'category_boxes' => 'CategoryBox',
     'info_cards' => 'InfoCard',
+    'category_box_posts' => 'CategoryBoxPost',
+    'info_card_posts' => 'InfoCardPost',
     'notifications' => 'Notification',
     'settings' => 'Setting',
     'backups' => 'Backup'

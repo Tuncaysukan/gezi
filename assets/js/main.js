@@ -727,3 +727,150 @@ if ('serviceWorker' in navigator) {
         //     .catch(err => console.log('Service Worker hatası:', err));
     });
 }
+
+// === CATEGORY BOXES AND INFO CARDS LOADING ===
+document.addEventListener('DOMContentLoaded', function() {
+    // Load category boxes
+    loadCategoryBoxes();
+    
+    // Load info cards
+    loadInfoCards();
+});
+
+function loadCategoryBoxes() {
+    fetch('api/crud.php?action=list&table=category_boxes')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.data) {
+                const container = document.getElementById('categoryBoxesContainer');
+                const activeBoxes = data.data.filter(box => box.is_active == 1);
+                
+                if (activeBoxes.length > 0) {
+                    container.innerHTML = activeBoxes.map(box => `
+                        <div class="col-lg-3 col-md-6">
+                            <div class="category-box-card">
+                                <div class="category-box-icon">
+                                    <i class="${box.icon || 'fas fa-box'}"></i>
+                                </div>
+                                <h3 class="category-box-title">${box.title}</h3>
+                                <p class="category-box-description">${box.description || ''}</p>
+                                <a href="#" class="category-box-link" onclick="loadCategoryBoxPosts(${box.id}); return false;">
+                                    Gönderileri Görüntüle <i class="fas fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    container.innerHTML = '<div class="col-12"><p class="text-center">Henüz kategori kutusu eklenmemiş.</p></div>';
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Kategori kutuları yüklenirken hata oluştu:', error);
+        });
+}
+
+function loadInfoCards() {
+    fetch('api/crud.php?action=list&table=info_cards')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.data) {
+                const container = document.getElementById('infoCardsContainer');
+                const activeCards = data.data.filter(card => card.is_active == 1);
+                
+                if (activeCards.length > 0) {
+                    container.innerHTML = activeCards.map(card => `
+                        <div class="col-lg-4 col-md-6">
+                            <div class="info-card">
+                                <div class="info-card-header">
+                                    <h3 class="info-card-title">${card.title}</h3>
+                                </div>
+                                <div class="info-card-body">
+                                    <p class="info-card-description">${card.description || ''}</p>
+                                    <a href="#" class="info-card-link" onclick="loadInfoCardPosts(${card.id}); return false;">
+                                        Detayları Gör <i class="fas fa-arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    container.innerHTML = '<div class="col-12"><p class="text-center">Henüz bilgi kartı eklenmemiş.</p></div>';
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Bilgi kartları yüklenirken hata oluştu:', error);
+        });
+}
+
+function loadCategoryBoxPosts(categoryBoxId) {
+    // Load posts for a specific category box
+    fetch(`api/crud.php?action=list&table=category_box_posts`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.data) {
+                const posts = data.data.filter(post => 
+                    post.category_box_id == categoryBoxId && post.is_active == 1
+                );
+                
+                // Display posts in the main content area
+                displayPostsInContentArea(posts, 'Kategori Kutusu Gönderileri');
+            }
+        })
+        .catch(error => {
+            console.error('Kategori kutusu gönderileri yüklenirken hata oluştu:', error);
+        });
+}
+
+function loadInfoCardPosts(infoCardId) {
+    // Load posts for a specific info card
+    fetch(`api/crud.php?action=list&table=info_card_posts`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.data) {
+                const posts = data.data.filter(post => 
+                    post.info_card_id == infoCardId && post.is_active == 1
+                );
+                
+                // Display posts in the main content area
+                displayPostsInContentArea(posts, 'Bilgi Kartı Gönderileri');
+            }
+        })
+        .catch(error => {
+            console.error('Bilgi kartı gönderileri yüklenirken hata oluştu:', error);
+        });
+}
+
+function displayPostsInContentArea(posts, title) {
+    const contentArea = document.getElementById('dynamicContentArea');
+    const postsList = document.getElementById('postsList');
+    const categoryTitle = document.getElementById('categoryTitle');
+    
+    // Set title
+    categoryTitle.textContent = title;
+    
+    // Generate posts list
+    if (posts.length > 0) {
+        postsList.innerHTML = posts.map(post => `
+            <article class="blog-list-item" onclick="loadPostDetail(${post.id}, 'custom')">
+                <div class="blog-list-content">
+                    <h6>${post.title}</h6>
+                    <p>${post.excerpt || ''}</p>
+                    <div class="blog-list-meta">
+                        <span><i class="fa-regular fa-clock"></i> ${new Date(post.created_at).toLocaleDateString('tr-TR')}</span>
+                        <span><i class="fa-regular fa-eye"></i> ${post.view_count || 0} görüntüleme</span>
+                    </div>
+                </div>
+            </article>
+        `).join('');
+    } else {
+        postsList.innerHTML = '<p>Bu kategori için henüz gönderi eklenmemiş.</p>';
+    }
+    
+    // Show content area
+    contentArea.style.display = 'block';
+    
+    // Scroll to content
+    contentArea.scrollIntoView({ behavior: 'smooth' });
+}

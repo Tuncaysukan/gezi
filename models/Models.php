@@ -65,6 +65,34 @@ class InfoCard extends Model {
     protected $table = 'info_cards';
 }
 
+class CategoryBoxPost extends Model {
+    protected $table = 'category_box_posts';
+    
+    public function getAllWithCategoryBox() {
+        $query = "SELECT p.*, cb.title as category_box_title 
+                  FROM {$this->table} p 
+                  LEFT JOIN category_boxes cb ON p.category_box_id = cb.id 
+                  ORDER BY p.created_at DESC";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+}
+
+class InfoCardPost extends Model {
+    protected $table = 'info_card_posts';
+    
+    public function getAllWithInfoCard() {
+        $query = "SELECT p.*, ic.title as info_card_title 
+                  FROM {$this->table} p 
+                  LEFT JOIN info_cards ic ON p.info_card_id = ic.id 
+                  ORDER BY p.created_at DESC";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+}
+
 class Notification extends Model {
     protected $table = 'notifications';
 }

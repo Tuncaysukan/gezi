@@ -86,6 +86,8 @@ document.addEventListener('DOMContentLoaded', function() {
             categories: getCategoriesTemplate(),
             'category-boxes': getCategoryBoxesTemplate(),
             'info-cards': getInfoCardsTemplate(),
+            'category-box-posts': getCategoryBoxPostsTemplate(),
+            'info-card-posts': getInfoCardPostsTemplate(),
             hashtags: getHashtagsTemplate(),
             widgets: getWidgetsTemplate(),
             header: getHeaderTemplate(),
@@ -1695,9 +1697,29 @@ document.addEventListener('DOMContentLoaded', function() {
                                     <input type="text" class="form-control" name="title" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">Açıklama</label>
-                                    <textarea class="form-control" name="description" rows="3"></textarea>
+                                    <label class="form-label">Açıklama (Kısa)</label>
+                                    <textarea class="form-control" name="description" rows="2"></textarea>
+                                    <small class="text-muted">Ana sayfada görünecek kısa açıklama</small>
                                 </div>
+                                <hr>
+                                <h6 class="mb-3"><i class="fas fa-blog"></i> Blog İçeriği (Opsiyonel)</h6>
+                                <div class="mb-3">
+                                    <label class="form-label">Blog Başlığı</label>
+                                    <input type="text" class="form-control" name="blog_title" placeholder="Detaylı blog yazısı başlığı">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Blog Özeti</label>
+                                    <textarea class="form-control" name="blog_excerpt" rows="2" placeholder="Blog yazısı kısa özeti"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Blog İçeriği</label>
+                                    <textarea class="form-control" name="blog_content" rows="6" placeholder="Tam blog yazısı içeriği (HTML kullanabilirsiniz)"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Öne Çıkan Görsel URL</label>
+                                    <input type="url" class="form-control" name="featured_image" placeholder="https://...">
+                                </div>
+                                <hr>
                                 <div class="mb-3">
                                     <label class="form-label">Icon (FontAwesome) *</label>
                                     <input type="text" class="form-control" name="icon" placeholder="fa-solid fa-book-open" required>
@@ -1847,6 +1869,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     $('#category_box_id').val(data.id);
                     $('[name="title"]').val(data.title);
                     $('[name="description"]').val(data.description);
+                    $('[name="blog_title"]').val(data.blog_title || '');
+                    $('[name="blog_excerpt"]').val(data.blog_excerpt || '');
+                    $('[name="blog_content"]').val(data.blog_content || '');
+                    $('[name="featured_image"]').val(data.featured_image || '');
                     $('[name="icon"]').val(data.icon);
                     $('[name="color"]').val(data.color);
                     $('[name="url"]').val(data.url);
@@ -1897,9 +1923,29 @@ document.addEventListener('DOMContentLoaded', function() {
                                     <input type="text" class="form-control" name="title" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">Açıklama *</label>
-                                    <textarea class="form-control" name="description" rows="3" required></textarea>
+                                    <label class="form-label">Açıklama (Kısa) *</label>
+                                    <textarea class="form-control" name="description" rows="2" required></textarea>
+                                    <small class="text-muted">Ana sayfada görünecek kısa açıklama</small>
                                 </div>
+                                <hr>
+                                <h6 class="mb-3"><i class="fas fa-blog"></i> Blog İçeriği (Opsiyonel)</h6>
+                                <div class="mb-3">
+                                    <label class="form-label">Blog Başlığı</label>
+                                    <input type="text" class="form-control" name="blog_title" placeholder="Detaylı blog yazısı başlığı">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Blog Özeti</label>
+                                    <textarea class="form-control" name="blog_excerpt" rows="2" placeholder="Blog yazısı kısa özeti"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Blog İçeriği</label>
+                                    <textarea class="form-control" name="blog_content" rows="6" placeholder="Tam blog yazısı içeriği (HTML kullanabilirsiniz)"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Öne Çıkan Görsel URL</label>
+                                    <input type="url" class="form-control" name="featured_image" placeholder="https://...">
+                                </div>
+                                <hr>
                                 <div class="mb-3">
                                     <label class="form-label">Renk *</label>
                                     <select class="form-select" name="color" required>
@@ -2039,6 +2085,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     $('#info_card_id').val(data.id);
                     $('[name="title"]').val(data.title);
                     $('[name="description"]').val(data.description);
+                    $('[name="blog_title"]').val(data.blog_title || '');
+                    $('[name="blog_excerpt"]').val(data.blog_excerpt || '');
+                    $('[name="blog_content"]').val(data.blog_content || '');
+                    $('[name="featured_image"]').val(data.featured_image || '');
                     $('[name="color"]').val(data.color);
                     $('[name="order"]').val(data.order);
                     $('[name="is_active"]').prop('checked', data.is_active == 1);
@@ -4536,6 +4586,360 @@ document.addEventListener('DOMContentLoaded', function() {
         showNotification('Performans testi çalıştırılıyor...', 'info');
         setTimeout(() => showNotification('Performans testi tamamlandı!', 'success'), 2000);
     };
+    
+    
+    // === CATEGORY BOX POSTS TEMPLATE ===
+    function getCategoryBoxPostsTemplate() {
+        return `
+            <h2 class="mb-4">Kategori Kutuları Yazıları</h2>
+            
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5>Tüm Yazılar</h5>
+                    <button class="btn btn-primary btn-sm" onclick="openCategoryBoxPostEditor()">
+                        <i class="fas fa-plus"></i> Yeni Yazı
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="categoryBoxPostsTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Başlık</th>
+                                    <th>Kategori Kutusu</th>
+                                    <th>Tarih</th>
+                                    <th>Durum</th>
+                                    <th>İşlem</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <script>
+            $(document).ready(function() {
+                // DataTable başlat
+                CRUD.initDataTable('categoryBoxPostsTable', 'category_box_posts', [
+                    { data: 'id' },
+                    { data: 'title' },
+                    { 
+                        data: 'category_box_id',
+                        render: function(data) {
+                            return '<span class="badge bg-primary">Kutu #' + data + '</span>';
+                        }
+                    },
+                    { 
+                        data: 'created_at',
+                        render: function(data) {
+                            return new Date(data).toLocaleDateString('tr-TR');
+                        }
+                    },
+                    { 
+                        data: 'is_active',
+                        render: function(data) {
+                            return data == 1 
+                                ? '<span class="badge-status badge-success">Yayında</span>' 
+                                : '<span class="badge-status badge-warning">Taslak</span>';
+                        }
+                    },
+                    { 
+                        data: null,
+                        render: function(data, type, row) {
+                            return '<button class="btn btn-sm btn-primary" onclick="editCategoryBoxPost(' + row.id + ')">' +
+                                   '<i class="fas fa-edit"></i></button> ' +
+                                   '<button class="btn btn-sm btn-danger" onclick="deleteCategoryBoxPost(' + row.id + ')">' +
+                                   '<i class="fas fa-trash"></i></button>';
+                        }
+                    }
+                ]);
+            });
+            
+            window.openCategoryBoxPostEditor = function(postData = null) {
+                const isEdit = postData !== null;
+                
+                // Önce kategori kutularını yükle
+                $.get('../api/crud.php?action=list&table=category_boxes', function(response) {
+                    if (!response.success || !response.data) {
+                        Swal.fire('Hata!', 'Kategori kutuları yüklenemedi!', 'error');
+                        return;
+                    }
+                    
+                    const boxes = response.data.filter(b => b.is_active == 1);
+                    let boxOptions = '';
+                    boxes.forEach(box => {
+                        const selected = isEdit && postData.category_box_id == box.id ? 'selected' : '';
+                        boxOptions += '<option value="' + box.id + '" ' + selected + '>' + box.title + '</option>';
+                    });
+                    
+                    const title = isEdit ? postData.title : '';
+                    const content = isEdit ? (postData.content || '') : '';
+                    const excerpt = isEdit ? (postData.excerpt || '') : '';
+                    const slug = isEdit ? postData.slug : '';
+                    const image = isEdit ? (postData.featured_image || '') : '';
+                    const postId = isEdit ? postData.id : '';
+                    
+                    const modalHtml = '<div class="modal fade" id="categoryBoxPostModal" tabindex="-1">' +
+                        '<div class="modal-dialog modal-xl"><div class="modal-content">' +
+                        '<div class="modal-header"><h5 class="modal-title">' + (isEdit ? 'Yaz\u0131 D\u00fczenle' : 'Yeni Yaz\u0131') + '</h5>' +
+                        '<button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>' +
+                        '<div class="modal-body"><form id="categoryBoxPostForm">' +
+                        '<input type="hidden" id="post_id" value="' + postId + '">' +
+                        '<div class="row"><div class="col-md-8">' +
+                        '<div class="mb-3"><label class="form-label">Ba\u015fl\u0131k *</label>' +
+                        '<input type="text" class="form-control" name="title" value="' + title + '" required></div>' +
+                        '<div class="mb-3"><label class="form-label">\u0130\u00e7erik *</label>' +
+                        '<textarea class="form-control" name="content" rows="15" required>' + content + '</textarea>' +
+                        '<small class="text-muted">HTML kullanabilirsiniz</small></div>' +
+                        '<div class="mb-3"><label class="form-label">K\u0131sa A\u00e7\u0131klama</label>' +
+                        '<textarea class="form-control" name="excerpt" rows="3">' + excerpt + '</textarea></div>' +
+                        '</div><div class="col-md-4">' +
+                        '<div class="mb-3"><label class="form-label">Kategori Kutusu *</label>' +
+                        '<select class="form-select" name="category_box_id" required><option value="">Se\u00e7in</option>' + boxOptions + '</select></div>' +
+                        '<div class="mb-3"><label class="form-label">Slug *</label>' +
+                        '<input type="text" class="form-control" name="slug" value="' + slug + '" required>' +
+                        '<small class="text-muted">URL i\u00e7in</small></div>' +
+                        '<div class="mb-3"><label class="form-label">\u00d6ne \u00c7\u0131kan G\u00f6rsel URL</label>' +
+                        '<input type="url" class="form-control" name="featured_image" value="' + image + '"></div>' +
+                        '<div class="mb-3"><div class="form-check form-switch">' +
+                        '<input class="form-check-input" type="checkbox" name="is_active" value="1" ' + (isEdit && postData.is_active == 1 ? 'checked' : 'checked') + '>' +
+                        '<label class="form-check-label">Yay\u0131nla</label></div></div>' +
+                        '</div></div></form></div>' +
+                        '<div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">\u0130ptal</button>' +
+                        '<button type="button" class="btn btn-primary" onclick="saveCategoryBoxPost()">' +
+                        '<i class="fas fa-save"></i> ' + (isEdit ? 'G\u00fcncelle' : 'Yay\u0131nla') + '</button></div>' +
+                        '</div></div></div>';
+                    
+                    $('body').append(modalHtml);
+                    const modal = new bootstrap.Modal(document.getElementById('categoryBoxPostModal'));
+                    
+                    // Slug oluştur
+                    $('#categoryBoxPostModal input[name="title"]').on('input', function() {
+                        if (!isEdit) {
+                            const slug = $(this).val()
+                                .toLowerCase()
+                                .replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ş/g, 's')
+                                .replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ç/g, 'c')
+                                .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+                            $('#categoryBoxPostModal input[name="slug"]').val(slug);
+                        }
+                    });
+                    
+                    $('#categoryBoxPostModal').on('hidden.bs.modal', function() { $(this).remove(); });
+                    modal.show();
+                });
+            };
+            
+            window.saveCategoryBoxPost = function() {
+                const formData = CRUD.serializeForm('categoryBoxPostForm');
+                const id = $('#post_id').val();
+                
+                formData.is_active = $('[name="is_active"]').is(':checked') ? 1 : 0;
+                
+                if (id) {
+                    CRUD.update('category_box_posts', id, formData, function() {
+                        CRUD.reloadTable('categoryBoxPostsTable');
+                        bootstrap.Modal.getInstance(document.getElementById('categoryBoxPostModal')).hide();
+                    });
+                } else {
+                    CRUD.create('category_box_posts', formData, function() {
+                        CRUD.reloadTable('categoryBoxPostsTable');
+                        bootstrap.Modal.getInstance(document.getElementById('categoryBoxPostModal')).hide();
+                    });
+                }
+            };
+            
+            window.editCategoryBoxPost = function(id) {
+                CRUD.get('category_box_posts', id, function(data) {
+                    openCategoryBoxPostEditor(data);
+                });
+            };
+            
+            window.deleteCategoryBoxPost = function(id) {
+                CRUD.delete('category_box_posts', id, function() {
+                    CRUD.reloadTable('categoryBoxPostsTable');
+                });
+            };
+            </script>
+        `;
+    }
+    
+    // === INFO CARD POSTS TEMPLATE ===
+    function getInfoCardPostsTemplate() {
+        return `
+            <h2 class="mb-4">Bilgi Kartları Yazıları</h2>
+            
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5>Tüm Yazılar</h5>
+                    <button class="btn btn-primary btn-sm" onclick="openInfoCardPostEditor()">
+                        <i class="fas fa-plus"></i> Yeni Yazı
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="infoCardPostsTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Başlık</th>
+                                    <th>Bilgi Kartı</th>
+                                    <th>Tarih</th>
+                                    <th>Durum</th>
+                                    <th>İşlem</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <script>
+            $(document).ready(function() {
+                // DataTable başlat
+                CRUD.initDataTable('infoCardPostsTable', 'info_card_posts', [
+                    { data: 'id' },
+                    { data: 'title' },
+                    { 
+                        data: 'info_card_id',
+                        render: function(data) {
+                            return '<span class="badge bg-info">Kart #' + data + '</span>';
+                        }
+                    },
+                    { 
+                        data: 'created_at',
+                        render: function(data) {
+                            return new Date(data).toLocaleDateString('tr-TR');
+                        }
+                    },
+                    { 
+                        data: 'is_active',
+                        render: function(data) {
+                            return data == 1 
+                                ? '<span class="badge-status badge-success">Yayında</span>' 
+                                : '<span class="badge-status badge-warning">Taslak</span>';
+                        }
+                    },
+                    { 
+                        data: null,
+                        render: function(data, type, row) {
+                            return '<button class="btn btn-sm btn-primary" onclick="editInfoCardPost(' + row.id + ')">' +
+                                   '<i class="fas fa-edit"></i></button> ' +
+                                   '<button class="btn btn-sm btn-danger" onclick="deleteInfoCardPost(' + row.id + ')">' +
+                                   '<i class="fas fa-trash"></i></button>';
+                        }
+                    }
+                ]);
+            });
+            
+            window.openInfoCardPostEditor = function(postData = null) {
+                const isEdit = postData !== null;
+                
+                // Önce bilgi kartlarını yükle
+                $.get('../api/crud.php?action=list&table=info_cards', function(response) {
+                    if (!response.success || !response.data) {
+                        Swal.fire('Hata!', 'Bilgi kartları yüklenemedi!', 'error');
+                        return;
+                    }
+                    
+                    const cards = response.data.filter(c => c.is_active == 1);
+                    let cardOptions = '';
+                    cards.forEach(card => {
+                        const selected = isEdit && postData.info_card_id == card.id ? 'selected' : '';
+                        cardOptions += '<option value="' + card.id + '" ' + selected + '>' + card.title + '</option>';
+                    });
+                    
+                    const title = isEdit ? postData.title : '';
+                    const content = isEdit ? (postData.content || '') : '';
+                    const excerpt = isEdit ? (postData.excerpt || '') : '';
+                    const slug = isEdit ? postData.slug : '';
+                    const image = isEdit ? (postData.featured_image || '') : '';
+                    
+                    const modalHtml = '<div class="modal fade" id="infoCardPostModal" tabindex="-1">' +
+                        '<div class="modal-dialog modal-xl"><div class="modal-content">' +
+                        '<div class="modal-header"><h5 class="modal-title">' + (isEdit ? 'Yazı Düzenle' : 'Yeni Yazı') + '</h5>' +
+                        '<button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>' +
+                        '<div class="modal-body"><form id="infoCardPostForm">' +
+                        '<input type="hidden" id="post_id2" value="' + (isEdit ? postData.id : '') + '">' +
+                        '<div class="row"><div class="col-md-8">' +
+                        '<div class="mb-3"><label class="form-label">Başlık *</label>' +
+                        '<input type="text" class="form-control" name="title" value="' + title + '" required></div>' +
+                        '<div class="mb-3"><label class="form-label">İçerik *</label>' +
+                        '<textarea class="form-control" name="content" rows="15" required>' + content + '</textarea>' +
+                        '<small class="text-muted">HTML kullanabilirsiniz</small></div>' +
+                        '<div class="mb-3"><label class="form-label">Kısa Açıklama</label>' +
+                        '<textarea class="form-control" name="excerpt" rows="3">' + excerpt + '</textarea></div>' +
+                        '</div><div class="col-md-4">' +
+                        '<div class="mb-3"><label class="form-label">Bilgi Kartı *</label>' +
+                        '<select class="form-select" name="info_card_id" required><option value="">Seçin</option>' + cardOptions + '</select></div>' +
+                        '<div class="mb-3"><label class="form-label">Slug *</label>' +
+                        '<input type="text" class="form-control" name="slug" value="' + slug + '" required>' +
+                        '<small class="text-muted">URL için</small></div>' +
+                        '<div class="mb-3"><label class="form-label">Öne Çıkan Görsel URL</label>' +
+                        '<input type="url" class="form-control" name="featured_image" value="' + image + '"></div>' +
+                        '<div class="mb-3"><div class="form-check form-switch">' +
+                        '<input class="form-check-input" type="checkbox" name="is_active" value="1" ' + (isEdit && postData.is_active == 1 ? 'checked' : 'checked') + '>' +
+                        '<label class="form-check-label">Yayınla</label></div></div>' +
+                        '</div></div></form></div>' +
+                        '<div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>' +
+                        '<button type="button" class="btn btn-primary" onclick="saveInfoCardPost()">' +
+                        '<i class="fas fa-save"></i> ' + (isEdit ? 'Güncelle' : 'Yayınla') + '</button></div>' +
+                        '</div></div></div>';
+                    
+                    $('body').append(modalHtml);
+                    const modal = new bootstrap.Modal(document.getElementById('infoCardPostModal'));
+                    
+                    // Slug oluştur
+                    $('#infoCardPostModal input[name="title"]').on('input', function() {
+                        if (!isEdit) {
+                            const slug = $(this).val()
+                                .toLowerCase()
+                                .replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ş/g, 's')
+                                .replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ç/g, 'c')
+                                .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+                            $('#infoCardPostModal input[name="slug"]').val(slug);
+                        }
+                    });
+                    
+                    $('#infoCardPostModal').on('hidden.bs.modal', function() { $(this).remove(); });
+                    modal.show();
+                });
+            };
+            
+            window.saveInfoCardPost = function() {
+                const formData = CRUD.serializeForm('infoCardPostForm');
+                const id = $('#post_id2').val();
+                
+                formData.is_active = $('[name="is_active"]').is(':checked') ? 1 : 0;
+                
+                if (id) {
+                    CRUD.update('info_card_posts', id, formData, function() {
+                        CRUD.reloadTable('infoCardPostsTable');
+                        bootstrap.Modal.getInstance(document.getElementById('infoCardPostModal')).hide();
+                    });
+                } else {
+                    CRUD.create('info_card_posts', formData, function() {
+                        CRUD.reloadTable('infoCardPostsTable');
+                        bootstrap.Modal.getInstance(document.getElementById('infoCardPostModal')).hide();
+                    });
+                }
+            };
+            
+            window.editInfoCardPost = function(id) {
+                CRUD.get('info_card_posts', id, function(data) {
+                    openInfoCardPostEditor(data);
+                });
+            };
+            
+            window.deleteInfoCardPost = function(id) {
+                CRUD.delete('info_card_posts', id, function() {
+                    CRUD.reloadTable('infoCardPostsTable');
+                });
+            };
+            </script>
+        `;
+    }
     
     
     console.log('✅ Admin Panel yüklendi!');
