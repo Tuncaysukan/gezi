@@ -1896,3 +1896,37 @@ img {
         padding: 20px 15px;
     }
 }
+
+/* === NOTIFICATIONS === */
+.notification-item {
+    position: relative;
+    transition: var(--transition);
+}
+
+.notification-item:hover {
+    background-color: var(--bg-color);
+    box-shadow: var(--shadow);
+}
+
+.notification-item h6 {
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.notification-item p {
+    margin-bottom: 0.25rem;
+    color: var(--text-color);
+}
+
+.notification-item .stretched-link {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+}
+
+.notification-item .stretched-link:hover {
+    text-decoration: none;
+}

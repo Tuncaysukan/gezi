@@ -828,13 +828,9 @@
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-            <div class="notification-item mb-3">
-                <p><strong>Yeni Gezi:</strong> Kapadokya rehberi yayınlandı!</p>
-                <small class="text-muted">2 saat önce</small>
-            </div>
-            <div class="notification-item mb-3">
-                <p><strong>Güncelleme:</strong> Site performansı artırıldı</p>
-                <small class="text-muted">1 gün önce</small>
+            <!-- Bildirimler buraya yüklenecek -->
+            <div id="notificationsContainer">
+                <!-- Bildirim öğeleri dinamik olarak yüklenecek -->
             </div>
         </div>
     </div>
@@ -1650,6 +1646,41 @@
                 .catch(err => console.error('Category boxes load error:', err));
         }
 
+        // ESCAPE HTML FUNCTION SHOULD BE HERE
+        // Escape HTML to prevent XSS
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+        }
+
+        // === CATEGORY BOXES AND INFO CARDS LOADING ===
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load category boxes
+            loadCategoryBoxes();
+            
+            // Load info cards
+            loadInfoCards();
+            
+            // Load notifications
+            loadNotifications();
+        });
+
+        // Bildirim offcanvas'ı açıldığında bildirimleri yeniden yükle
+        document.addEventListener('DOMContentLoaded', function() {
+            const notificationOffcanvas = document.getElementById('bildirim');
+            if (notificationOffcanvas) {
+                notificationOffcanvas.addEventListener('show.bs.offcanvas', function () {
+                    loadNotifications();
+                });
+            }
+        });
+
         // Kategori kutusundan kategori içeriği yükle
         function loadCategoryByBox(categoryData) {
             // Dinamik alanı göster
@@ -1864,6 +1895,67 @@
                 .catch(err => console.error('Info cards load error:', err));
         }
 
+        // Load Notifications
+        function loadNotifications() {
+            fetch('api/crud.php?action=list&table=notifications')
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success && data.data && data.data.length > 0) {
+                        const notifications = data.data
+                            .filter(n => n.is_active == 1)
+                            .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+                        let html = '';
+
+                        notifications.forEach(notification => {
+                            html += `
+                        <div class="notification-item mb-3 p-3 border rounded">
+                            <h6 class="notification-title">${escapeHtml(notification.title)}</h6>
+                            <p class="notification-message mb-1">${escapeHtml(notification.message)}</p>
+                            <small class="text-muted">${escapeHtml(notification.time_text || 'Yeni')}</small>
+                            ${notification.url ? `<a href="${notification.url}" class="stretched-link"></a>` : ''}
+                        </div>
+                    `;
+                        });
+
+                        document.getElementById('notificationsContainer').innerHTML = html;
+                        
+                        // Bildirim sayısını güncelle
+                        updateNotificationCount(notifications.length);
+                    } else {
+                        document.getElementById('notificationsContainer').innerHTML = 
+                            '<div class="text-center text-muted py-5"><p>Bildirim bulunmamaktadır.</p></div>';
+                        updateNotificationCount(0);
+                    }
+                })
+                .catch(err => {
+                    console.error('Notifications load error:', err);
+                    document.getElementById('notificationsContainer').innerHTML = 
+                        '<div class="text-center text-danger py-5"><p>Bildirimler yüklenirken hata oluştu.</p></div>';
+                    updateNotificationCount(0);
+                });
+        }
+
+        // Update notification count
+        function updateNotificationCount(count) {
+            const countBox = document.querySelector('.count-box');
+            if (countBox) {
+                countBox.textContent = count;
+                countBox.style.display = count > 0 ? 'inline-block' : 'none';
+            }
+        }
+
+        // Escape HTML to prevent XSS
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+        }
     </script>
 </body>
 
