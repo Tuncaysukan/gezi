@@ -9,6 +9,7 @@ require_once __DIR__ . '/../config/database.php';
 class Model {
     protected $db;
     protected $table;
+    private $columnsCache = null;
     
     public function __construct() {
         $database = new Database();
@@ -34,6 +35,7 @@ class Model {
     
     // Oluştur
     public function create($data) {
+        $data = $this->filterDataByTableColumns($data, /*allowId*/ false);
         $columns = '`' . implode('`, `', array_keys($data)) . '`';
         $placeholders = ':' . implode(', :', array_keys($data));
         $query = "INSERT INTO {$this->table} ({$columns}) VALUES ({$placeholders})";
@@ -46,6 +48,7 @@ class Model {
     
     // Güncelle
     public function update($id, $data) {
+        $data = $this->filterDataByTableColumns($data, /*allowId*/ false);
         $set = [];
         foreach ($data as $key => $value) {
             $set[] = "`{$key}` = :{$key}";
@@ -85,6 +88,27 @@ class Model {
         return $stmt->execute();
     }
 
-    
+    private function getTableColumns() {
+        if ($this->columnsCache !== null) {
+            return $this->columnsCache;
+        }
+        $stmt = $this->db->prepare("DESCRIBE {$this->table}");
+        $stmt->execute();
+        $cols = $stmt->fetchAll();
+        $this->columnsCache = array_map(function($c){ return $c['Field']; }, $cols);
+        return $this->columnsCache;
+    }
+
+    private function filterDataByTableColumns($data, $allowId = false) {
+        $columns = $this->getTableColumns();
+        $filtered = [];
+        foreach ($data as $key => $value) {
+            if (!$allowId && $key === 'id') { continue; }
+            if (in_array($key, $columns, true)) {
+                $filtered[$key] = $value;
+            }
+        }
+        return $filtered;
+    }
 }
 ?>
