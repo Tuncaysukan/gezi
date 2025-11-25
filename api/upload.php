@@ -6,8 +6,8 @@
 
 header('Content-Type: application/json');
 
-// Upload klasörü
-$uploadDir = __DIR__ . '/../uploads/';
+// Upload klasörü (statik dosyalar için assets/uploads tercih edildi)
+$uploadDir = __DIR__ . '/../assets/uploads/';
 
 // Klasör yoksa oluştur
 if (!is_dir($uploadDir)) {
@@ -58,8 +58,8 @@ $targetPath = $uploadDir . $fileName;
 
 // Dosyayı kaydet
 if (move_uploaded_file($file['tmp_name'], $targetPath)) {
-    // Başarılı - URL'yi döndür
-    $fileUrl = 'uploads/' . $fileName;
+    // Başarılı - URL'yi döndür (assets altında)
+    $fileUrl = 'assets/uploads/' . $fileName;
     
     echo json_encode([
         'success' => true,

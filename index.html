@@ -151,7 +151,7 @@
                                     <a href="#bildirim" aria-label="Bildirim" data-bs-toggle="offcanvas"
                                         class="nav-icon-item">
                                         <i class="fa-solid fa-bell"></i>
-                                        <span class="count-box">2</span>
+                                        <span class="count-box" id="notificationCount">0</span>
                                     </a>
                                 </li>
                             </ul>
@@ -278,95 +278,42 @@
             <section class="stories-section">
                 <div class="container">
                     <div class="stories-wrapper">
+                        <!-- Placeholder hikayeler (API yüklenene kadar) -->
                         <div class="story-item new">
                             <div class="story-avatar">
-                                <img src="https://picsum.photos/200/200?random=11" alt="WordPress Mağaza"
-                                    loading="lazy">
+                                <img src="https://picsum.photos/200/200?random=101" alt="Hikaye" loading="lazy">
                             </div>
-                            <span class="story-title">WordPress...</span>
+                            <span class="story-title">Yükleniyor...</span>
                         </div>
                         <div class="story-item">
                             <div class="story-avatar">
-                                <img src="https://picsum.photos/200/200?random=12" alt="Google PageSpeed"
-                                    loading="lazy">
+                                <img src="https://picsum.photos/200/200?random=102" alt="Hikaye" loading="lazy">
                             </div>
-                            <span class="story-title">Google P...</span>
-                        </div>
-                        <div class="story-item new">
-                            <div class="story-avatar">
-                                <img src="https://picsum.photos/200/200?random=13" alt="Özgüveni Artırmak"
-                                    loading="lazy">
-                            </div>
-                            <span class="story-title">Özgüveni...</span>
+                            <span class="story-title">Yükleniyor...</span>
                         </div>
                         <div class="story-item">
                             <div class="story-avatar">
-                                <img src="https://picsum.photos/200/200?random=14" alt="WordPress Sitenizi"
-                                    loading="lazy">
+                                <img src="https://picsum.photos/200/200?random=103" alt="Hikaye" loading="lazy">
                             </div>
-                            <span class="story-title">WordPress...</span>
+                            <span class="story-title">Yükleniyor...</span>
                         </div>
                         <div class="story-item">
                             <div class="story-avatar">
-                                <img src="https://picsum.photos/200/200?random=15" alt="Popüler Kültür" loading="lazy">
+                                <img src="https://picsum.photos/200/200?random=104" alt="Hikaye" loading="lazy">
                             </div>
-                            <span class="story-title">Popüler K...</span>
-                        </div>
-                        <div class="story-item active">
-                            <div class="story-avatar">
-                                <img src="https://picsum.photos/200/200?random=16" alt="Resim Optimizasyonu"
-                                    loading="lazy">
-                            </div>
-                            <span class="story-title">Resim Op...</span>
-                        </div>
-                        <div class="story-item new">
-                            <div class="story-avatar">
-                                <img src="https://picsum.photos/200/200?random=17" alt="Arkadaşlarla Evde"
-                                    loading="lazy">
-                            </div>
-                            <span class="story-title">Arkadaşl...</span>
+                            <span class="story-title">Yükleniyor...</span>
                         </div>
                         <div class="story-item">
                             <div class="story-avatar">
-                                <img src="https://picsum.photos/200/200?random=18" alt="WordPress Tema" loading="lazy">
+                                <img src="https://picsum.photos/200/200?random=105" alt="Hikaye" loading="lazy">
                             </div>
-                            <span class="story-title">WordPress...</span>
+                            <span class="story-title">Yükleniyor...</span>
                         </div>
                         <div class="story-item">
                             <div class="story-avatar">
-                                <img src="https://picsum.photos/200/200?random=19" alt="Blog yeya" loading="lazy">
+                                <img src="https://picsum.photos/200/200?random=106" alt="Hikaye" loading="lazy">
                             </div>
-                            <span class="story-title">Blog yeya...</span>
-                        </div>
-                        <div class="story-item">
-                            <div class="story-avatar">
-                                <img src="https://picsum.photos/200/200?random=20" alt="Vizyona Giren" loading="lazy">
-                            </div>
-                            <span class="story-title">Vizyona G...</span>
-                        </div>
-                        <div class="story-item">
-                            <div class="story-avatar">
-                                <img src="https://picsum.photos/200/200?random=21" alt="Kitap Oku" loading="lazy">
-                            </div>
-                            <span class="story-title">Kitap Oku...</span>
-                        </div>
-                        <div class="story-item">
-                            <div class="story-avatar">
-                                <img src="https://picsum.photos/200/200?random=22" alt="Eklenti Ku" loading="lazy">
-                            </div>
-                            <span class="story-title">Eklenti Ku...</span>
-                        </div>
-                        <div class="story-item">
-                            <div class="story-avatar">
-                                <img src="https://picsum.photos/200/200?random=23" alt="Avrupa'da" loading="lazy">
-                            </div>
-                            <span class="story-title">Avrupa'd...</span>
-                        </div>
-                        <div class="story-item">
-                            <div class="story-avatar">
-                                <img src="https://picsum.photos/200/200?random=24" alt="Müziğin R" loading="lazy">
-                            </div>
-                            <span class="story-title">Müziğin R...</span>
+                            <span class="story-title">Yükleniyor...</span>
                         </div>
                     </div>
                 </div>
@@ -827,15 +774,8 @@
             <h5 class="offcanvas-title">Bildirimler</h5>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
-        <div class="offcanvas-body">
-            <div class="notification-item mb-3">
-                <p><strong>Yeni Gezi:</strong> Kapadokya rehberi yayınlandı!</p>
-                <small class="text-muted">2 saat önce</small>
-            </div>
-            <div class="notification-item mb-3">
-                <p><strong>Güncelleme:</strong> Site performansı artırıldı</p>
-                <small class="text-muted">1 gün önce</small>
-            </div>
+        <div class="offcanvas-body" id="notificationsContainer">
+            <div class="text-muted">Bildirimler yükleniyor...</div>
         </div>
     </div>
 

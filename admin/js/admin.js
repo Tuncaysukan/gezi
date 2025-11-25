@@ -58,6 +58,23 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+    // Kullanıcı menüsü: Profil & Ayarlar
+    const menuProfile = document.getElementById('menuProfile');
+    const menuAccountSettings = document.getElementById('menuAccountSettings');
+    if (menuProfile) {
+        menuProfile.addEventListener('click', function(e) {
+            e.preventDefault();
+            pageTitle.textContent = 'Profil';
+            loadPage('profile');
+        });
+    }
+    if (menuAccountSettings) {
+        menuAccountSettings.addEventListener('click', function(e) {
+            e.preventDefault();
+            pageTitle.textContent = 'Ayarlar';
+            loadPage('account');
+        });
+    }
     
     function loadPage(page) {
         // Clear all content first
@@ -97,6 +114,8 @@ document.addEventListener('DOMContentLoaded', function() {
             media: getMediaTemplate(),
             seo: getSEOTemplate(),
             settings: getSettingsTemplate(),
+            profile: getProfileTemplate(),
+            account: getAccountSettingsTemplate(),
             performance: getPerformanceTemplate(),
             backup: getBackupTemplate()
         };
@@ -244,6 +263,227 @@ document.addEventListener('DOMContentLoaded', function() {
             </script>
         `;
     }
+
+    function getProfileTemplate() {
+        return `
+            <h2 class="mb-4">Profil</h2>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card mb-4">
+                        <div class="card-header"><h5>Profil Bilgileri</h5></div>
+                        <div class="card-body">
+                            <form id="profileForm">
+                                <div class="mb-3">
+                                    <label class="form-label">Kullanıcı Adı</label>
+                                    <input type="text" class="form-control" name="username" readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Ad Soyad</label>
+                                    <input type="text" class="form-control" name="full_name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">E-posta</label>
+                                    <input type="email" class="form-control" name="email" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Kaydet</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card mb-4">
+                        <div class="card-header"><h5>Şifre Değiştir</h5></div>
+                        <div class="card-body">
+                            <form id="passwordForm">
+                                <div class="mb-3">
+                                    <label class="form-label">Mevcut Şifre</label>
+                                    <input type="password" class="form-control" name="current_password" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Yeni Şifre</label>
+                                    <input type="password" class="form-control" name="new_password" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Yeni Şifre (Tekrar)</label>
+                                    <input type="password" class="form-control" name="confirm_password" required>
+                                </div>
+                                <button type="submit" class="btn btn-warning"><i class="fas fa-key"></i> Şifreyi Güncelle</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+            $(document).ready(function(){
+                // Mevcut kullanıcıyı getir
+                $.get('../api/user.php?action=get_me', function(res){
+                    if (res && res.success && res.data) {
+                        $('#profileForm [name="username"]').val(res.data.username || (window.ADMIN && window.ADMIN.username) || '');
+                        $('#profileForm [name="full_name"]').val(res.data.full_name || (window.ADMIN && window.ADMIN.name) || '');
+                        $('#profileForm [name="email"]').val(res.data.email || '');
+                    }
+                });
+
+                // Profil kaydet
+                $('#profileForm').on('submit', function(e){
+                    e.preventDefault();
+                    const payload = {
+                        full_name: $('#profileForm [name="full_name"]').val().trim(),
+                        email: $('#profileForm [name="email"]').val().trim()
+                    };
+                    $.ajax({
+                        url: '../api/user.php?action=update_profile',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(payload),
+                        success: function(r){
+                            if (r && r.success) {
+                                Swal.fire('Başarılı', 'Profil güncellendi', 'success');
+                                if (window.ADMIN) { window.ADMIN.name = payload.full_name; }
+                            } else {
+                                Swal.fire('Hata', (r && r.message) || 'Güncelleme başarısız', 'error');
+                            }
+                        },
+                        error: function(){ Swal.fire('Hata', 'İşlem sırasında hata oluştu', 'error'); }
+                    });
+                });
+
+                // Şifre değiştir
+                $('#passwordForm').on('submit', function(e){
+                    e.preventDefault();
+                    const payload = {
+                        current_password: $('#passwordForm [name="current_password"]').val(),
+                        new_password: $('#passwordForm [name="new_password"]').val(),
+                        confirm_password: $('#passwordForm [name="confirm_password"]').val()
+                    };
+                    $.ajax({
+                        url: '../api/user.php?action=change_password',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(payload),
+                        success: function(r){
+                            if (r && r.success) {
+                                Swal.fire('Başarılı', 'Şifre güncellendi', 'success');
+                                $('#passwordForm')[0].reset();
+                            } else {
+                                Swal.fire('Hata', (r && r.message) || 'İşlem başarısız', 'error');
+                            }
+                        },
+                        error: function(){ Swal.fire('Hata', 'İşlem sırasında hata oluştu', 'error'); }
+                    });
+                });
+            });
+            </script>
+        `;
+    }
+
+    function getAccountSettingsTemplate() {
+        return `
+            <h2 class="mb-4">Hesap Ayarları</h2>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card mb-4">
+                        <div class="card-header"><h5>Profil Bilgileri</h5></div>
+                        <div class="card-body">
+                            <form id="accountProfileForm">
+                                <div class="mb-3">
+                                    <label class="form-label">Kullanıcı Adı</label>
+                                    <input type="text" class="form-control" name="username" readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Ad Soyad</label>
+                                    <input type="text" class="form-control" name="full_name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">E-posta</label>
+                                    <input type="email" class="form-control" name="email" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Kaydet</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card mb-4">
+                        <div class="card-header"><h5>Şifre Değiştir</h5></div>
+                        <div class="card-body">
+                            <form id="accountPasswordForm">
+                                <div class="mb-3">
+                                    <label class="form-label">Mevcut Şifre</label>
+                                    <input type="password" class="form-control" name="current_password" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Yeni Şifre</label>
+                                    <input type="password" class="form-control" name="new_password" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Yeni Şifre (Tekrar)</label>
+                                    <input type="password" class="form-control" name="confirm_password" required>
+                                </div>
+                                <button type="submit" class="btn btn-warning"><i class="fas fa-key"></i> Şifreyi Güncelle</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+            $(document).ready(function(){
+                $.get('../api/user.php?action=get_me', function(res){
+                    if (res && res.success && res.data) {
+                        $('#accountProfileForm [name="username"]').val(res.data.username || '');
+                        $('#accountProfileForm [name="full_name"]').val(res.data.full_name || '');
+                        $('#accountProfileForm [name="email"]').val(res.data.email || '');
+                    }
+                });
+                $('#accountProfileForm').on('submit', function(e){
+                    e.preventDefault();
+                    const payload = {
+                        full_name: $('#accountProfileForm [name="full_name"]').val().trim(),
+                        email: $('#accountProfileForm [name="email"]').val().trim()
+                    };
+                    $.ajax({
+                        url: '../api/user.php?action=update_profile',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(payload),
+                        success: function(r){
+                            if (r && r.success) {
+                                Swal.fire('Başarılı', 'Profil güncellendi', 'success');
+                                if (window.ADMIN) { window.ADMIN.name = payload.full_name; }
+                            } else {
+                                Swal.fire('Hata', (r && r.message) || 'Güncelleme başarısız', 'error');
+                            }
+                        },
+                        error: function(){ Swal.fire('Hata', 'İşlem sırasında hata oluştu', 'error'); }
+                    });
+                });
+                $('#accountPasswordForm').on('submit', function(e){
+                    e.preventDefault();
+                    const payload = {
+                        current_password: $('#accountPasswordForm [name="current_password"]').val(),
+                        new_password: $('#accountPasswordForm [name="new_password"]').val(),
+                        confirm_password: $('#accountPasswordForm [name="confirm_password"]').val()
+                    };
+                    $.ajax({
+                        url: '../api/user.php?action=change_password',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(payload),
+                        success: function(r){
+                            if (r && r.success) {
+                                Swal.fire('Başarılı', 'Şifre güncellendi', 'success');
+                                $('#accountPasswordForm')[0].reset();
+                            } else {
+                                Swal.fire('Hata', (r && r.message) || 'İşlem başarısız', 'error');
+                            }
+                        },
+                        error: function(){ Swal.fire('Hata', 'İşlem sırasında hata oluştu', 'error'); }
+                    });
+                });
+            });
+            </script>
+        `;
+    }
     
     function getPostsTemplate() {
         return `
@@ -276,34 +516,51 @@ document.addEventListener('DOMContentLoaded', function() {
             
             <script>
             $(document).ready(function() {
-                CRUD.initDataTable('postsTable', 'posts', [
-                    { data: 'id' },
-                    { data: 'title' },
-                    { data: 'category_id' },
-                    { 
-                        data: 'created_at',
-                        render: function(data) {
-                            return new Date(data).toLocaleDateString('tr-TR');
-                        }
-                    },
-                    { 
-                        data: 'is_active',
-                        render: function(data) {
-                            return data == 1 
-                                ? '<span class="badge-status badge-success">Yayında</span>' 
-                                : '<span class="badge-status badge-warning">Taslak</span>';
-                        }
-                    },
-                    { 
-                        data: null,
-                        render: function(data, type, row) {
-                            return '<button class="btn btn-sm btn-primary" onclick="editPost(' + row.id + ')">' +
-                                   '<i class="fas fa-edit"></i></button> ' +
-                                   '<button class="btn btn-sm btn-danger" onclick="deletePost(' + row.id + ')">' +
-                                   '<i class="fas fa-trash"></i></button>';
-                        }
+                // Kategori adlarını haritalandır ve tabloyu başlat
+                window.postCategoryMap = window.postCategoryMap || {};
+                $.get('../api/crud.php?action=list&table=categories', function(resp) {
+                    if (resp && resp.success && Array.isArray(resp.data)) {
+                        window.postCategoryMap = {};
+                        resp.data.forEach(function(cat){ window.postCategoryMap[cat.id] = cat.name; });
                     }
-                ]);
+                    initPostsTable();
+                }).fail(function(){ initPostsTable(); });
+
+                function initPostsTable() {
+                    CRUD.initDataTable('postsTable', 'posts', [
+                        { data: 'id' },
+                        { data: 'title' },
+                        { 
+                            data: 'category_id',
+                            render: function(data) {
+                                return (window.postCategoryMap && window.postCategoryMap[data]) ? window.postCategoryMap[data] : (data || '-');
+                            }
+                        },
+                        { 
+                            data: 'created_at',
+                            render: function(data) {
+                                return new Date(data).toLocaleDateString('tr-TR');
+                            }
+                        },
+                        { 
+                            data: 'is_active',
+                            render: function(data) {
+                                return data == 1 
+                                    ? '<span class="badge-status badge-success">Yayında</span>' 
+                                    : '<span class="badge-status badge-warning">Taslak</span>';
+                            }
+                        },
+                        { 
+                            data: null,
+                            render: function(data, type, row) {
+                                return '<button class="btn btn-sm btn-primary" onclick="editPost(' + row.id + ')">' +
+                                       '<i class="fas fa-edit"></i></button> ' +
+                                       '<button class="btn btn-sm btn-danger" onclick="deletePost(' + row.id + ')">' +
+                                       '<i class="fas fa-trash"></i></button>';
+                            }
+                        }
+                    ]);
+                }
             });
             
             window.editPost = function(id) {
@@ -357,17 +614,17 @@ document.addEventListener('DOMContentLoaded', function() {
                                                 '<small class="text-muted">URL için</small>' +
                                             '</div>' +
                                             '<div class="mb-3">' +
-                                                '<label class="form-label">Öne Çıkan Görsel URL</label>' +
-                                                '<input type="url" class="form-control" name="image" value="' + (isEdit ? postData.image : '') + '">' +
+                                                '<label class="form-label">Öne Çıkan Görsel</label>' +
+                                                '<input type="file" class="form-control" id="postImageFile" accept="image/*">' +
+                                                '<input type="hidden" name="featured_image" value="' + (isEdit ? (postData.featured_image || '') : '') + '">' +
+                                                '<div class="mt-2" id="postImagePreviewWrap" style="display:none;">' +
+                                                    '<img id="postImagePreview" src="" alt="Önizleme" class="img-fluid rounded" style="max-height:120px;">' +
+                                                    '<small class="text-muted d-block" id="postImageName"></small>' +
+                                                '</div>' +
+                                                '<small class="text-muted">JPG, PNG, GIF, WEBP (max 5MB)</small>' +
                                             '</div>' +
-                                            '<div class="mb-3">' +
-                                                '<label class="form-label">Etiketler</label>' +
-                                                '<input type="text" class="form-control" name="tags" value="' + (isEdit ? postData.tags : '') + '">' +
-                                            '</div>' +
-                                            '<div class="mb-3">' +
-                                                '<label class="form-label">Yazar</label>' +
-                                                '<input type="text" class="form-control" name="author" value="' + (isEdit ? postData.author : 'Admin') + '">' +
-                                            '</div>' +
+                                            
+                                            
                                             '<div class="mb-3">' +
                                                 '<div class="form-check form-switch">' +
                                                     '<input class="form-check-input" type="checkbox" name="is_active" value="1" ' + (isEdit && postData.is_active == 1 ? 'checked' : 'checked') + '>' +
@@ -395,6 +652,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 '</div>';
                 
                 $('body').append(modalHtml);
+                // Post görsel önizleme (edit ise mevcut görseli göster)
+                if (isEdit && postData.featured_image) {
+                    $('#postEditorModal #postImagePreview').attr('src', postData.featured_image);
+                    $('#postEditorModal #postImagePreviewWrap').show();
+                }
                 const modal = new bootstrap.Modal(document.getElementById('postEditorModal'));
                 
                 $.get('../api/crud.php?action=list&table=categories', function(response) {
@@ -405,6 +667,40 @@ document.addEventListener('DOMContentLoaded', function() {
                             select.append('<option value="' + cat.id + '" ' + selected + '>' + cat.name + '</option>');
                         });
                     }
+                });
+                // Kategori kutusu görsel yükleme
+                $(document).off('change', '#categoryBoxImageFile').on('change', '#categoryBoxImageFile', function() {
+                    const file = this.files && this.files[0];
+                    if (!file) return;
+                    const fd = new FormData();
+                    fd.append('image', file);
+                    const $btn = $('#categoryBoxForm button[type="submit"]');
+                    const original = $btn.html();
+                    $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-2"></span>Yükleniyor');
+                    $.ajax({
+                        url: '../api/upload.php',
+                        method: 'POST',
+                        data: fd,
+                        processData: false,
+                        contentType: false,
+                        dataType: 'json',
+                        success: function(res) {
+                            if (res && res.success) {
+                                $('[name="featured_image"]').val(res.url);
+                                $('#categoryBoxImagePreview').attr('src', res.url);
+                                $('#categoryBoxImageName').text(res.fileName || '');
+                                $('#categoryBoxImagePreviewWrap').show();
+                            } else {
+                                Swal.fire({ icon:'error', title:'Hata', text: (res && res.message) ? res.message : 'Görsel yüklenemedi' });
+                            }
+                        },
+                        error: function() {
+                            Swal.fire({ icon:'error', title:'Hata', text:'Yükleme sırasında hata oluştu' });
+                        },
+                        complete: function() {
+                            $btn.prop('disabled', false).html(original);
+                        }
+                    });
                 });
                 
                 $('#postEditorModal input[name="title"]').on('input', function() {
@@ -419,6 +715,40 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
                 
                 $('#postEditorModal').on('hidden.bs.modal', function() { $(this).remove(); });
+                // Post görsel upload handler
+                $(document).off('change', '#postImageFile').on('change', '#postImageFile', function() {
+                    const file = this.files && this.files[0];
+                    if (!file) return;
+                    const fd = new FormData();
+                    fd.append('image', file);
+                    const $btn = $('#postEditorModal .btn.btn-primary');
+                    const original = $btn.html();
+                    $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-2"></span>Yükleniyor');
+                    $.ajax({
+                        url: '../api/upload.php',
+                        method: 'POST',
+                        data: fd,
+                        processData: false,
+                        contentType: false,
+                        dataType: 'json',
+                        success: function(res) {
+                            if (res && res.success) {
+                                $('#postEditorModal [name="featured_image"]').val(res.url);
+                                $('#postEditorModal #postImagePreview').attr('src', res.url);
+                                $('#postEditorModal #postImageName').text(res.fileName || '');
+                                $('#postEditorModal #postImagePreviewWrap').show();
+                            } else {
+                                Swal.fire({ icon:'error', title:'Hata', text: (res && res.message) ? res.message : 'Görsel yüklenemedi' });
+                            }
+                        },
+                        error: function() {
+                            Swal.fire({ icon:'error', title:'Hata', text:'Yükleme sırasında hata oluştu' });
+                        },
+                        complete: function() {
+                            $btn.prop('disabled', false).html(original);
+                        }
+                    });
+                });
                 modal.show();
             };
             
@@ -438,6 +768,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 formData.is_active = $('[name="is_active"]').is(':checked') ? 1 : 0;
                 formData.is_featured = $('[name="is_featured"]').is(':checked') ? 1 : 0;
+                // DB'de 'tags' sütunu yok; varsa form verisinden kaldır
+                if (formData.hasOwnProperty('tags')) {
+                    delete formData.tags;
+                }
+                // DB'de 'author' sütunu yok; varsa form verisinden kaldır
+                if (formData.hasOwnProperty('author')) {
+                    delete formData.author;
+                }
                 
                 if (id) {
                     CRUD.update('posts', id, formData, function() {
@@ -477,8 +815,14 @@ document.addEventListener('DOMContentLoaded', function() {
                                     <input type="text" class="form-control" name="short_title" maxlength="15">
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">Görsel URL</label>
-                                    <input type="url" class="form-control" name="image">
+                                    <label class="form-label">Görsel</label>
+                                    <input type="file" class="form-control" id="storyImageFile" accept="image/*">
+                                    <input type="hidden" name="image">
+                                    <div class="mt-2" id="storyImagePreviewWrap" style="display:none;">
+                                        <img id="storyImagePreview" src="" alt="Önizleme" class="img-fluid rounded" style="max-height:120px;">
+                                        <small class="text-muted d-block" id="storyImageName"></small>
+                                    </div>
+                                    <small class="text-muted">JPG, PNG, GIF, WEBP (max 5MB)</small>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Bağlantı URL</label>
@@ -570,13 +914,50 @@ document.addEventListener('DOMContentLoaded', function() {
                             $('#storyFormTitle').text('Yeni Hikaye Ekle');
                             $('#storyBtnText').text('Kaydet');
                             $('#cancelEditStory').hide();
+                            $('#storyImagePreviewWrap').hide();
                         });
                     } else {
                         CRUD.create('stories', formData, function() {
                             CRUD.reloadTable('storiesTable');
                             CRUD.resetForm('storyForm');
+                            $('#storyImagePreviewWrap').hide();
                         });
                     }
+                });
+
+                // Görsel yükleme işlemi
+                $(document).off('change', '#storyImageFile').on('change', '#storyImageFile', function() {
+                    const file = this.files && this.files[0];
+                    if (!file) return;
+                    const fd = new FormData();
+                    fd.append('image', file);
+                    const $btnText = $('#storyBtnText');
+                    const originalText = $btnText.text();
+                    $btnText.text('Yükleniyor...');
+                    $.ajax({
+                        url: '../api/upload.php',
+                        method: 'POST',
+                        data: fd,
+                        processData: false,
+                        contentType: false,
+                        dataType: 'json',
+                        success: function(res) {
+                            if (res && res.success) {
+                                $('[name="image"]').val(res.url);
+                                $('#storyImagePreview').attr('src', res.url);
+                                $('#storyImageName').text(res.fileName || '');
+                                $('#storyImagePreviewWrap').show();
+                            } else {
+                                alert((res && res.message) ? res.message : 'Görsel yüklenemedi');
+                            }
+                        },
+                        error: function() {
+                            alert('Yükleme sırasında hata oluştu');
+                        },
+                        complete: function() {
+                            $btnText.text($('#story_id').val() ? 'Güncelle' : 'Kaydet');
+                        }
+                    });
                 });
                 
                 $('#cancelEditStory').on('click', function() {
@@ -594,6 +975,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     $('[name="title"]').val(data.title);
                     $('[name="short_title"]').val(data.short_title);
                     $('[name="image"]').val(data.image);
+                    if (data.image) {
+                        $('#storyImagePreview').attr('src', data.image);
+                        $('#storyImageName').text('');
+                        $('#storyImagePreviewWrap').show();
+                    } else {
+                        $('#storyImagePreviewWrap').hide();
+                    }
                     $('[name="url"]').val(data.url);
                     $('[name="order"]').val(data.order);
                     $('[name="is_active"]').prop('checked', data.is_active == 1);
@@ -1716,8 +2104,14 @@ document.addEventListener('DOMContentLoaded', function() {
                                     <textarea class="form-control" name="blog_content" rows="6" placeholder="Tam blog yazısı içeriği (HTML kullanabilirsiniz)"></textarea>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">Öne Çıkan Görsel URL</label>
-                                    <input type="url" class="form-control" name="featured_image" placeholder="https://...">
+                                    <label class="form-label">Öne Çıkan Görsel</label>
+                                    <input type="file" class="form-control" id="categoryBoxImageFile" accept="image/*">
+                                    <input type="hidden" name="featured_image">
+                                    <div class="mt-2" id="categoryBoxImagePreviewWrap" style="display:none;">
+                                        <img id="categoryBoxImagePreview" src="" alt="Önizleme" class="img-fluid rounded" style="max-height:120px;">
+                                        <small class="text-muted d-block" id="categoryBoxImageName"></small>
+                                    </div>
+                                    <small class="text-muted">JPG, PNG, GIF, WEBP (max 5MB)</small>
                                 </div>
                                 <hr>
                                 <div class="mb-3">
@@ -1873,6 +2267,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     $('[name="blog_excerpt"]').val(data.blog_excerpt || '');
                     $('[name="blog_content"]').val(data.blog_content || '');
                     $('[name="featured_image"]').val(data.featured_image || '');
+                    if (data.featured_image) {
+                        $('#categoryBoxImagePreview').attr('src', data.featured_image);
+                        $('#categoryBoxImageName').text('');
+                        $('#categoryBoxImagePreviewWrap').show();
+                    } else {
+                        $('#categoryBoxImagePreviewWrap').hide();
+                    }
                     $('[name="icon"]').val(data.icon);
                     $('[name="color"]').val(data.color);
                     $('[name="url"]').val(data.url);
@@ -4700,8 +5101,14 @@ document.addEventListener('DOMContentLoaded', function() {
                         '<div class="mb-3"><label class="form-label">Slug *</label>' +
                         '<input type="text" class="form-control" name="slug" value="' + slug + '" required>' +
                         '<small class="text-muted">URL i\u00e7in</small></div>' +
-                        '<div class="mb-3"><label class="form-label">\u00d6ne \u00c7\u0131kan G\u00f6rsel URL</label>' +
-                        '<input type="url" class="form-control" name="featured_image" value="' + image + '"></div>' +
+                        '<div class="mb-3"><label class="form-label">\u00d6ne \u00c7\u0131kan G\u00f6rsel</label>' +
+                        '<input type="file" class="form-control" id="categoryBoxPostImageFile" accept="image/*">' +
+                        '<input type="hidden" name="featured_image" value="' + image + '">' +
+                        '<div class="mt-2" id="categoryBoxPostImagePreviewWrap" style="display:none;">' +
+                        '<img id="categoryBoxPostImagePreview" src="" alt="\u00d6nizleme" class="img-fluid rounded" style="max-height:120px;">' +
+                        '<small class="text-muted d-block" id="categoryBoxPostImageName"></small>' +
+                        '</div>' +
+                        '<small class="text-muted">JPG, PNG, GIF, WEBP (max 5MB)</small></div>' +
                         '<div class="mb-3"><div class="form-check form-switch">' +
                         '<input class="form-check-input" type="checkbox" name="is_active" value="1" ' + (isEdit && postData.is_active == 1 ? 'checked' : 'checked') + '>' +
                         '<label class="form-check-label">Yay\u0131nla</label></div></div>' +
@@ -4713,6 +5120,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     $('body').append(modalHtml);
                     const modal = new bootstrap.Modal(document.getElementById('categoryBoxPostModal'));
+                    // Edit modunda mevcut görseli göster
+                    if (isEdit && image) {
+                        $('#categoryBoxPostImagePreview').attr('src', image);
+                        $('#categoryBoxPostImagePreviewWrap').show();
+                    }
                     
                     // Slug oluştur
                     $('#categoryBoxPostModal input[name="title"]').on('input', function() {
@@ -4727,6 +5139,40 @@ document.addEventListener('DOMContentLoaded', function() {
                     });
                     
                     $('#categoryBoxPostModal').on('hidden.bs.modal', function() { $(this).remove(); });
+                    // Görsel upload handler
+                    $(document).off('change', '#categoryBoxPostImageFile').on('change', '#categoryBoxPostImageFile', function() {
+                        const file = this.files && this.files[0];
+                        if (!file) return;
+                        const fd = new FormData();
+                        fd.append('image', file);
+                        const $btn = $('#categoryBoxPostModal .btn.btn-primary');
+                        const original = $btn.html();
+                        $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-2"></span>Yükleniyor');
+                        $.ajax({
+                            url: '../api/upload.php',
+                            method: 'POST',
+                            data: fd,
+                            processData: false,
+                            contentType: false,
+                            dataType: 'json',
+                            success: function(res){
+                                if (res && res.success) {
+                                    $('#categoryBoxPostModal [name="featured_image"]').val(res.url);
+                                    $('#categoryBoxPostImagePreview').attr('src', res.url);
+                                    $('#categoryBoxPostImageName').text(res.fileName || '');
+                                    $('#categoryBoxPostImagePreviewWrap').show();
+                                } else {
+                                    Swal.fire({icon:'error', title:'Hata', text:(res&&res.message)?res.message:'Görsel yüklenemedi'});
+                                }
+                            },
+                            error: function(){
+                                Swal.fire({icon:'error', title:'Hata', text:'Yükleme sırasında hata oluştu'});
+                            },
+                            complete: function(){
+                                $btn.prop('disabled', false).html(original);
+                            }
+                        });
+                    });
                     modal.show();
                 });
             };
@@ -4876,8 +5322,14 @@ document.addEventListener('DOMContentLoaded', function() {
                         '<div class="mb-3"><label class="form-label">Slug *</label>' +
                         '<input type="text" class="form-control" name="slug" value="' + slug + '" required>' +
                         '<small class="text-muted">URL için</small></div>' +
-                        '<div class="mb-3"><label class="form-label">Öne Çıkan Görsel URL</label>' +
-                        '<input type="url" class="form-control" name="featured_image" value="' + image + '"></div>' +
+                        '<div class="mb-3"><label class="form-label">Öne Çıkan Görsel</label>' +
+                        '<input type="file" class="form-control" id="infoCardPostImageFile" accept="image/*">' +
+                        '<input type="hidden" name="featured_image" value="' + image + '">' +
+                        '<div class="mt-2" id="infoCardPostImagePreviewWrap" style="display:none;">' +
+                        '<img id="infoCardPostImagePreview" src="" alt="Önizleme" class="img-fluid rounded" style="max-height:120px;">' +
+                        '<small class="text-muted d-block" id="infoCardPostImageName"></small>' +
+                        '</div>' +
+                        '<small class="text-muted">JPG, PNG, GIF, WEBP (max 5MB)</small></div>' +
                         '<div class="mb-3"><div class="form-check form-switch">' +
                         '<input class="form-check-input" type="checkbox" name="is_active" value="1" ' + (isEdit && postData.is_active == 1 ? 'checked' : 'checked') + '>' +
                         '<label class="form-check-label">Yayınla</label></div></div>' +
@@ -4889,6 +5341,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     $('body').append(modalHtml);
                     const modal = new bootstrap.Modal(document.getElementById('infoCardPostModal'));
+                    if (isEdit && image) {
+                        $('#infoCardPostImagePreview').attr('src', image);
+                        $('#infoCardPostImagePreviewWrap').show();
+                    }
                     
                     // Slug oluştur
                     $('#infoCardPostModal input[name="title"]').on('input', function() {
@@ -4903,6 +5359,40 @@ document.addEventListener('DOMContentLoaded', function() {
                     });
                     
                     $('#infoCardPostModal').on('hidden.bs.modal', function() { $(this).remove(); });
+                    // Görsel upload handler
+                    $(document).off('change', '#infoCardPostImageFile').on('change', '#infoCardPostImageFile', function() {
+                        const file = this.files && this.files[0];
+                        if (!file) return;
+                        const fd = new FormData();
+                        fd.append('image', file);
+                        const $btn = $('#infoCardPostModal .btn.btn-primary');
+                        const original = $btn.html();
+                        $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-2"></span>Yükleniyor');
+                        $.ajax({
+                            url: '../api/upload.php',
+                            method: 'POST',
+                            data: fd,
+                            processData: false,
+                            contentType: false,
+                            dataType: 'json',
+                            success: function(res){
+                                if (res && res.success) {
+                                    $('#infoCardPostModal [name="featured_image"]').val(res.url);
+                                    $('#infoCardPostImagePreview').attr('src', res.url);
+                                    $('#infoCardPostImageName').text(res.fileName || '');
+                                    $('#infoCardPostImagePreviewWrap').show();
+                                } else {
+                                    Swal.fire({icon:'error', title:'Hata', text:(res&&res.message)?res.message:'Görsel yüklenemedi'});
+                                }
+                            },
+                            error: function(){
+                                Swal.fire({icon:'error', title:'Hata', text:'Yükleme sırasında hata oluştu'});
+                            },
+                            complete: function(){
+                                $btn.prop('disabled', false).html(original);
+                            }
+                        });
+                    });
                     modal.show();
                 });
             };

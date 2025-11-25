@@ -61,8 +61,8 @@
                     <div class="dropdown">
                         <button class="btn btn-link dropdown-toggle" type="button" data-bs-toggle="dropdown"><i class="fas fa-user-circle"></i> <?php echo $_SESSION['admin_username']; ?></button>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-user"></i> Profil</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog"></i> Ayarlar</a></li>
+                            <li><a class="dropdown-item" href="#" id="menuProfile"><i class="fas fa-user"></i> Profil</a></li>
+                            <li><a class="dropdown-item" href="#" id="menuAccountSettings"><i class="fas fa-cog"></i> Ayarlar</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="../api/logout.php"><i class="fas fa-sign-out-alt"></i> Çıkış Yap</a></li>
                         </ul>
@@ -107,6 +107,13 @@
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        window.ADMIN = {
+            id: <?php echo (int)($_SESSION['admin_id'] ?? 0); ?>,
+            username: <?php echo json_encode($_SESSION['admin_username'] ?? ''); ?>,
+            name: <?php echo json_encode($_SESSION['admin_name'] ?? ''); ?>
+        };
+    </script>
     <script src="js/admin.crud.js"></script>
     <script src="js/admin.js"></script>
 </body>

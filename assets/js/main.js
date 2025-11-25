@@ -86,35 +86,31 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     
-    // === STORIES INTERACTION ===
-    const storyItems = document.querySelectorAll('.story-item');
-    
-    storyItems.forEach(item => {
-        item.addEventListener('click', function() {
+    // === STORIES INTERACTION (delegated for dynamic content) ===
+    const storiesWrapper = document.querySelector('.stories-wrapper');
+    if (storiesWrapper) {
+        storiesWrapper.addEventListener('click', function(e) {
+            const item = e.target.closest('.story-item');
+            if (!item) return;
             // Remove active from all
-            storyItems.forEach(s => s.classList.remove('active'));
-            
+            storiesWrapper.querySelectorAll('.story-item').forEach(s => s.classList.remove('active'));
             // Add active to clicked
-            this.classList.add('active');
-            
+            item.classList.add('active');
             // Remove new badge after viewing
-            this.classList.remove('new');
-            
+            item.classList.remove('new');
             // Show notification (you can replace with actual story modal)
-            const title = this.querySelector('.story-title').textContent;
+            const titleEl = item.querySelector('.story-title');
+            const title = titleEl ? titleEl.textContent : '';
             console.log('Story clicked:', title);
-            
             // Add ripple effect
             const ripple = document.createElement('span');
             ripple.className = 'story-ripple';
-            this.appendChild(ripple);
-            
+            item.appendChild(ripple);
             setTimeout(() => ripple.remove(), 600);
         });
-    });
+    }
     
     // Smooth horizontal scroll for stories
-    const storiesWrapper = document.querySelector('.stories-wrapper');
     if (storiesWrapper) {
         let isDown = false;
         let startX;
@@ -145,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     
     // === INTERACTIVE SVG EUROPE MAP ===
-    const europeMap = document.getElementById('svg-avrupa-haritasi');
+    const europeMap = document.getElementById('europeMap');
     
     if (europeMap) {
         const countries = europeMap.querySelectorAll('g[data-ulke]');
@@ -728,6 +724,94 @@ if ('serviceWorker' in navigator) {
     });
 }
 
+// === UTIL: Escape HTML ===
+function escapeHtml(str) {
+    if (typeof str !== 'string') return '';
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+// === LOAD NOTIFICATIONS ===
+function loadNotifications() {
+    fetch('api/crud.php?action=list&table=notifications')
+        .then(res => res.json())
+        .then(data => {
+            const container = document.getElementById('notificationsContainer');
+            const countEl = document.getElementById('notificationCount');
+            if (!container) return;
+
+            if (data.success && Array.isArray(data.data)) {
+                const active = data.data.filter(n => Number(n.is_active) === 1);
+                if (countEl) countEl.textContent = active.length;
+
+                if (active.length === 0) {
+                    container.innerHTML = '<div class="text-muted">Gösterilecek bildirim yok.</div>';
+                    return;
+                }
+
+                container.innerHTML = active.map(n => `
+                    <div class="notification-item mb-3">
+                        <p>
+                            <strong>${escapeHtml(n.title || 'Bildirim')}:</strong> ${escapeHtml(n.message || '')}
+                            ${n.url ? `<a href="${n.url}" class="ms-1">İncele</a>` : ''}
+                        </p>
+                        <small class="text-muted">${escapeHtml(n.time_text || '')}</small>
+                    </div>
+                `).join('');
+            } else {
+                container.innerHTML = '<div class="text-danger">Bildirimler yüklenemedi.</div>';
+            }
+        })
+        .catch(err => {
+            const container = document.getElementById('notificationsContainer');
+            if (container) container.innerHTML = '<div class="text-danger">Bildirimler yüklenirken hata oluştu.</div>';
+            console.error('Bildirim hatası:', err);
+        });
+}
+
+// === LOAD STORIES ===
+function loadStories() {
+    const wrapper = document.querySelector('.stories-wrapper');
+    if (!wrapper) return;
+    fetch('api/crud.php?action=list&table=stories')
+        .then(res => res.json())
+        .then(data => {
+            if (!(data.success && Array.isArray(data.data))) {
+                // API başarısız ise placeholderları koru
+                return;
+            }
+            const active = data.data
+                .filter(s => Number(s.is_active) === 1)
+                .sort((a,b) => Number(a.order||0) - Number(b.order||0));
+
+            if (active.length === 0) {
+                // Aktif hikaye yoksa placeholderları koru
+                return;
+            }
+
+            wrapper.innerHTML = active.map(s => {
+                const isNewClass = Number(s.is_new) === 1 ? ' new' : '';
+                const img = s.image || 'https://picsum.photos/200/200?blur=3';
+                const short = s.short_title || (s.title ? s.title.slice(0,10) + '...' : 'Hikaye');
+                const content = `
+                    <div class="story-item${isNewClass}" ${s.url ? `data-url="${s.url}"` : ''}>
+                        <div class="story-avatar">
+                            <img src="${img}" alt="${escapeHtml(s.title || 'Hikaye')}" loading="lazy">
+                        </div>
+                        <span class="story-title">${escapeHtml(short)}</span>
+                    </div>`;
+                return content;
+            }).join('');
+        })
+        .catch(err => {
+            console.error('Hikayeler yüklenirken hata:', err);
+        });
+}
+
 // === CATEGORY BOXES AND INFO CARDS LOADING ===
 document.addEventListener('DOMContentLoaded', function() {
     // Load category boxes
@@ -735,6 +819,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Load info cards
     loadInfoCards();
+
+    // Load notifications
+    loadNotifications();
+
+    // Load stories
+    loadStories();
 });
 
 function loadCategoryBoxes() {
