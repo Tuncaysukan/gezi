@@ -2,33 +2,371 @@
 // Pars Gezi Teması - Ana JavaScript
 // ========================================
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     
     // === THEME TOGGLE (Dark/Light Mode) ===
     const themeToggle = document.getElementById('themeToggle');
     const themeIcon = themeToggle.querySelector('i');
     const themeLogo = document.getElementById('themeLogo');
+    let HEADER_LOGO = { dark: null, light: null };
+    let HEADER_FAVICON = null;
+
+    function applyFavicon(href) {
+        try {
+            if (!href) return;
+            let link = document.querySelector('link[rel="icon"], link[rel="shortcut icon"]');
+            if (!link) {
+                link = document.createElement('link');
+                link.setAttribute('rel', 'icon');
+                document.head.appendChild(link);
+            }
+            link.setAttribute('href', href);
+        } catch (e) { console.warn('applyFavicon error', e); }
+    }
     
     function setTheme(theme) {
         document.documentElement.setAttribute('data-theme', theme);
         localStorage.setItem('theme', theme);
         document.cookie = `theme=${theme}; path=/; max-age=31536000`;
         
-        // Icon değiştir
+        // Icon / Logo güncelle
         if (theme === 'dark') {
             themeIcon.classList.remove('fa-moon');
             themeIcon.classList.add('fa-sun');
             if (themeLogo) {
-                themeLogo.src = 'assets/img/logo-light.svg';
+                themeLogo.src = (HEADER_LOGO.light || 'assets/img/logo-light.svg');
             }
         } else {
             themeIcon.classList.remove('fa-sun');
             themeIcon.classList.add('fa-moon');
             if (themeLogo) {
-                themeLogo.src = 'assets/img/logo-dark.svg';
+                themeLogo.src = (HEADER_LOGO.dark || 'assets/img/logo-dark.svg');
             }
         }
     }
+
+    // === LOAD CATEGORIES (Header Menu) ===
+    function loadCategoriesMenu() {
+        const ul = document.getElementById('categoriesMenu');
+        if (!ul) return;
+        fetch('api/crud.php?action=list&table=categories')
+            .then(r => r.json())
+            .then(res => {
+                if (!(res.success && Array.isArray(res.data))) return;
+                const active = res.data.filter(c => Number(c.is_active) === 1).sort((a,b)=>Number(a.order||0)-Number(b.order||0));
+                ul.innerHTML = active.map(c => `
+                    <li class="sub-menu-item">
+                        <a href="#category/${c.id}" class="menu-link-text link">${escapeHtml(c.name)}</a>
+                    </li>
+                `).join('');
+            })
+            .catch(err => console.error('Kategoriler (menü) yüklenemedi:', err));
+    }
+
+    // === LOAD CATEGORIES (Sidebar Widget) ===
+    function loadCategoriesWidget() {
+        const wrap = document.getElementById('categoriesWidget');
+        if (!wrap) return;
+        fetch('api/crud.php?action=list&table=categories')
+            .then(r => r.json())
+            .then(res => {
+                if (!(res.success && Array.isArray(res.data))) return;
+                const active = res.data.filter(c => Number(c.is_active) === 1);
+                wrap.innerHTML = active.map(c => `
+                    <div class="category-item">
+                        <a href="#category/${c.id}">
+                            <i class="fa-solid fa-folder"></i> ${escapeHtml(c.name)}
+                        </a>
+                    </div>
+                `).join('');
+            })
+            .catch(err => console.error('Kategoriler (widget) yüklenemedi:', err));
+    }
+
+// === LOAD FEATURED + RECENT POSTS ===
+function loadFeaturedAndRecentPosts() {
+    fetch('api/crud.php?action=list&table=posts')
+        .then(r => r.json())
+        .then(res => {
+            if (!(res.success && Array.isArray(res.data))) return;
+            const active = res.data.filter(p => Number(p.is_active) === 1);
+            // Featured
+            const featured = active.find(p => Number(p.is_featured) === 1) || active[0];
+            if (featured) {
+                const imgEl = document.querySelector('.featured-post-image img');
+                const titleEl = document.querySelector('.featured-post-content h2');
+                const excerptEl = document.querySelector('.featured-post-content p');
+                if (imgEl && featured.featured_image) imgEl.src = featured.featured_image;
+                if (titleEl) titleEl.textContent = featured.title || 'Gönderi';
+                if (excerptEl) excerptEl.textContent = featured.excerpt || '';
+                // Başlığa tıklama ile detay yükle
+                const container = document.querySelector('.featured-main-post');
+                if (container) {
+                    container.addEventListener('click', function(){
+                        if (featured.slug) {
+                            location.hash = '#post/' + encodeURIComponent(featured.slug);
+                        } else if (typeof loadPostDetail === 'function') {
+                            loadPostDetail(featured.id, 'posts');
+                        }
+                    });
+                }
+            }
+            // Recent posts widget
+            const recentWrap = document.getElementById('recentPostsWidget');
+            if (recentWrap) {
+                const sorted = active.slice().sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
+                recentWrap.innerHTML = sorted.slice(0,6).map(p => `
+                    <article class="blog-list-item">
+                        <a href="${p.slug ? ('#post/' + encodeURIComponent(p.slug)) : '#'}" class="d-flex align-items-start gap-3 text-decoration-none">
+                            ${p.featured_image ? `<img src="${p.featured_image}" alt="${escapeHtml(p.title||'Gönderi')}" loading="lazy" style="width:90px; height:70px; object-fit:cover;">` : ''}
+                            <div class="blog-list-content">
+                                <h6 class="mb-1">${escapeHtml(p.title||'Gönderi')}</h6>
+                                <div class="blog-list-meta">
+                                    <span><i class="fa-regular fa-eye"></i> ${p.view_count||0}</span>
+                                    <span><i class="fa-regular fa-clock"></i> ${new Date(p.created_at).toLocaleDateString('tr-TR')}</span>
+                                </div>
+                            </div>
+                        </a>
+                    </article>
+                `).join('');
+            }
+        })
+        .catch(err => console.error('Gönderiler yüklenemedi:', err));
+}
+
+// === LOAD POSTS BY CATEGORY INTO CONTENT AREA ===
+function loadPostsByCategory(categoryId) {
+    fetch('api/crud.php?action=list&table=posts')
+        .then(r=>r.json())
+        .then(res=>{
+            if (!(res.success && Array.isArray(res.data))) return;
+            const posts = res.data.filter(p => Number(p.is_active)===1 && String(p.category_id)===String(categoryId));
+            displayPostsInContentArea(posts, 'Kategori Gönderileri');
+        })
+        .catch(err=>console.error('Kategori gönderileri yüklenemedi:', err));
+}
+
+// === LOAD DETAIL BY SLUG ===
+function loadPostDetailBySlug(slug) {
+    fetch('api/crud.php?action=list&table=posts')
+        .then(r=>r.json())
+        .then(res=>{
+            if (!(res.success && Array.isArray(res.data))) return;
+            const post = res.data.find(p => (p.slug||'').toLowerCase() === String(slug).toLowerCase());
+            if (!post) {
+                const area = document.getElementById('dynamicContentArea');
+                const content = document.getElementById('postContent');
+                if (area && content) {
+                    area.style.display = 'block';
+                    content.innerHTML = `<div class="alert alert-warning">İçerik bulunamadı.</div>`;
+                }
+                return;
+            }
+            if (typeof loadPostDetail === 'function') {
+                loadPostDetail(post.id, 'posts');
+                return;
+            }
+            // Basit render (fallback)
+            const content = document.getElementById('postContent');
+            if (content) {
+                content.innerHTML = `
+                    <article class="post-detail">
+                        ${post.featured_image ? `<img class="img-fluid rounded mb-3" src="${post.featured_image}" alt="${escapeHtml(post.title||'')}">` : ''}
+                        <h2>${escapeHtml(post.title||'')}</h2>
+                        <div class="text-muted mb-2">${new Date(post.created_at).toLocaleDateString('tr-TR')}</div>
+                        <div class="post-body">${post.content || ''}</div>
+                    </article>`;
+                const area = document.getElementById('dynamicContentArea');
+                if (area) area.style.display = 'block';
+            }
+        });
+}
+
+// === LOAD SITE SETTINGS ===
+function loadSiteSettings() {
+    fetch('api/crud.php?action=list&table=settings')
+        .then(r => r.json())
+        .then(res => {
+            if (!(res.success && Array.isArray(res.data))) return;
+            const map = {};
+            res.data.forEach(s => { map[s.setting_key] = s.setting_value; });
+            // Genel
+            if (map.site_general) {
+                try {
+                    const g = JSON.parse(map.site_general);
+                    if (g.site_title) { document.title = g.site_title; }
+                    const metaDesc = document.querySelector('meta[name="description"]');
+                    if (metaDesc && g.site_description) metaDesc.setAttribute('content', g.site_description);
+                    if (g.site_language) {
+                        document.documentElement.lang = g.site_language;
+                        applyI18n(g.site_language);
+                    } else {
+                        applyI18n(document.documentElement.lang || 'tr');
+                    }
+                } catch(e) { console.warn('site_general parse', e); }
+            }
+            // Logo
+            if (map.header_logo) {
+                try {
+                    const h = JSON.parse(map.header_logo);
+                    const logoEl = document.getElementById('themeLogo');
+                    HEADER_LOGO.dark = h.logo_dark || HEADER_LOGO.dark;
+                    HEADER_LOGO.light = h.logo_light || HEADER_LOGO.light;
+                    if (h.favicon) { HEADER_FAVICON = h.favicon; applyFavicon(HEADER_FAVICON); }
+                    if (logoEl) {
+                        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+                        logoEl.src = currentTheme === 'dark'
+                            ? (HEADER_LOGO.light || 'assets/img/logo-light.svg')
+                            : (HEADER_LOGO.dark || 'assets/img/logo-dark.svg');
+                    }
+                } catch(e) { console.warn('header_logo parse', e); }
+            }
+            // Sosyal
+            if (map.header_social) {
+                try {
+                    const s = JSON.parse(map.header_social);
+                    const twitter = document.querySelector('.nav-icon a[aria-label="Twitter"], .social-buttons .twitter');
+                    if (twitter && s.twitter) twitter.href = s.twitter;
+                    const facebook = document.querySelector('.nav-icon a[aria-label="Facebook"], .social-buttons .facebook');
+                    if (facebook && s.facebook) facebook.href = s.facebook;
+                    const instagram = document.querySelector('.nav-icon a[aria-label="Instagram"], .social-buttons .instagram');
+                    if (instagram && s.instagram) instagram.href = s.instagram;
+                } catch(e) { console.warn('header_social parse', e); }
+            }
+            // Header buton
+            const headerBtnLi = document.querySelector('.header-ek-buton');
+            if (map.header_button) {
+                try {
+                    const b = JSON.parse(map.header_button);
+                    if (headerBtnLi) {
+                        const a = headerBtnLi.querySelector('a');
+                        if (a && b.text) a.innerHTML = '<i class="fa-solid fa-layer-group"></i> ' + escapeHtml(b.text);
+                        if (a && b.url) a.href = b.url;
+                        const show = String(b.is_active) === '1';
+                        headerBtnLi.style.display = show ? '' : 'none';
+                    }
+                } catch(e) {
+                    if (headerBtnLi) headerBtnLi.style.display = 'none';
+                }
+            } else {
+                if (headerBtnLi) headerBtnLi.style.display = 'none';
+            }
+
+            // Header Menü (menu_items) - Kategoriler dropdown HER ZAMAN kalsın
+            if (map.menu_items) {
+                try {
+                    const items = JSON.parse(map.menu_items) || [];
+                    const ul = document.getElementById('menu-header');
+                    if (ul && Array.isArray(items)) {
+                        const activeItems = items.filter(it => Number(it.is_active) === 1)
+                          .sort((a,b)=>Number(a.order||0)-Number(b.order||0));
+
+                        const categoriesDropdown = `
+                            <li class="menu-item position-relative">
+                                <a href="#" class="item-link" data-i18n="menu.categories">Kategoriler <i class="fa-solid fa-angle-down"></i></a>
+                                <div class="sub-menu">
+                                    <ul class="menu-list" id="categoriesMenu">
+                                        <li class="sub-menu-item"><a href="#" class="menu-link-text link">Yükleniyor...</a></li>
+                                    </ul>
+                                </div>
+                            </li>`;
+
+                        const itemsHtml = activeItems.map(it => {
+                            const title = escapeHtml(it.title || '');
+                            const url = (it.url || '#').trim();
+                            return `<li class="menu-item"><a href="${url}" class="item-link">${title}</a></li>`;
+                        }).join('');
+
+                        // Kategoriler dropdown'ını başa ekleyerek menüyü yaz
+                        ul.innerHTML = [
+                            itemsHtml,
+                            categoriesDropdown
+                        ].join('');
+                    }
+                } catch(e) { console.warn('menu_items parse', e); }
+            }
+
+            // Footer - Hakkımızda
+            if (map.footer_about) {
+                try {
+                    const f = JSON.parse(map.footer_about);
+                    if (String(f.is_active) === '1') {
+                        const tEl = document.getElementById('footerAboutTitle');
+                        const dEl = document.getElementById('footerAboutText');
+                        if (tEl && f.title) tEl.textContent = f.title;
+                        if (dEl && f.description) dEl.textContent = f.description;
+                    } else {
+                        const col = document.getElementById('footerAboutCol');
+                        if (col) col.style.display = 'none';
+                    }
+                } catch(e) { console.warn('footer_about parse', e); }
+            }
+            // Footer - Linkler
+            if (map.footer_links) {
+                try {
+                    const f = JSON.parse(map.footer_links);
+                    const col = document.getElementById('footerLinksCol');
+                    if (String(f.is_active) !== '1') { if (col) col.style.display = 'none'; }
+                    const title = document.getElementById('footerLinksTitle');
+                    if (title && f.title) title.textContent = f.title;
+                    const list = document.getElementById('footerLinksList');
+                    if (list && f.links) {
+                        const lines = String(f.links).split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+                        list.innerHTML = lines.map(l=>{
+                            const [text, url] = l.split('|');
+                            return `<li><a href="${(url||'#').trim()}" class="text-white-50">${escapeHtml((text||'').trim())}</a></li>`;
+                        }).join('');
+                    }
+                } catch(e) { console.warn('footer_links parse', e); }
+            }
+            // Footer - Sosyal
+            if (map.footer_social) {
+                try {
+                    const f = JSON.parse(map.footer_social);
+                    const col = document.getElementById('footerSocialCol');
+                    if (String(f.is_active) !== '1') { if (col) col.style.display = 'none'; }
+                    const title = document.getElementById('footerSocialTitle');
+                    if (title && f.title) title.textContent = f.title;
+                    const wrap = document.getElementById('footerSocialLinks');
+                    if (wrap) {
+                        if (f.facebook) wrap.querySelector('[aria-label="Facebook"]').href = f.facebook;
+                        if (f.twitter) wrap.querySelector('[aria-label="Twitter"]').href = f.twitter;
+                        if (f.instagram) wrap.querySelector('[aria-label="Instagram"]').href = f.instagram;
+                    }
+                } catch(e) { console.warn('footer_social parse', e); }
+            }
+            // Footer - Telif
+            if (map.footer_copyright) {
+                try {
+                    const f = JSON.parse(map.footer_copyright);
+                    const el = document.getElementById('footerCopyright');
+                    if (el && f.text) el.textContent = f.text;
+                } catch(e) { console.warn('footer_copyright parse', e); }
+            }
+        })
+        .catch(err => console.error('Ayarlar yüklenemedi:', err));
+}
+
+// === I18N (TR/EN) ===
+let I18N_CACHE = null;
+function applyI18n(lang) {
+    const supported = ['tr','en'];
+    const use = supported.includes(lang) ? lang : 'tr';
+    fetch(`assets/i18n/${use}.json`).then(r=>r.json()).then(dict => {
+        I18N_CACHE = dict || {};
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (key && I18N_CACHE[key]) {
+                if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                    el.setAttribute('placeholder', I18N_CACHE[key]);
+                } else {
+                    el.textContent = I18N_CACHE[key];
+                }
+            }
+        });
+    }).catch(()=>{});
+}
+    
     
     // Mevcut tema kontrolü
     const currentTheme = localStorage.getItem('theme') || 'light';
@@ -448,7 +786,49 @@ document.addEventListener('DOMContentLoaded', function() {
         updateMapTheme();
     }
     
+    // === MOBILE SUBMENU TOGGLE ===
+    (function(){
+        const isDesktop = () => window.innerWidth >= 992;
+        document.addEventListener('click', function(e){
+            const trigger = e.target.closest('.menu-item.position-relative > .item-link');
+            if (!trigger) return;
+            if (isDesktop()) return; // desktopta hover çalışsın
+            e.preventDefault();
+            const parent = trigger.closest('.menu-item');
+            if (parent) parent.classList.toggle('open');
+        });
+        window.addEventListener('resize', function(){
+            if (isDesktop()) {
+                document.querySelectorAll('.menu-item.open').forEach(el => el.classList.remove('open'));
+            }
+        });
+    })();
+
     
+    // ==== INITIAL LOAD CALLS (kept inside same DOMContentLoaded for scope) ====
+    try { loadNotifications(); } catch(e) { console.error(e); }
+    try { loadStories(); } catch(e) { console.error(e); }
+    try { loadSiteSettings(); } catch(e) { console.error(e); }
+    try { loadCategoriesMenu(); } catch(e) { console.error(e); }
+    try { loadCategoriesWidget(); } catch(e) { console.error(e); }
+    try { loadFeaturedAndRecentPosts(); } catch(e) { console.error(e); }
+
+    // Hash route dinleme (#post/<slug>)
+    function handleHashRoute() {
+        const m = location.hash.match(/^#post\/(.+)$/);
+        if (m && m[1]) {
+            loadPostDetailBySlug(decodeURIComponent(m[1]));
+            return;
+        }
+        const c = location.hash.match(/^#category\/(\d+)$/);
+        if (c && c[1]) {
+            loadPostsByCategory(c[1]);
+            return;
+        }
+    }
+    window.addEventListener('hashchange', handleHashRoute);
+    handleHashRoute();
+
     // === LAZY LOADING IMAGES ===
     const lazyImages = document.querySelectorAll('img[data-src]');
     
@@ -813,19 +1193,7 @@ function loadStories() {
 }
 
 // === CATEGORY BOXES AND INFO CARDS LOADING ===
-document.addEventListener('DOMContentLoaded', function() {
-    // Load category boxes
-    loadCategoryBoxes();
-    
-    // Load info cards
-    loadInfoCards();
-
-    // Load notifications
-    loadNotifications();
-
-    // Load stories
-    loadStories();
-});
+// Removed duplicate DOMContentLoaded block to avoid ReferenceError
 
 function loadCategoryBoxes() {
     fetch('api/crud.php?action=list&table=category_boxes')

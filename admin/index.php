@@ -45,6 +45,7 @@
                     <li class="nav-item"><a href="#settings" class="nav-link" data-page="settings"><i class="fas fa-cog"></i><span>Site Ayarları</span></a></li>
                     <li class="nav-item"><a href="#performance" class="nav-link" data-page="performance"><i class="fas fa-tachometer-alt"></i><span>Performans</span></a></li>
                     <li class="nav-item"><a href="#backup" class="nav-link" data-page="backup"><i class="fas fa-database"></i><span>Yedekleme</span></a></li>
+                    <li class="nav-item"><a href="#messages" class="nav-link" data-page="messages"><i class="fas fa-envelope"></i><span>Gelen Mesajlar</span></a></li>
                 </ul>
             </nav>
             <div class="sidebar-footer">

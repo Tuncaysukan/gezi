@@ -1,0 +1,15 @@
+medya dan resim yüklenmiyor
+site adı ve site açıklama değişmiyor
+iletişim sayfası yok gelen mesajlar görünmüyor panelde
+dil çalışmıyor
+robot ve sitemap kısmında facebook linkleri anlayamadım
+
+facebook kontrol et serkan
+
+url yapısı post içeriği yazmıyor
+footer alanı hiç bir şey değişmiyor
+header alanında değişlikler çalışmmıyor
+kategoriler telefonda gözükmüyor
+bize ulaşın kalkabilir gereksiz
+
+logo fileupload 

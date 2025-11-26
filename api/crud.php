@@ -39,6 +39,7 @@ $modelMap = [
     'info_card_posts' => 'InfoCardPost',
     'notifications' => 'Notification',
     'settings' => 'Setting',
+    'contact_messages' => 'ContactMessage',
     'backups' => 'Backup'
 ];
 

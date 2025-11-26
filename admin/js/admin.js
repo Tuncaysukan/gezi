@@ -117,7 +117,8 @@ document.addEventListener('DOMContentLoaded', function() {
             profile: getProfileTemplate(),
             account: getAccountSettingsTemplate(),
             performance: getPerformanceTemplate(),
-            backup: getBackupTemplate()
+            backup: getBackupTemplate(),
+            messages: getMessagesTemplate()
         };
         
         newPage.innerHTML = pageTemplates[page] || `<h2>${page}</h2><p>Sayfa içeriği yükleniyor...</p>`;
@@ -1410,6 +1411,70 @@ document.addEventListener('DOMContentLoaded', function() {
             </script>
         `;
     }
+
+    // === MESSAGES (CONTACT) TEMPLATE ===
+    function getMessagesTemplate() {
+        return `
+            <h2 class="mb-4">Gelen Mesajlar</h2>
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="messagesTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Ad Soyad</th>
+                                    <th>E-posta</th>
+                                    <th>Konu</th>
+                                    <th>Tarih</th>
+                                    <th>Durum</th>
+                                    <th>İşlem</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <script>
+            $(document).ready(function(){
+                if (!window.CRUD) { console.error('CRUD yok'); return; }
+                CRUD.initDataTable('messagesTable', 'contact_messages', [
+                    { data: 'id' },
+                    { data: 'full_name' },
+                    { data: 'email' },
+                    { data: 'subject' },
+                    { data: 'created_at', render: function(d){ return d ? new Date(d).toLocaleString('tr-TR') : '-'; } },
+                    { data: 'is_read', render: function(v){ return v==1 ? '<span class="badge bg-success">Okundu</span>' : '<span class="badge bg-warning">Yeni</span>'; } },
+                    { data: null, render: function(row){
+                        return '<button class="btn btn-sm btn-primary" onclick="viewMessage('+row.id+')"><i class="fas fa-eye"></i></button> ' +
+                               '<button class="btn btn-sm btn-danger" onclick="deleteMessage('+row.id+')"><i class="fas fa-trash"></i></button>';
+                    }}
+                ]);
+            });
+            
+            window.viewMessage = function(id){
+                CRUD.get('contact_messages', id, function(data){
+                    Swal.fire({
+                        title: data.subject || 'Mesaj',
+                        html: '<p><strong>Gönderen:</strong> '+(data.full_name||'')+' ('+(data.email||'')+')</p>' +
+                              '<pre style="text-align:left; white-space:pre-wrap;">'+(data.message||'')+'</pre>',
+                        showCancelButton: true,
+                        confirmButtonText: 'Okundu İşaretle',
+                        cancelButtonText: 'Kapat'
+                    }).then(function(res){
+                        if (res.isConfirmed) {
+                            CRUD.update('contact_messages', id, { is_read: 1 }, function(){ CRUD.reloadTable('messagesTable'); });
+                        }
+                    });
+                });
+            };
+            
+            window.deleteMessage = function(id){
+                CRUD.delete('contact_messages', id, function(){ CRUD.reloadTable('messagesTable'); });
+            };
+            </script>
+        `;
+    }
     
     function getSettingsTemplate() {
         return `
@@ -1432,20 +1497,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         <div class="mb-3">
                             <label class="form-label">Site Açıklaması</label>
                             <textarea class="form-control" name="site_description" rows="3"></textarea>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Logo (Dark Mode) URL</label>
-                                <input type="url" class="form-control" name="logo_dark">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Logo (Light Mode) URL</label>
-                                <input type="url" class="form-control" name="logo_light">
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Favicon URL</label>
-                            <input type="url" class="form-control" name="favicon">
                         </div>
                         <button type="submit" class="btn btn-primary">
                             <i class="fas fa-save"></i> Kaydet
@@ -1533,8 +1584,75 @@ document.addEventListener('DOMContentLoaded', function() {
             
             <script>
             $(document).ready(function() {
-                console.log('Settings page loaded, initializing forms...');
-                initSettingsForms();
+                // Yükle: site_general
+                $.get('../api/crud.php?action=get_setting&key=site_general', function(res){
+                    if (res && res.success && res.data && res.data.value) {
+                        try {
+                            const g = JSON.parse(res.data.value);
+                            if (g.site_title) $('#generalSettingsForm [name="site_name"]').val(g.site_title);
+                            if (g.site_heading) $('#generalSettingsForm [name="site_heading"]').val(g.site_heading);
+                            if (g.site_description) $('#generalSettingsForm [name="site_description"]').val(g.site_description);
+                            if (g.site_language) $('#languageSettingsForm [name="default_language"]').val(g.site_language);
+                        } catch(e) { console.warn('site_general parse', e); }
+                    }
+                });
+
+                // Kaydet: Genel Ayarlar -> site_general (site_title/site_description)
+                $('#generalSettingsForm').on('submit', function(e){
+                    e.preventDefault();
+                    const site_title = $('#generalSettingsForm [name="site_name"]').val() || '';
+                    const site_description = $('#generalSettingsForm [name="site_description"]').val() || '';
+                    const site_heading = $('#generalSettingsForm [name="site_heading"]').val() || '';
+                    // Var olan language'ı korumak için önce mevcut değeri alıp sonra kaydedelim
+                    $.get('../api/crud.php?action=get_setting&key=site_general', function(res){
+                        let current = {};
+                        try { if (res && res.success && res.data && res.data.value) current = JSON.parse(res.data.value)||{}; } catch(_){ }
+                        const payload = {
+                            site_title: site_title,
+                            site_heading: site_heading,
+                            site_description: site_description,
+                            site_language: current.site_language || 'tr'
+                        };
+                        $.ajax({
+                            url: '../api/crud.php?action=update_setting',
+                            type: 'POST',
+                            contentType: 'application/json',
+                            data: JSON.stringify({ key: 'site_general', value: JSON.stringify(payload) }),
+                            success: function(r){
+                                if (r && r.success) { Swal.fire({icon:'success', title:'Kaydedildi', timer:1200, showConfirmButton:false}); }
+                                else { Swal.fire('Hata','Kaydedilemedi','error'); }
+                            },
+                            error: function(){ Swal.fire('Hata','Sunucu hatası','error'); }
+                        });
+                    });
+                });
+
+                // Kaydet: Dil Ayarları -> site_general.site_language
+                $('#languageSettingsForm').on('submit', function(e){
+                    e.preventDefault();
+                    const lang = $('#languageSettingsForm [name="default_language"]').val() || 'tr';
+                    $.get('../api/crud.php?action=get_setting&key=site_general', function(res){
+                        let current = {};
+                        try { if (res && res.success && res.data && res.data.value) current = JSON.parse(res.data.value)||{}; } catch(_){ }
+                        const payload = {
+                            site_title: current.site_title || '',
+                            site_heading: current.site_heading || '',
+                            site_description: current.site_description || '',
+                            site_language: lang
+                        };
+                        $.ajax({
+                            url: '../api/crud.php?action=update_setting',
+                            type: 'POST',
+                            contentType: 'application/json',
+                            data: JSON.stringify({ key: 'site_general', value: JSON.stringify(payload) }),
+                            success: function(r){
+                                if (r && r.success) { Swal.fire({icon:'success', title:'Dil Güncellendi', timer:1200, showConfirmButton:false}); }
+                                else { Swal.fire('Hata','Kaydedilemedi','error'); }
+                            },
+                            error: function(){ Swal.fire('Hata','Sunucu hatası','error'); }
+                        });
+                    });
+                });
             });
             </script>
         `;
@@ -2976,14 +3094,18 @@ document.addEventListener('DOMContentLoaded', function() {
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">Dark Logo URL</label>
-                                    <input type="text" class="form-control" name="logo_dark" placeholder="assets/logo-dark.svg">
+                                    <label class="form-label">Dark Logo</label>
+                                    <input type="file" class="form-control" id="headerLogoDarkFile" accept="image/*">
+                                    <input type="text" class="form-control mt-2" name="logo_dark" placeholder="assets/logo-dark.svg">
+                                    <small class="text-muted">Dosya seçerseniz otomatik yüklenir ve URL alanına yazılır.</small>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">Light Logo URL</label>
-                                    <input type="text" class="form-control" name="logo_light" placeholder="assets/logo-light.svg">
+                                    <label class="form-label">Light Logo</label>
+                                    <input type="file" class="form-control" id="headerLogoLightFile" accept="image/*">
+                                    <input type="text" class="form-control mt-2" name="logo_light" placeholder="assets/logo-light.svg">
+                                    <small class="text-muted">Dosya seçerseniz otomatik yüklenir ve URL alanına yazılır.</small>
                                 </div>
                             </div>
                         </div>
@@ -3095,6 +3217,30 @@ document.addEventListener('DOMContentLoaded', function() {
                 $('#headerLogoForm').on('submit', function(e) {
                     e.preventDefault();
                     saveHeaderSettings('header_logo', $(this));
+                });
+                // Dark logo upload
+                $(document).off('change', '#headerLogoDarkFile').on('change', '#headerLogoDarkFile', function(){
+                    const file = this.files && this.files[0]; if (!file) return;
+                    const fd = new FormData(); fd.append('image', file);
+                    const $btn = $('#headerLogoForm button[type="submit"]'); const original = $btn.html();
+                    $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-2"></span>Yükleniyor');
+                    $.ajax({ url: '../api/upload.php', method: 'POST', data: fd, processData: false, contentType: false, dataType:'json',
+                        success: function(res){ if(res && res.success){ $('#headerLogoForm [name="logo_dark"]').val(res.url); } else { Swal.fire('Hata','Yükleme başarısız','error'); } },
+                        error: function(){ Swal.fire('Hata','Sunucu hatası','error'); },
+                        complete: function(){ $btn.prop('disabled', false).html(original); }
+                    });
+                });
+                // Light logo upload
+                $(document).off('change', '#headerLogoLightFile').on('change', '#headerLogoLightFile', function(){
+                    const file = this.files && this.files[0]; if (!file) return;
+                    const fd = new FormData(); fd.append('image', file);
+                    const $btn = $('#headerLogoForm button[type="submit"]'); const original = $btn.html();
+                    $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-2"></span>Yükleniyor');
+                    $.ajax({ url: '../api/upload.php', method: 'POST', data: fd, processData: false, contentType: false, dataType:'json',
+                        success: function(res){ if(res && res.success){ $('#headerLogoForm [name="logo_light"]').val(res.url); } else { Swal.fire('Hata','Yükleme başarısız','error'); } },
+                        error: function(){ Swal.fire('Hata','Sunucu hatası','error'); },
+                        complete: function(){ $btn.prop('disabled', false).html(original); }
+                    });
                 });
                 
                 // Sosyal medya form
@@ -4791,7 +4937,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             const formData = new FormData();
-            formData.append('media_file', fileInput.files[0]);
+            // Upload API 'image' anahtarı bekliyor
+            formData.append('image', fileInput.files[0]);
             formData.append('description', $('[name="description"]').val() || '');
             
             console.log('=== MEDIA UPLOAD START ===');
@@ -4813,24 +4960,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 processData: false,
                 contentType: false,
                 success: function(response) {
-                    console.log('=== UPLOAD SUCCESS ===');
-                    console.log(response);
-                    
+                    console.log('Upload Response:', response);
                     if (response.success) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Başarılı!',
-                            text: response.message,
-                            timer: 1500,
-                            showConfirmButton: false
-                        });
-                        $('#mediaUploadForm')[0].reset();
-                        setTimeout(() => loadMediaFilesList(), 500);
+                        $('#mediaPreview').attr('src', response.url).show();
+                        $('#mediaUrl').val(response.url);
+                        Swal.fire({ icon: 'success', title: 'Yüklendi', timer: 1500, showConfirmButton: false });
                     } else {
-                        Swal.fire('Hata!', response.message, 'error');
+                        Swal.fire({ icon: 'error', title: 'Hata', text: response.message || 'Yükleme başarısız' });
                     }
                 },
-                error: function(xhr, status, error) {
+                error: function(err) {
+                    console.error('Upload Error:', err);
+                    Swal.fire({ icon: 'error', title: 'Hata', text: 'Sunucu hatası' });
                     console.log('=== UPLOAD ERROR ===');
                     console.error('Status:', status);
                     console.error('Error:', error);

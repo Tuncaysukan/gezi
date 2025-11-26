@@ -76,7 +76,7 @@
                         <!-- Logo -->
                         <div class="col-12 text-center py-3">
                             <a href="index.html" title="Pars" class="logo-header">
-                                <img src="assets/img/logo-dark.svg" alt="Pars Logo" class="logo" width="160" height="50">
+                                <img src="assets/img/logo-dark.svg" alt="Pars Logo" class="logo" width="160" height="50" id="themeLogo">
                             </a>
                         </div>
                     </div>
@@ -88,7 +88,7 @@
                 <div class="container">
                     <nav class="box-navigation text-center">
                         <ul class="box-nav-menu pars-header-menum d-flex justify-content-center">
-                            <li class="menu-item"><a href="index.html" class="item-link">Ana Sayfa</a></li>
+                            <li class="menu-item"><a href="index.html" class="item-link" data-i18n="menu.home">Ana Sayfa</a></li>
                             <li class="menu-item position-relative">
                                 <a href="#" class="item-link">Kategoriler <i class="fa-solid fa-angle-down"></i></a>
                                 <div class="sub-menu">
@@ -97,7 +97,7 @@
                                     </ul>
                                 </div>
                             </li>
-                            <li class="menu-item"><a href="iletisim.html" class="item-link active">İletişim</a></li>
+                            <li class="menu-item"><a href="iletisim.html" class="item-link active" data-i18n="menu.contact">İletişim</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -190,17 +190,41 @@
         </main>
         
         <!-- Footer -->
-        <footer class="bg-dark text-white py-4 mt-5">
+        <footer class="footer bg-dark text-white py-5 mt-5">
             <div class="container">
                 <div class="row">
-                    <div class="col-12 text-center">
-                        <p class="mb-0">&copy; 2025 Pars. Tüm hakları saklıdır.</p>
+                    <div class="col-lg-4 mb-4" id="footerAboutCol">
+                        <h5 id="footerAboutTitle" data-i18n="footer.about">Hakkımızda</h5>
+                        <p id="footerAboutText">Pars Gezi Teması ile dünyayı keşfedin. SEO uyumlu, hızlı ve modern tasarım.</p>
                     </div>
+                    <div class="col-lg-4 mb-4" id="footerLinksCol">
+                        <h5 id="footerLinksTitle" data-i18n="footer.links">Hızlı Linkler</h5>
+                        <ul class="list-unstyled" id="footerLinksList">
+                            <li><a href="#" class="text-white-50" data-i18n="menu.home">Ana Sayfa</a></li>
+                            <li><a href="#" class="text-white-50" data-i18n="menu.about">Hakkımızda</a></li>
+                            <li><a href="iletisim.html" class="text-white-50" data-i18n="menu.contact">İletişim</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-4 mb-4" id="footerSocialCol">
+                        <h5 id="footerSocialTitle" data-i18n="footer.social">Sosyal Medya</h5>
+                        <div class="social-links" id="footerSocialLinks">
+                            <a href="#" class="text-white me-3" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                            <a href="#" class="text-white me-3" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
+                            <a href="#" class="text-white me-3" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <hr class="bg-white">
+                <div class="text-center">
+                    <p id="footerCopyright" data-i18n="footer.copyright">&copy; 2025 Pars Gezi Teması. Tüm hakları saklıdır.</p>
                 </div>
             </div>
         </footer>
     </div>
     
+    <!-- Main JS (dynamic settings, i18n, routing) -->
+    <script src="assets/js/main.js"></script>
+
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     
@@ -208,41 +232,6 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <script>
-    // Load Categories Menu
-    function loadCategoriesMenu() {
-        fetch('api/crud.php?action=list&table=categories')
-            .then(r => r.json())
-            .then(data => {
-                if (data.success && data.data && data.data.length > 0) {
-                    const cats = data.data
-                        .filter(c => c.is_active == 1)
-                        .sort((a, b) => (a.order || 0) - (b.order || 0));
-                    
-                    let html = '';
-                    cats.forEach(cat => {
-                        html += `<li class="sub-menu-item"><a href="index.html#category-${cat.id}" class="menu-link-text link">${escapeHtml(cat.name)}</a></li>`;
-                    });
-                    
-                    const menu = document.getElementById('categoriesMenu');
-                    if (menu && html) {
-                        menu.innerHTML = html;
-                    }
-                }
-            })
-            .catch(err => console.error('Categories menu load error:', err));
-    }
-    
-    function escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-    }
-    
-    // Load categories on page load
-    document.addEventListener('DOMContentLoaded', function() {
-        loadCategoriesMenu();
-    });
-    
     // Contact Form Submit
     document.getElementById('contactForm').addEventListener('submit', function(e) {
         e.preventDefault();
@@ -254,24 +243,27 @@
             message: document.getElementById('message').value
         };
         
-        // Show success message
-        Swal.fire({
-            icon: 'success',
-            title: 'Mesajınız Gönderildi!',
-            text: 'En kısa sürede size dönüş yapacağız.',
-            confirmButtonText: 'Tamam',
-            confirmButtonColor: '#667eea'
+        fetch('api/contact.php', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(formData)
+        }).then(r => r.json()).then(res => {
+            if (res.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Mesajınız Gönderildi!',
+                    text: 'En kısa sürede size dönüş yapacağız.',
+                    confirmButtonText: 'Tamam',
+                    confirmButtonColor: '#667eea'
+                });
+                document.getElementById('contactForm').reset();
+            } else {
+                Swal.fire({ icon: 'error', title: 'Hata', text: res.message || 'Gönderim başarısız' });
+            }
+        }).catch(err => {
+            console.error('Contact send error:', err);
+            Swal.fire({ icon: 'error', title: 'Hata', text: 'Sunucu hatası' });
         });
-        
-        // Reset form
-        this.reset();
-        
-        // Here you can add actual form submission to backend
-        // fetch('api/contact.php', {
-        //     method: 'POST',
-        //     headers: {'Content-Type': 'application/json'},
-        //     body: JSON.stringify(formData)
-        // })
     });
     </script>
 </body>

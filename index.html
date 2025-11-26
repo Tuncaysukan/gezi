@@ -31,7 +31,26 @@
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="assets/img/favicon.png">
 
-    <title>Pars - Seo Uyumlu Gezi Teması</title>
+    <title></title>
+    <script>
+        (function(){
+            try {
+                fetch('api/crud.php?action=get_setting&key=site_general')
+                    .then(function(r){ return r.json(); })
+                    .then(function(res){
+                        if (res && res.success && res.data && res.data.value) {
+                            try {
+                                var g = JSON.parse(res.data.value);
+                                if (g.site_title) { document.title = g.site_title; }
+                                var metaDesc = document.querySelector('meta[name="description"]');
+                                if (metaDesc && g.site_description) metaDesc.setAttribute('content', g.site_description);
+                                if (g.site_language) document.documentElement.lang = g.site_language;
+                            } catch(e) {}
+                        }
+                    }).catch(function(){});
+            } catch(e) {}
+        })();
+    </script>
 
     <!-- Theme Script (Dark/Light Mode) -->
     <script>
@@ -125,14 +144,6 @@
                         <!-- Header Icons -->
                         <div class="col-xl-5 col-md-4 col-3">
                             <ul class="nav-icon d-flex justify-content-end align-items-center">
-                                <!-- Contact Button -->
-                                <li class="header-ek-buton">
-                                    <a href="#" title="Bize Ulaşın" target="_blank">
-                                        <i class="fa-solid fa-layer-group"></i> Bize Ulaşın
-                                    </a>
-                                </li>
-
-                                <!-- Search -->
                                 <li class="nav-search">
                                     <a href="#search" aria-label="Arama" data-bs-toggle="modal" class="nav-icon-item">
                                         <i class="fa-solid fa-magnifying-glass"></i>
@@ -165,7 +176,7 @@
                 <div class="container">
                     <nav class="box-navigation text-center">
                         <ul id="menu-header" class="box-nav-menu pars-header-menum">
-                            <li class="menu-item"><a href="index.html" class="item-link">Ana Sayfa</a></li>
+                            <li class="menu-item"><a href="index.html" class="item-link" data-i18n="menu.home">Ana Sayfa</a></li>
                             <li class="menu-item position-relative">
                                 <a href="#" class="item-link">Kategoriler <i class="fa-solid fa-angle-down"></i></a>
                                 <div class="sub-menu">
@@ -175,7 +186,7 @@
                                     </ul>
                                 </div>
                             </li>
-                            <li class="menu-item"><a href="iletisim.html" class="item-link">İletişim</a></li>
+                            <li class="menu-item"><a href="iletisim.html" class="item-link" data-i18n="menu.contact">İletişim</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -724,30 +735,30 @@
     <footer class="footer bg-dark text-white py-5">
         <div class="container">
             <div class="row">
-                <div class="col-lg-4 mb-4">
-                    <h5>Hakkımızda</h5>
-                    <p>Pars Gezi Teması ile dünyayı keşfedin. SEO uyumlu, hızlı ve modern tasarım.</p>
+                <div class="col-lg-4 mb-4" id="footerAboutCol">
+                    <h5 id="footerAboutTitle" data-i18n="footer.about">Hakkımızda</h5>
+                    <p id="footerAboutText">Pars Gezi Teması ile dünyayı keşfedin. SEO uyumlu, hızlı ve modern tasarım.</p>
                 </div>
-                <div class="col-lg-4 mb-4">
-                    <h5>Hızlı Linkler</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="text-white-50">Ana Sayfa</a></li>
-                        <li><a href="#" class="text-white-50">Hakkımızda</a></li>
-                        <li><a href="#" class="text-white-50">İletişim</a></li>
+                <div class="col-lg-4 mb-4" id="footerLinksCol">
+                    <h5 id="footerLinksTitle" data-i18n="footer.links">Hızlı Linkler</h5>
+                    <ul class="list-unstyled" id="footerLinksList">
+                        <li><a href="#" class="text-white-50" data-i18n="menu.home">Ana Sayfa</a></li>
+                        <li><a href="#" class="text-white-50" data-i18n="menu.about">Hakkımızda</a></li>
+                        <li><a href="iletisim.html" class="text-white-50" data-i18n="menu.contact">İletişim</a></li>
                     </ul>
                 </div>
-                <div class="col-lg-4 mb-4">
-                    <h5>Sosyal Medya</h5>
-                    <div class="social-links">
-                        <a href="#" class="text-white me-3"><i class="fa-brands fa-facebook-f"></i></a>
-                        <a href="#" class="text-white me-3"><i class="fa-brands fa-twitter"></i></a>
-                        <a href="#" class="text-white me-3"><i class="fa-brands fa-instagram"></i></a>
+                <div class="col-lg-4 mb-4" id="footerSocialCol">
+                    <h5 id="footerSocialTitle" data-i18n="footer.social">Sosyal Medya</h5>
+                    <div class="social-links" id="footerSocialLinks">
+                        <a href="#" class="text-white me-3" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="text-white me-3" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="#" class="text-white me-3" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
                     </div>
                 </div>
             </div>
             <hr class="bg-white">
             <div class="text-center">
-                <p>&copy; 2025 Pars Gezi Teması. Tüm hakları saklıdır.</p>
+                <p id="footerCopyright" data-i18n="footer.copyright">&copy; 2025 Pars Gezi Teması. Tüm hakları saklıdır.</p>
             </div>
         </div>
     </footer>
